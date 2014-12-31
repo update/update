@@ -1,7 +1,7 @@
 {
   "name": "update",
-  "description": "Update the properties of an object with the properties of other objects.",
-  "version": "0.1.0",
+  "description": "Update the year in all files in a project using glob patterns.",
+  "version": "0.2.0",
   "homepage": "https://github.com/jonschlinkert/update",
   "author": {
     "name": "Jon Schlinkert",
@@ -14,21 +14,39 @@
   "bugs": {
     "url": "https://github.com/jonschlinkert/update/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/jonschlinkert/update/blob/master/LICENSE-MIT"
-    }
-  ],
-  "main": "update.js",
+  "license": {
+    "type": "MIT",
+    "url": "https://github.com/jonschlinkert/update/blob/master/LICENSE-MIT"
+  },
+  "main": "index.js",
+  "preferGlobal": true,
+  "bin": {
+    "update": "./cli.js"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha -R spec",
+    "docs": "update && license && npmignore && deps && verb",
+    "all": "npm run test && npm run docs"
+  },
+  "dependencies": {
+    "extend-shallow": "^0.2.0",
+    "globby": "^1.0.0",
+    "load-pkg": "^1.0.0",
+    "minimist": "^1.1.0",
+    "parse-author": "^0.1.0",
+    "write": "^0.1.1",
+    "year": "^0.2.1"
+  },
   "devDependencies": {
-    "mocha": "~1.13.0"
+    "mocha": "*"
   },
   "keywords": [
-    "sort",
-    "sort object",
-    "sort object keys",
-    "sort object by keys",
-    "javascript sort"
+    "javascript",
+    "keys",
+    "object",
+    "sort"
   ]
 }
