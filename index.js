@@ -14,9 +14,6 @@ var parseCopyright = require('parse-copyright');
 var copyright = require('update-copyright');
 var license = require('update-license');
 var banner = require('update-banner');
-// var pkg = require('update-pkg');
-var verbfile = require('./lib/verb');
-
 var through = require('through2');
 var engine = require('engine');
 

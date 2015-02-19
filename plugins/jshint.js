@@ -3,8 +3,9 @@
 var through = require('through2');
 var merge = require('merge-deep');
 var sortObj = require('sort-object');
+var logger = require('../lib/logging');
 
-module.exports = function jshint() {
+module.exports = function jshintPlugin() {
   return through.obj(function (file, enc, cb) {
     if (file.isNull() || !file.isBuffer()) {
       this.push(file);
@@ -12,6 +13,8 @@ module.exports = function jshint() {
     }
 
     var obj = JSON.parse(file.contents.toString());
+    var log = logger({nocompare: true});
+
     delete obj.globals;
 
     obj = sortObj(merge(obj, {
@@ -34,7 +37,7 @@ module.exports = function jshint() {
     }));
 
     file.contents = new Buffer(JSON.stringify(obj, null, 2));
-    console.log('jshint updated');
+    log.success(true, 'updated properties in', file.relative);
     this.push(file);
     cb();
   });

@@ -9,12 +9,12 @@
 
 module.exports = function (verb) {
  return {
-    banners  : require('./banners.js'),
-    copyright: require('./copyright.js')(verb),
+    banners  : require('./banners.js')(verb),
     dotfiles : require('./dotfiles.js'),
     index    : require('./index.js'),
     jshint   : require('./jshint.js'),
-    pkg      : require('./pkg.js'),
-    verbfile : require('./verbfile.js')(verb)
-  }
+    pkg      : require('./pkg.js')(verb),
+    tests    : require('./tests.js'),
+    verbmd : require('./verbmd.js')(verb)
+  };
 };

@@ -34,13 +34,16 @@
     "test": "mocha"
   },
   "dependencies": {
+    "arr-diff": "^1.0.1",
     "chalk": "^0.5.1",
+    "clone-deep": "^0.1.1",
     "del": "^1.1.1",
     "delete": "^0.1.5",
+    "gray-matter": "^1.2.4",
     "gulp-dest": "^0.2.1",
     "log-symbols": "^1.0.1",
     "merge-deep": "^0.1.5",
-    "parse-copyright": "^0.3.1",
+    "parse-copyright": "^0.4.0",
     "sort-object": "^1.0.0",
     "through2": "^0.6.3",
     "update-banner": "^0.1.0",

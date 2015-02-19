@@ -1,10 +1,9 @@
 'use strict';
 
 var through = require('through2');
-var utils = require('../lib/utils');
 var logger = require('../lib/logging');
 
-module.exports = function dotfilesPlugin() {
+module.exports = function testsPlugin() {
   return through.obj(function (file, enc, cb) {
     if (file.isNull() || !file.isBuffer()) {
       this.push(file);
@@ -14,9 +13,9 @@ module.exports = function dotfilesPlugin() {
     var str = file.contents.toString();
     var log = logger(str);
 
-    if (utils.contains(file, '.gitattributes')) {
-      str = '*.* text';
-      log.success(str, 'updated patterns in', file.relative);
+    if (str.indexOf('var should') !== -1) {
+      str = fixShould(str, file.relative);
+      log.success(str, 'updated "should" statements in', file.relative);
     }
 
     file.contents = new Buffer(str);
@@ -24,3 +23,9 @@ module.exports = function dotfilesPlugin() {
     cb();
   });
 };
+
+function fixShould(str) {
+  var segs = str.split('var should = require(\'should\');');
+  str = segs.join('require(\'should\');');
+  return str;
+}
