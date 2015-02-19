@@ -19,7 +19,7 @@ module.exports = function (verb) {
       var str = file.contents.toString();
       var log = logger(str);
 
-      if (/\/\*[!*]/.test(str.trim()) || opts.banner) {
+      if (/^\/\*[!*]/.test(str.trim()) || opts.banner) {
         var copyright = parse(str);
         if (copyright && copyright.length) {
           file.data.copyright = copyright[0];
