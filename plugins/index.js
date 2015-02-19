@@ -7,13 +7,14 @@
 
 'use strict';
 
-// var fs = require('fs');
-// var path = require('path');
-// var through = require('through2');
-// var merge = require('merge-deep');
-// var sortObj = require('sort-object');
-// var parseCopyright = require('parse-copyright');
-// var copyright = require('update-copyright');
-// var license = require('update-license');
-// var banner = require('update-banner');
-// var pkg = require('update-pkg');
+module.exports = function (verb) {
+ return {
+    banners  : require('./banners.js'),
+    copyright: require('./copyright.js')(verb),
+    dotfiles : require('./dotfiles.js'),
+    index    : require('./index.js'),
+    jshint   : require('./jshint.js'),
+    pkg      : require('./pkg.js'),
+    verbfile : require('./verbfile.js')(verb)
+  }
+};

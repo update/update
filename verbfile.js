@@ -1,15 +1,12 @@
 'use strict';
 
-var fs = require('fs');
 var del = require('del');
 var path = require('path');
 var verb = require('verb');
-var dest = require('gulp-dest');
-var rename = require('./lib/rename');
-var update = require('./lib/plugins')(verb);
+var plugins = require('./plugins')(verb);
 
 verb.onLoad(/\.verbrc\.md/, function (file, next) {
-  update.getCopyright('index.js');
+  plugins.getCopyright('index.js');
   file.render = false;
   file.readme = false;
   next();
@@ -29,7 +26,7 @@ verb.copy('LICENSE-MIT', function (file) {
 
 verb.task('banners', function () {
   verb.src(['*.js', 'test/*.js', 'lib/*.js'], {render: false})
-    .pipe(update.banners())
+    .pipe(plugins.banners())
     .pipe(verb.dest(function (file) {
       return path.dirname(file.path);
     }));
@@ -37,7 +34,7 @@ verb.task('banners', function () {
 
 verb.task('verbfile', function () {
   verb.src(['.verb{,rc}.md'], {render: false})
-    .pipe(update.verbfile())
+    .pipe(plugins.verbfile())
     .pipe(verb.dest(function (file) {
       file.path = '.verb.md';
       return path.dirname(file.path);
@@ -46,7 +43,7 @@ verb.task('verbfile', function () {
 
 verb.task('jshint', function () {
   verb.src('.jshintrc', {render: false})
-    .pipe(update.jshint())
+    .pipe(plugins.jshint())
     .pipe(verb.dest(function (file) {
       file.path = '.jshintrc';
       return path.dirname(file.path);
@@ -55,7 +52,7 @@ verb.task('jshint', function () {
 
 verb.task('dotfiles', function () {
   verb.src('.git*', {render: false, dot: true})
-    .pipe(update.dotfiles())
+    .pipe(plugins.dotfiles())
     .pipe(verb.dest(function (file) {
       return path.dirname(file.path);
     }))
@@ -67,7 +64,7 @@ verb.task('dotfiles', function () {
 
 verb.task('readme', function () {
   verb.src('.verb.md')
-    .pipe(verb.dest('.'))
+    .pipe(verb.dest('.'));
 });
 
 verb.task('default', [
