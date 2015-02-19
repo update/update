@@ -15,4 +15,3 @@ describe('update', function () {
     assert.equal(update('Copyright (c) 2015, Jon Schlinkert.'), 'Copyright (c) 2015, Jon Schlinkert.');
   });
 });
-

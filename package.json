@@ -18,6 +18,10 @@
     "type": "MIT",
     "url": "https://github.com/jonschlinkert/update/blob/master/LICENSE-MIT"
   },
+  "files": [
+    "index.js",
+    "lib/"
+  ],
   "main": "index.js",
   "preferGlobal": true,
   "bin": {
@@ -27,7 +31,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "mocha"
   },
   "dependencies": {
     "chalk": "^0.5.1",
@@ -35,7 +39,9 @@
     "delete": "^0.1.5",
     "gulp-dest": "^0.2.1",
     "log-symbols": "^1.0.1",
+    "merge-deep": "^0.1.5",
     "parse-copyright": "^0.3.1",
+    "sort-object": "^1.0.0",
     "through2": "^0.6.3",
     "update-banner": "^0.1.0",
     "update-copyright": "^0.1.0",
