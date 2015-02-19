@@ -1,8 +1,8 @@
 /*!
- * update <http://github.com/helpers/update>
+ * update <https://github.com/jonschlinkert/update>
  *
  * Copyright (c) 2013-2015, Jon Schlinkert.
- * Licensed under the MIT license.
+ * Licensed under the MIT License.
  */
 
 var assert = require('assert');

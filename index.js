@@ -1,8 +1,8 @@
-/**
+/*!
  * update <https://github.com/jonschlinkert/update>
  *
  * Copyright (c) 2014-2015, Jon Schlinkert.
- * Licensed under the MIT license.
+ * Licensed under the MIT License.
  */
 
 'use strict';

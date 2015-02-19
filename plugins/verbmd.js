@@ -25,8 +25,7 @@ module.exports = function verbmdPlugin(verb) {
           log.success(str, 'stripped front-matter in', file.relative);
         }
 
-        var year = verb.get('data.copyright') || new Date().getFullYear();
-        str = verbmd(str, year);
+        str = verbmd(str);
 
         log.success(str, 'updated helpers in', file.relative);
         file.contents = new Buffer(str);
