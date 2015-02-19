@@ -27,22 +27,22 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha -R spec",
-    "docs": "update && license && npmignore && deps && verb",
-    "all": "npm run test && npm run docs"
+    "test": "mocha -R spec"
   },
   "dependencies": {
-    "extend-shallow": "^0.2.0",
-    "globby": "^1.0.0",
-    "load-pkg": "^1.0.0",
-    "minimist": "^1.1.0",
-    "parse-author": "^0.1.0",
-    "write": "^0.1.1",
-    "year": "^0.2.1"
+    "chalk": "^0.5.1",
+    "del": "^1.1.1",
+    "delete": "^0.1.5",
+    "gulp-dest": "^0.2.1",
+    "log-symbols": "^1.0.1",
+    "parse-copyright": "^0.3.1",
+    "through2": "^0.6.3",
+    "update-banner": "^0.1.0",
+    "update-copyright": "^0.1.0",
+    "update-license": "^0.2.0",
+    "verb": "^0.3.9"
   },
-  "devDependencies": {
-    "mocha": "*"
-  },
+  "devDependencies": {},
   "keywords": [
     "javascript",
     "keys",
