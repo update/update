@@ -1,7 +1,7 @@
 {
   "name": "update",
   "description": "Update the year in all files in a project using glob patterns.",
-  "version": "0.2.0",
+  "version": "0.3.0-beta",
   "homepage": "https://github.com/jonschlinkert/update",
   "author": {
     "name": "Jon Schlinkert",
@@ -39,10 +39,8 @@
     "arr-diff": "^1.0.1",
     "chalk": "^0.5.1",
     "clone-deep": "^0.1.1",
-    "del": "^1.1.1",
     "delete": "^0.1.5",
     "gray-matter": "^1.2.4",
-    "gulp-dest": "^0.2.1",
     "log-symbols": "^1.0.1",
     "merge-deep": "^0.1.5",
     "parse-copyright": "^0.4.0",
@@ -51,9 +49,12 @@
     "update-banner": "^0.1.0",
     "update-copyright": "^0.1.0",
     "update-license": "^0.2.0",
+    "update-package": "^0.1.0",
     "verb": "^0.4.5"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "del": "^1.1.1"
+  },
   "keywords": [
     "javascript",
     "keys",
