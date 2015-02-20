@@ -1,7 +1,7 @@
 {
   "name": "update",
   "description": "Update the year in all files in a project using glob patterns.",
-  "version": "0.3.1-beta",
+  "version": "0.3.2-beta",
   "homepage": "https://github.com/jonschlinkert/update",
   "author": {
     "name": "Jon Schlinkert",
@@ -22,6 +22,7 @@
   ],
   "files": [
     "index.js",
+    "cli.js",
     "lib/"
   ],
   "main": "index.js",
