@@ -1,1 +1,8 @@
-*.* text
+# Enforce Unix newlines
+*.* text eol=lf
+
+# binaries
+*.jpg binary
+*.gif binary
+*.png binary
+*.jpeg binary

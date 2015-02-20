@@ -15,7 +15,16 @@ module.exports = function dotfilesPlugin() {
     var log = logger(str);
 
     if (utils.contains(file, '.gitattributes')) {
-      str = '*.* text';
+      str = [
+        '# Enforce Unix newlines',
+        '*.* text eol=lf',
+        '',
+        '# binaries',
+        '*.jpg binary',
+        '*.gif binary',
+        '*.png binary',
+        '*.jpeg binary'
+      ].join('\n');
       log.success(str, 'updated patterns in', file.relative);
     }
 
@@ -24,3 +33,4 @@ module.exports = function dotfilesPlugin() {
     cb();
   });
 };
+
