@@ -9,12 +9,14 @@
 
 module.exports = function (verb) {
  return {
-    banners  : require('./banners.js')(verb),
-    dotfiles : require('./dotfiles.js'),
-    index    : require('./index.js'),
-    jshint   : require('./jshint.js'),
-    pkg      : require('./pkg.js')(verb),
-    tests    : require('./tests.js'),
-    verbmd : require('./verbmd.js')(verb)
+    banners   : require('./banners.js')(verb),
+    dotfiles  : require('./dotfiles.js'),
+    index     : require('./index.js'),
+    gitignore : require('./gitignore.js'),
+    jshint    : require('./jshint.js'),
+    license   : require('./license.js'),
+    pkg       : require('./pkg.js')(verb),
+    tests     : require('./tests.js'),
+    verbmd    : require('./verbmd.js')(verb)
   };
 };

@@ -7,6 +7,7 @@ var log = require('./lib/logging')({nocompare: true});
 var plugins = require('./plugins')(verb);
 var parse = require('parse-copyright');
 
+
 verb.onLoad(/./, function (file, next) {
   file.render = false;
   file.readme = false;
@@ -17,20 +18,6 @@ verb.onLoad(/\.js$/, function (file, next) {
   file.data.copyright = parse(file.content);
   next();
 });
-
-// verb.onLoad(/\.js/, function copyright(file, next) {
-//   try {
-//     if (typeof file.data.copyright === 'undefined') {
-//       file.data.copyright = parse(file.content);
-//     }
-//   } catch (err) {
-//     throw new Error('copyright middleware:', err);
-//   }
-//   next();
-// });
-// var parse = require('parse-copyright');
-
-
 
 verb.copy('.verbrc.md', function (file) {
   file.path = '.verb.md';
@@ -71,9 +58,19 @@ verb.task('jshint', function () {
     }));
 });
 
+verb.task('license', function () {
+  verb.src('LICENSE', {render: false})
+    .pipe(plugins.license())
+    .pipe(verb.dest(function (file) {
+      file.path = 'LICENSE';
+      return path.dirname(file.path);
+    }));
+});
+
 verb.task('dotfiles', function () {
   verb.src('.git*', {render: false, dot: true})
     .pipe(plugins.dotfiles())
+    // .pipe(plugins.gitignore())
     .pipe(verb.dest(function (file) {
       return path.dirname(file.path);
     }))
@@ -100,6 +97,7 @@ verb.task('default', [
   'verbfile',
   'dotfiles',
   'jshint',
+  'license',
   'pkg',
   'readme'
 ]);
