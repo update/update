@@ -13,8 +13,8 @@
   },
   "license": "MIT",
   "files": [
-    "lib",
-    "cli.js"
+    "cli.js",
+    "lib/"
   ],
   "main": "index.js",
   "preferGlobal": true,

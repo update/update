@@ -29,9 +29,10 @@ module.exports = function pkgPlugin(verb) {
         var pkg = update(obj);
 
         // populate the `files` property
-        pkg.files = utils.toPkgFiles(file.base, pkg.files);
-        // // populate the `browser` property
-        // var browser = utils.toPkgFiles(file.base, ['browser.js']);
+        pkg.files = pkgUtil.files.toFiles(file.base, pkg.files);
+
+        // populate the `browser` property
+        // var browser = pkgUtil.files.toFiles(file.base, ['browser.js']);
         // if (browser.length || pkg.browser && pkg.browser.length) {
         //   pkg.browser = unique(browser, pkg.browser);
         // }
@@ -46,6 +47,10 @@ module.exports = function pkgPlugin(verb) {
         }
 
         pkg = pkgUtil.devDependencies.removeVerb(pkg);
+
+        if (!verb.get('data.hasShould')) {
+          pkg = pkgUtil.devDependencies.removeShould(pkg);
+        }
 
         pkg.license = 'MIT';
         delete pkg.licenses;
