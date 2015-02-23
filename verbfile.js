@@ -3,10 +3,34 @@
 var del = require('del');
 var path = require('path');
 var verb = require('verb');
+var parse = require('parse-copyright');
 var log = require('./lib/logging')({nocompare: true});
 var plugins = require('./plugins')(verb);
-var parse = require('parse-copyright');
+var utils = require('./lib/utils');
 
+verb.known(function(env) {
+  var orgs = ['jonschlinkert', 'doowb', 'assemble', 'verb', 'helpers', 'regexps'];
+  var repo = env.repository;
+  if (typeof repo === 'object') {
+    repo = repo.url;
+  }
+  var len = orgs.length;
+  while(len--) {
+    var ele = orgs[len];
+    if (repo.indexOf(ele) !== -1) {
+      return true;
+    }
+  }
+  return false;
+});
+
+verb.data({
+  travis: {
+    sudo: false,
+    language: 'node_js',
+    node_js:  ['iojs', '0.12', '0.10']
+  }
+});
 
 verb.onLoad(/./, function (file, next) {
   file.render = false;
@@ -58,8 +82,26 @@ verb.task('jshint', function () {
     }));
 });
 
+verb.task('travis', function () {
+  verb.src('.travis.yml', {render: false})
+    .pipe(plugins.travis())
+    .pipe(verb.dest(function (file) {
+      file.path = '.travis.yml';
+      return path.dirname(file.path);
+    }));
+});
+
 verb.task('license', function () {
-  verb.src('LICENSE', {render: false})
+  verb.src('LICENSE{,-MIT}', {render: false})
+    .pipe(plugins.license())
+    .pipe(verb.dest(function (file) {
+      file.path = 'LICENSE';
+      return path.dirname(file.path);
+    }));
+});
+
+verb.task('travis', function () {
+  verb.src('LICENSE{,-MIT}', {render: false})
     .pipe(plugins.license())
     .pipe(verb.dest(function (file) {
       file.path = 'LICENSE';
@@ -70,14 +112,17 @@ verb.task('license', function () {
 verb.task('dotfiles', function () {
   verb.src('.git*', {render: false, dot: true})
     .pipe(plugins.dotfiles())
-    // .pipe(plugins.gitignore())
+    .pipe(plugins.gitignore())
     .pipe(verb.dest(function (file) {
       return path.dirname(file.path);
     }))
     .on('end', function (cb) {
       var files = ['.npmignore', 'test/mocha.opts', '.verbrc.md', 'LICENSE-MIT'];
-      log.info('deleted', files.join(', '));
-      del(files, cb);
+      var exists = utils.exists(files).EXISTS;
+      if (exists.length) {
+        del(exists, cb);
+        log.info('deleted', exists.join(', '));
+      }
     });
 });
 
@@ -96,10 +141,11 @@ verb.task('default', [
   'banners',
   'verbfile',
   'dotfiles',
+  'travis',
   'jshint',
   'license',
-  'pkg',
-  'readme'
+  'pkg'
 ]);
 
+// verb.diff()
 verb.run();
