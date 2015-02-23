@@ -20,6 +20,7 @@ module.exports = function jshintPlugin() {
     obj = sortObj(merge(obj, {
       "asi": false,
       "boss": true,
+      "camelcase": true,
       "curly": true,
       "eqeqeq": true,
       "eqnull": true,
