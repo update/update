@@ -3,10 +3,14 @@
 var path = require('path');
 var diff = require('arr-diff');
 var clone = require('clone-deep');
+var typeOf = require('kind-of');
+var unique = require('array-unique');
 var through = require('through2');
 var sortObj = require('sort-object');
 var update = require('update-package');
 var logger = require('../lib/logging');
+var utils = require('../lib/utils');
+var pkgUtil = require('../lib/pkg');
 
 module.exports = function pkgPlugin(verb) {
   return function() {
@@ -17,23 +21,37 @@ module.exports = function pkgPlugin(verb) {
       }
 
       try {
-        verb.cache.data = verb.cache.data || {};
-        var licenses = verb.cache.data.licenses;
-        var license = verb.cache.data.license;
-
-        if (Array.isArray(licenses)) {
-          licenses = [fixLicense(licenses[0])];
-        } else if (typeof license === 'object') {
-          licenses = [fixLicense(license)];
-        }
-
         var log = logger({nocompare: true});
         var str = file.contents.toString();
         var obj = JSON.parse(str);
 
         // run updates on package.json fields
-        var pkg = update(clone(obj));
+        var pkg = update(obj);
 
+        // populate the `files` property
+        pkg.files = utils.toPkgFiles(file.base, pkg.files);
+        // // populate the `browser` property
+        // var browser = utils.toPkgFiles(file.base, ['browser.js']);
+        // if (browser.length || pkg.browser && pkg.browser.length) {
+        //   pkg.browser = unique(browser, pkg.browser);
+        // }
+
+        var repo = pkg && pkg.repository && typeof pkg.repository === 'object'
+          ? pkg.repository.url
+          : pkg.repository;
+
+        // make repo a string.
+        if (repo) {
+          pkg.repository = pkgUtil.repo.toString(repo);
+        }
+
+        pkg = pkgUtil.devDependencies.removeVerb(pkg);
+
+        pkg.license = 'MIT';
+        delete pkg.licenses;
+
+        // order of preference. keywords last to keep most keys
+        // on the same screen when reviewing properties
         var defaults = [
           'name',
           'description',
@@ -46,10 +64,12 @@ module.exports = function pkgPlugin(verb) {
           'license',
           'licenses',
           'files',
+          'browser',
           'main',
           'private',
           'preferGlobal',
           'bin',
+          'engineStrict',
           'engines',
           'scripts',
           'dependencies',
@@ -59,8 +79,6 @@ module.exports = function pkgPlugin(verb) {
 
         var keys = diff(Object.keys(pkg), defaults);
         var res = sortObj(pkg, defaults.concat(keys));
-        res.licenses = licenses;
-        delete res.license;
 
         if (res.scripts && res.scripts.test && /mocha -r/i.test(res.scripts.test)) {
           res.scripts.test = 'mocha';
@@ -79,8 +97,13 @@ module.exports = function pkgPlugin(verb) {
 };
 
 function fixLicense(license) {
-  if (license && license.url && license.url.indexOf('LICENSE-MIT') !== -1) {
+  if (typeof license === 'string') {
+    return license;
+  }
+
+  if (typeOf(license) === 'object' && license.url && license.url.indexOf('LICENSE-MIT') !== -1) {
     license.url = license.url.split('LICENSE-MIT').join('LICENSE');
   }
+
   return license;
 }
