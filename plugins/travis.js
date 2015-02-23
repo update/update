@@ -5,8 +5,8 @@ var yaml = require('js-yaml');
 var utils = require('../lib/utils');
 var logger = require('../lib/logging');
 
-module.exports = function (verb) {
-  return function travis() {
+module.exports = function travis(verb) {
+  return function() {
     return through.obj(function (file, enc, cb) {
       if (file.isNull() || !file.isBuffer()) {
         this.push(file);
@@ -17,12 +17,11 @@ module.exports = function (verb) {
         var str = file.contents.toString();
         var log = logger(str);
         var obj = yaml.load(str);
-        // console.log(verb.cache.data);
 
-        // log.success(str, 'updated patterns in', file.relative);
+        file.contents = new Buffer(str);
+        log.success(str, 'updated patterns in', file.relative);
       }
 
-      // file.contents = new Buffer(str);
       this.push(file);
       cb();
     });

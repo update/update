@@ -17,6 +17,7 @@ module.exports = function jshintPlugin() {
 
     delete obj.globals;
 
+    // TODO: move to user preferences
     obj = sortObj(merge(obj, {
       "asi": false,
       "boss": true,
