@@ -4,6 +4,7 @@ var fs = require('fs');
 var path = require('path');
 var unique = require('array-unique');
 var intersect = require('array-intersection');
+var utils = require('../../lib/utils');
 
 exports.toFiles = function(fp, names) {
   var lookFor = names || ['index.js', 'cli.js', 'lib/', 'bin/', 'completion/', 'templates/'];
@@ -20,18 +21,8 @@ function formatFiles(files) {
     while (len--) {
       var file = files[i++];
       var stat = fs.statSync(file);
-      res.push(formatPath(file, stat));
+      res.push(utils.trailingSlash(file, stat));
     }
   }
   return res;
-}
-
-function formatPath(fp, stat) {
-  if (stat.isFile()) {
-    return fp;
-  }
-  if (fp && fp[fp.length - 1] !== '/') {
-    return fp + '/';
-  }
-  return fp;
 }
