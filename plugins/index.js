@@ -16,7 +16,8 @@ module.exports = function (verb) {
     jshint    : require('./jshint.js'),
     license   : require('./license.js'),
     pkg       : require('./pkg.js')(verb),
-    tests     : require('./tests.js'),
+    tests     : require('./tests.js')(verb),
+    travis    : require('./travis.js')(verb),
     verbmd    : require('./verbmd.js')(verb)
   };
 };
