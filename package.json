@@ -1,29 +1,20 @@
 {
   "name": "update",
   "description": "Update the year in all files in a project using glob patterns.",
-  "version": "0.3.2-beta",
+  "version": "0.3.3-beta",
   "homepage": "https://github.com/jonschlinkert/update",
   "author": {
     "name": "Jon Schlinkert",
     "url": "https://github.com/jonschlinkert"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jonschlinkert/update.git"
-  },
+  "repository": "jonschlinkert/update",
   "bugs": {
     "url": "https://github.com/jonschlinkert/update/issues"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/jonschlinkert/update/blob/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "files": [
-    "index.js",
-    "cli.js",
-    "lib/"
+    "lib",
+    "cli.js"
   ],
   "main": "index.js",
   "preferGlobal": true,
@@ -38,22 +29,25 @@
   },
   "dependencies": {
     "arr-diff": "^1.0.1",
+    "array-intersection": "^0.1.1",
+    "array-unique": "^0.1.1",
     "chalk": "^0.5.1",
     "clone-deep": "^0.1.1",
+    "del": "^1.1.1",
     "delete": "^0.1.5",
+    "export-files": "^1.0.0",
     "gray-matter": "^1.2.4",
+    "js-yaml": "^3.2.7",
+    "kind-of": "^1.1.0",
     "log-symbols": "^1.0.1",
     "merge-deep": "^0.1.5",
+    "micromatch": "^1.4.0",
     "parse-copyright": "^0.4.0",
     "sort-object": "^1.0.0",
     "through2": "^0.6.3",
     "update-banner": "^0.1.0",
     "update-license": "^0.3.0",
-    "update-package": "^0.1.1",
-    "verb": "^0.4.5"
-  },
-  "devDependencies": {
-    "del": "^1.1.1"
+    "update-package": "^0.1.1"
   },
   "keywords": [
     "javascript",
