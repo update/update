@@ -11,24 +11,27 @@ module.exports = function dotfilesPlugin() {
       return cb();
     }
 
-    var str = file.contents.toString();
-    var log = logger(str);
-
     if (utils.contains(file, '.gitattributes')) {
+      var str = file.contents.toString();
+      var log = logger(str);
+
       str = [
         '# Enforce Unix newlines',
-        '*.* text eol=lf',
+        '* text eol=lf',
         '',
         '# binaries',
+        '*.ai binary',
+        '*.psd binary',
         '*.jpg binary',
         '*.gif binary',
         '*.png binary',
         '*.jpeg binary'
       ].join('\n');
+
       log.success(str, 'updated patterns in', file.relative);
+      file.contents = new Buffer(str);
     }
 
-    file.contents = new Buffer(str);
     this.push(file);
     cb();
   });
