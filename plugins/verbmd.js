@@ -5,7 +5,7 @@ var through = require('through2');
 var verbmd = require('../lib/verbmd');
 var logger = require('../lib/logging');
 
-module.exports = function verbmdPlugin(verb) {
+module.exports = function(verb) {
   return function () {
     return through.obj(function (file, enc, cb) {
       if (file.isNull() || !file.isBuffer()) {
@@ -13,7 +13,7 @@ module.exports = function verbmdPlugin(verb) {
         return cb();
       }
 
-      if (file.path.indexOf('verbfile')) {
+      if (utils.contains(file.path, '.verb')) {
         var str = file.contents.toString();
         var log = logger(str);
 
@@ -22,11 +22,10 @@ module.exports = function verbmdPlugin(verb) {
 
         if (keys.length && obj.data.hasOwnProperty('tags')) {
           str = obj.content.replace(/^\s+/, '');
-          log.success(str, 'stripped front-matter in', file.relative);
+          log.success(str, 'stripped deprecated front-matter tags in', file.relative);
         }
 
         str = verbmd(str);
-
         log.success(str, 'updated helpers in', file.relative);
         file.contents = new Buffer(str);
       }
