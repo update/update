@@ -13,13 +13,13 @@ module.exports = function travis(verb) {
         return cb();
       }
 
-      if (utils.contains(file, '.travis.yml')) {
+      if (utils.contains(file.path, '.travis')) {
         var str = file.contents.toString();
-        var log = logger(str);
+        var log = logger({nocompare: true});
         var obj = yaml.load(str);
 
         file.contents = new Buffer(str);
-        log.success(str, 'updated patterns in', file.relative);
+        log.success(true, 'loaded data from', file.relative);
       }
 
       this.push(file);
