@@ -9,4 +9,4 @@ var utils = require('../../lib/utils');
  * @return {String}
  */
 
-exports.toString = utils.repo;
+exports.repo = utils.repo;
