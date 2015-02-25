@@ -1,9 +1,11 @@
 'use strict';
 
+var gutil = require('gulp-util');
 var matter = require('gray-matter');
 var through = require('through2');
 var verbmd = require('../lib/verbmd');
 var logger = require('../lib/logging');
+var utils = require('../lib/utils');
 
 module.exports = function(verb) {
   return function () {
@@ -13,7 +15,8 @@ module.exports = function(verb) {
         return cb();
       }
 
-      if (utils.contains(file.path, '.verb')) {
+      try {
+        var stats = verb.get('stats');
         var str = file.contents.toString();
         var log = logger(str);
 
@@ -25,9 +28,14 @@ module.exports = function(verb) {
           log.success(str, 'stripped deprecated front-matter tags in', file.relative);
         }
 
-        str = verbmd(str);
+        str = verbmd(str, stats || {});
         log.success(str, 'updated helpers in', file.relative);
         file.contents = new Buffer(str);
+
+      } catch (err) {
+        console.log(err);
+        this.emit('error', new gutil.PluginError('update:verbmd', err));
+        return cb();
       }
 
       this.push(file);
