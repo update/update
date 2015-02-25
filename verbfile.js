@@ -5,22 +5,33 @@ var del = require('del');
 var path = require('path');
 var verb = require('verb');
 var parse = require('parse-copyright');
-var log = require('./lib/logging')({nocompare: true});
+var logger = require('./lib/logging');
+var log = logger({nocompare: true});
 var plugins = require('./plugins')(verb);
+var verbmd = require('./lib/verbmd');
 var utils = require('./lib/utils');
 var glob = require('glob');
+
 
 verb.onLoad(/./, function (file, next) {
   var files = utils.tryReaddir(process.cwd());
   var tests = [];
 
-  if (files.indexOf('test') !== -1) {
+  verb.match = utils.match(files);
+  if (verb.match('test').length) {
     tests = utils.tryReaddir(process.cwd() + '/test');
   }
 
   verb.set('stats.files', files.concat(tests || []));
   verb.set('stats.hasTravis', fs.existsSync('.travis.yml'));
-  verb.match = utils.match(files);
+
+  var verbfile = verb.match('.verb*');
+  if (verbfile.length) {
+    var fp = verbfile[0];
+    var str = utils.antimatter(fp);
+    str = verbmd(str, verb.get('stats'));
+    utils.writeFile(fp, str);
+  }
 
   file.render = false;
   file.readme = false;
@@ -38,6 +49,7 @@ verb.copy('.verbrc.md', function (file) {
   return path.dirname(file.relative);
 });
 
+// all of this junk needs to go...
 var files = glob.sync('test/**').filter(function (fp) {
   return fs.statSync(fp).isDirectory();
 });
@@ -63,15 +75,6 @@ verb.task('banners', function () {
   verb.src(['*.js', 'test/*.js', 'lib/*.js'], {render: false})
     .pipe(plugins.banners())
     .pipe(verb.dest(function (file) {
-      return path.dirname(file.path);
-    }));
-});
-
-verb.task('verbfile', function () {
-  verb.src(['.verb{,rc}.md'], {render: false})
-    .pipe(plugins.verbmd())
-    .pipe(verb.dest(function (file) {
-      file.path = '.verb.md';
       return path.dirname(file.path);
     }));
 });
@@ -137,20 +140,35 @@ verb.task('dotfiles', function () {
 verb.task('pkg', function () {
   verb.src('package.json', {render: false})
     .pipe(plugins.pkg())
-    .pipe(verb.dest('.'));
+    .pipe(verb.dest('.'))
+    .on('end', function () {
+      log.success(true, 'package.json');
+    });
+});
+
+verb.task('verbfile', function () {
+  verb.src(['.verb{,rc}.md'], {render: false})
+    .pipe(plugins.verbmd())
+    .pipe(verb.dest(function (file) {
+      file.path = '.verb.md';
+      return path.dirname(file.path);
+    }))
+    .on('end', function () {
+      log.success(true, '.verb.md');
+    });
 });
 
 verb.task('readme', function () {
   verb.src('.verb.md')
     .pipe(verb.dest('.'))
-    .on('end', function (cb) {
+    .on('end', function () {
       log.success(true, 'updated.');
     });
 });
 
 verb.task('default', [
-  'tests',
   'banners',
+  'tests',
   'verbfile',
   'dotfiles',
   'travis',
@@ -159,5 +177,6 @@ verb.task('default', [
   'pkg',
   'readme'
 ]);
-verb.diff()
+
+verb.diff();
 verb.run();
