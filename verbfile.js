@@ -4,6 +4,7 @@ var fs = require('fs');
 var del = require('del');
 var path = require('path');
 var verb = require('verb');
+var gutil = require('gulp-util');
 var parse = require('parse-copyright');
 var logger = require('./lib/logging');
 var log = logger({nocompare: true});
@@ -74,6 +75,7 @@ verb.copy('LICENSE-MIT', function (file) {
 verb.task('banners', function () {
   verb.src(['*.js', 'test/*.js', 'lib/*.js'], {render: false})
     .pipe(plugins.banners())
+    .on('error', gutil.log)
     .pipe(verb.dest(function (file) {
       return path.dirname(file.path);
     }));
@@ -82,6 +84,7 @@ verb.task('banners', function () {
 verb.task('jshint', function () {
   verb.src('.jshintrc', {render: false})
     .pipe(plugins.jshint())
+    .on('error', gutil.log)
     .pipe(verb.dest(function (file) {
       file.path = '.jshintrc';
       return path.dirname(file.path);
@@ -91,6 +94,7 @@ verb.task('jshint', function () {
 verb.task('travis', function () {
   verb.src('.travis.yml', {render: false})
     .pipe(plugins.travis())
+    .on('error', gutil.log)
     .pipe(verb.dest(function (file) {
       file.path = '.travis.yml';
       return path.dirname(file.path);
@@ -100,6 +104,7 @@ verb.task('travis', function () {
 verb.task('tests', function () {
   verb.src(['test.js', 'test/*.js'], {render: false})
     .pipe(plugins.tests())
+    .on('error', gutil.log)
     .pipe(verb.dest(function (file) {
       return path.dirname(file.path);
     }));
@@ -108,6 +113,7 @@ verb.task('tests', function () {
 verb.task('license', function () {
   verb.src('LICENSE{,-MIT}', {render: false})
     .pipe(plugins.license())
+    .on('error', gutil.log)
     .pipe(verb.dest(function (file) {
       file.path = 'LICENSE';
       return path.dirname(file.path);
@@ -118,6 +124,7 @@ verb.task('dotfiles', function () {
   verb.src('.git*', {render: false, dot: true})
     .pipe(plugins.editorconfig())
     .pipe(plugins.gitignore())
+    .on('error', gutil.log)
     .pipe(verb.dest(function (file) {
       return path.dirname(file.path);
     }))
@@ -134,42 +141,32 @@ verb.task('dotfiles', function () {
         del(exists, cb);
         log.info('deleted', exists.join(', '));
       }
-    });
+    })
 });
 
 verb.task('pkg', function () {
   verb.src('package.json', {render: false})
     .pipe(plugins.pkg())
+    .on('error', gutil.log)
     .pipe(verb.dest('.'))
     .on('end', function () {
       log.success(true, 'package.json');
     });
 });
 
-verb.task('verbfile', function () {
-  verb.src(['.verb{,rc}.md'], {render: false})
-    .pipe(plugins.verbmd())
-    .pipe(verb.dest(function (file) {
-      file.path = '.verb.md';
-      return path.dirname(file.path);
-    }))
-    .on('end', function () {
-      log.success(true, '.verb.md');
-    });
-});
-
 verb.task('readme', function () {
   verb.src('.verb.md')
     .pipe(verb.dest('.'))
+    .on('error', gutil.log)
     .on('end', function () {
       log.success(true, 'updated.');
-    });
+    })
+    .on('error', gutil.log);
 });
 
 verb.task('default', [
   'banners',
   'tests',
-  'verbfile',
   'dotfiles',
   'travis',
   'jshint',
