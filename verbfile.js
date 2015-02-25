@@ -10,35 +10,12 @@ var plugins = require('./plugins')(verb);
 var utils = require('./lib/utils');
 var glob = require('glob');
 
-function tryReaddir(fp) {
-  try {
-    return fs.readdirSync(fp);
-  } catch (err) {}
-  return [];
-}
-
-// verb.known(function(env) {
-//   var orgs = ['jonschlinkert', 'doowb', 'assemble', 'verb', 'helpers', 'regexps'];
-//   var repo = env.repository;
-//   if (typeof repo === 'object') {
-//     repo = repo.url;
-//   }
-//   var len = orgs.length;
-//   while(len--) {
-//     var ele = orgs[len];
-//     if (repo.indexOf(ele) !== -1) {
-//       return true;
-//     }
-//   }
-//   return false;
-// });
-
 verb.onLoad(/./, function (file, next) {
-  var files = tryReaddir(process.cwd());
+  var files = utils.tryReaddir(process.cwd());
   var tests = [];
 
   if (files.indexOf('test') !== -1) {
-    tests = tryReaddir(process.cwd() + '/test');
+    tests = utils.tryReaddir(process.cwd() + '/test');
   }
 
   verb.set('stats.files', files.concat(tests || []));
