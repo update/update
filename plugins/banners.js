@@ -19,25 +19,20 @@ module.exports = function(verb) {
         return cb();
       }
 
-      try {
-        if (utils.contains(file.path, '.js')) {
-          var str = file.contents.toString();
-          var log = logger(str);
+      if (utils.contains(file.path, '.js')) {
+        var str = file.contents.toString();
+        var log = logger(str);
 
-          if (hasBanner(str) || opts.banner) {
-            var copyright = parse(str);
-            if (copyright && copyright.length) {
-              file.data.copyright = copyright[0];
-            }
-            str = banner(str, file.data);
-            log.success(str, 'updated banners in', file.relative);
+        if (hasBanner(str) || opts.banner) {
+          var copyright = parse(str);
+          if (copyright && copyright.length) {
+            file.data.copyright = copyright[0];
           }
-
-          file.contents = new Buffer(str);
+          str = banner(str, file.data);
+          log.success(str, 'updated banners in', file.relative);
         }
-      } catch (err) {
-        this.emit('error', new gutil.PluginError('update:banners', err));
-        return cb();
+
+        file.contents = new Buffer(str);
       }
 
       this.push(file);
