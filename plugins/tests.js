@@ -43,12 +43,13 @@ module.exports = function(verb) {
           // `should` exists in test files
           if (hasShould) {
             str = tests.fixShould(str, file.relative);
-            if (!deps.hasOwnProperty('should')) {
+            if (deps && !deps.hasOwnProperty('should')) {
               // TODO: add should to deps if exists in tets
               // console.log(verb.env);
             }
+
             log.success(str, 'updated "should" statements in', file.relative);
-          } else if (deps.hasOwnProperty('should')) {
+          } else if (deps && deps.hasOwnProperty('should')) {
             verb.set('strip.pkg.devDependencies', 'should');
           }
 
