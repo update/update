@@ -1,23 +1,21 @@
 {
   "name": "update",
   "description": "Update the year in all files in a project using glob patterns.",
-  "version": "0.2.0",
+  "version": "0.3.3",
   "homepage": "https://github.com/jonschlinkert/update",
   "author": {
     "name": "Jon Schlinkert",
     "url": "https://github.com/jonschlinkert"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jonschlinkert/update.git"
-  },
+  "repository": "jonschlinkert/update",
   "bugs": {
     "url": "https://github.com/jonschlinkert/update/issues"
   },
-  "license": {
-    "type": "MIT",
-    "url": "https://github.com/jonschlinkert/update/blob/master/LICENSE-MIT"
-  },
+  "license": "MIT",
+  "files": [
+    "cli.js",
+    "lib/"
+  ],
   "main": "index.js",
   "preferGlobal": true,
   "bin": {
@@ -27,21 +25,40 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "mocha -R spec",
-    "docs": "update && license && npmignore && deps && verb",
-    "all": "npm run test && npm run docs"
+    "test": "mocha"
   },
   "dependencies": {
-    "extend-shallow": "^0.2.0",
-    "globby": "^1.0.0",
-    "load-pkg": "^1.0.0",
-    "minimist": "^1.1.0",
-    "parse-author": "^0.1.0",
-    "write": "^0.1.1",
-    "year": "^0.2.1"
+    "arr-diff": "^1.0.1",
+    "array-intersection": "^0.1.1",
+    "array-unique": "^0.1.1",
+    "chalk": "^1.0.0",
+    "del": "^1.1.1",
+    "delete": "^0.1.5",
+    "export-files": "^1.0.0",
+    "glob": "^4.4.0",
+    "gray-matter": "^1.2.5",
+    "gulp-util": "^3.0.4",
+    "has-banner": "^0.2.0",
+    "js-yaml": "^3.2.7",
+    "kind-of": "^1.1.0",
+    "log-symbols": "^1.0.1",
+    "merge-deep": "^0.1.5",
+    "micromatch": "^1.4.2",
+    "mixin-deep": "^1.0.1",
+    "parse-copyright": "^0.4.0",
+    "relative": "^2.0.0",
+    "remote-origin-url": "^0.3.0",
+    "requires-regex": "^0.2.0",
+    "sort-object": "^1.0.0",
+    "template-utils": "^0.4.1",
+    "through2": "^0.6.3",
+    "update-banner": "^0.1.1",
+    "update-license": "^0.3.0",
+    "update-package": "^0.1.1",
+    "verb": "^0.5.0"
   },
   "devDependencies": {
-    "mocha": "*"
+    "should": "^5.0.1"
   },
   "keywords": [
     "javascript",
