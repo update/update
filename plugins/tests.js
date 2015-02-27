@@ -16,12 +16,7 @@ module.exports = function(verb) {
       }
 
       try {
-
         if (utils.contains(file.path, 'test')) {
-          var stats = verb.get('stats');
-
-          // console.log(verb.match('*.js'))
-
           var str = file.contents.toString();
           var log = logger(str);
 
@@ -41,9 +36,9 @@ module.exports = function(verb) {
           var deps = verb.env.devDependencies;
 
           // `should` exists in test files
-          if (hasShould) {
+          if (hasShould && deps) {
             str = tests.fixShould(str, file.relative);
-            if (deps && !deps.hasOwnProperty('should')) {
+            if (!deps.hasOwnProperty('should')) {
               // TODO: add should to deps if exists in tets
               // console.log(verb.env);
             }
@@ -63,5 +58,5 @@ module.exports = function(verb) {
       this.push(file);
       cb();
     });
-  }
+  };
 };

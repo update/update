@@ -13,27 +13,19 @@ var verbmd = require('./lib/verbmd');
 var utils = require('./lib/utils');
 var glob = require('glob');
 
+verb.transform('_init', function (verb) {
+  verb.set('stats.hasTravis', verb.exists('.travis.yml'));
 
-verb.onLoad(/./, function (file, next) {
-  var files = utils.tryReaddir(process.cwd());
-  var tests = [];
-
-  verb.match = utils.match(files);
-  if (verb.match('test').length) {
-    tests = utils.tryReaddir(process.cwd() + '/test');
-  }
-
-  verb.set('stats.files', files.concat(tests || []));
-  verb.set('stats.hasTravis', fs.existsSync('.travis.yml'));
-
-  var verbfile = verb.match('.verb*');
+  var verbfile = verb.files('.verb*');
   if (verbfile.length) {
     var fp = verbfile[0];
     var str = utils.antimatter(fp);
     str = verbmd(str, verb.get('stats'));
     utils.writeFile(fp, str);
   }
+});
 
+verb.onLoad(/./, function (file, next) {
   file.render = false;
   file.readme = false;
   next();
@@ -124,6 +116,7 @@ verb.task('dotfiles', function () {
   verb.src('.git*', {render: false, dot: true})
     .pipe(plugins.editorconfig())
     .pipe(plugins.gitignore())
+    .pipe(plugins.dotfiles())
     .on('error', gutil.log)
     .pipe(verb.dest(function (file) {
       return path.dirname(file.path);
@@ -160,8 +153,7 @@ verb.task('readme', function () {
     .on('error', gutil.log)
     .on('end', function () {
       log.success(true, 'updated.');
-    })
-    .on('error', gutil.log);
+    });
 });
 
 verb.task('default', [
@@ -175,5 +167,5 @@ verb.task('default', [
   'readme'
 ]);
 
-verb.diff();
+// verb.diff();
 verb.run();

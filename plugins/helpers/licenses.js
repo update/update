@@ -1,8 +1,5 @@
 'use strict';
 
-var typeOf = require('kind-of');
-var utils = require('../../lib/utils');
-
 exports.normalize = function normalize(pkg) {
   var licenses = pkg.licenses;
 
@@ -10,6 +7,5 @@ exports.normalize = function normalize(pkg) {
     pkg.license = pkg.licenses[0];
     delete pkg.licenses;
   }
-
   return pkg;
 };
