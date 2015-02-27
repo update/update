@@ -1,11 +1,6 @@
-/**
- * update <https://github.com/jonschlinkert/update>
- *
- * Copyright (c) 2014-2015, Jon Schlinkert.
- * Licensed under the MIT license.
- */
-
 'use strict';
+
+// module.exports = require('export-files')(__dirname);
 
 module.exports = function (verb) {
  return {
@@ -17,7 +12,6 @@ module.exports = function (verb) {
     license       : require('./license.js')(verb),
     pkg           : require('./pkg.js')(verb),
     tests         : require('./tests.js')(verb),
-    travis        : require('./travis.js')(verb),
-    verbmd        : require('./verbmd.js')(verb)
+    travis        : require('./travis.js')(verb)
   };
 };

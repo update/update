@@ -7,7 +7,7 @@ var intersect = require('array-intersection');
 var utils = require('../../lib/utils');
 
 exports.toFiles = function(fp, names) {
-  var lookFor = names || ['index.js', 'cli.js', 'lib/', 'bin/', 'completion/', 'templates/'];
+  var lookFor = names || ['index.js', 'cli.js', 'lib/', 'bin/', 'completion/', 'templates/', 'app/'];
   var files = fs.readdirSync(path.resolve(fp));
   names = formatFiles(names);
   files = formatFiles(files);

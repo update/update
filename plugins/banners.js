@@ -1,13 +1,11 @@
 'use strict';
 
-var gutil = require('gulp-util');
 var through = require('through2');
 var parse = require('parse-copyright');
 var banner = require('update-banner');
 var hasBanner = require('has-banner');
 var merge = require('merge-deep');
 var logger = require('../lib/logging');
-var utils = require('../lib/utils');
 
 module.exports = function(verb) {
   return function(options) {
@@ -19,22 +17,19 @@ module.exports = function(verb) {
         return cb();
       }
 
-      if (utils.contains(file.path, '.js')) {
-        var str = file.contents.toString();
-        var log = logger(str);
+      var str = file.contents.toString();
+      var log = logger(str);
 
-        if (hasBanner(str) || opts.banner) {
-          var copyright = parse(str);
-          if (copyright && copyright.length) {
-            file.data.copyright = copyright[0];
-          }
-          str = banner(str, file.data);
-          log.success(str, 'updated banners in', file.relative);
+      if (hasBanner(str) || opts.banner) {
+        var copyright = parse(str);
+        if (copyright && copyright.length) {
+          file.data.copyright = copyright[0];
         }
-
-        file.contents = new Buffer(str);
+        str = banner(str, file.data);
+        log.success(str, 'updated banners in', file.relative);
       }
 
+      file.contents = new Buffer(str);
       this.push(file);
       cb();
     });

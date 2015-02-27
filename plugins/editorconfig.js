@@ -2,8 +2,7 @@
 
 var gutil = require('gulp-util');
 var through = require('through2');
-var utils = require('../lib/utils');
-var logger = require('../lib/logging');
+// var ec = require('editorconfig');
 
 module.exports = function(verb) {
   return function() {

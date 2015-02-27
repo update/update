@@ -2,8 +2,6 @@
 
 var gutil = require('gulp-util');
 var through = require('through2');
-var utils = require('../lib/utils');
-var logger = require('../lib/logging');
 
 module.exports = function(verb) {
   return function() {
@@ -11,10 +9,7 @@ module.exports = function(verb) {
       this.push(file);
       cb();
     }, function (cb) {
-      var file = new gutil.File({
-        path: '.gitattributes'
-      });
-
+      var file = new gutil.File({path: '.gitattributes'});
       file.contents = new Buffer(require('../templates/gitattributes'));
       this.push(file);
       cb();
