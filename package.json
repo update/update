@@ -15,8 +15,9 @@
   "files": [
     "cli.js",
     "lib/",
-    "plugins/",
-    "templates/"
+    "templates/",
+    "verbfile.js",
+    "plugins/"
   ],
   "main": "index.js",
   "preferGlobal": true,
