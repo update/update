@@ -42,13 +42,8 @@ verb.copy('.verbrc.md', function (file) {
   return path.dirname(file.relative);
 });
 
-// all of this junk needs to go...
-var files = glob.sync('test/**').filter(function (fp) {
-  return fs.statSync(fp).isDirectory();
-});
-
 var singleTest = false;
-if (files && files.length === 1) {
+if (verb.files('test{,*.js,/*.js').length) {
   singleTest = true;
   verb.set('singleTest', true);
   verb.copy('test/test.js', function (file) {

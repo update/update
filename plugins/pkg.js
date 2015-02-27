@@ -44,11 +44,14 @@ module.exports = function(verb) {
           // run updates on package.json fields
           var pkg = update(obj);
 
-          // populate the `files` property
-          pkg.files = helpers.files.toFiles(file.base, pkg.files);
-
           // remove old verb from deps
           pkg = helpers.devDependencies.removeVerb(pkg);
+
+          // populate the `files` property. Not exposed on options
+          // currently, but can be if someone suggests a good option
+          var matched = require('./helpers/files')(pkg.files);
+          var files = verb.get('stats.files');
+          pkg.files = matched(files);
 
           // fix the scripts property
           pkg = helpers.scripts.fixMocha(pkg);

@@ -1,20 +1,26 @@
 'use strict';
 
 var fs = require('fs');
-var path = require('path');
 var unique = require('array-unique');
-var intersect = require('array-intersection');
+var mm = require('micromatch');
 var utils = require('../../lib/utils');
 
-exports.toFiles = function(fp, names) {
-  var lookFor = names || ['index.js', 'cli.js', 'lib/', 'bin/', 'completion/', 'templates/', 'app/'];
-  var files = fs.readdirSync(path.resolve(fp));
-  names = formatFiles(names);
-  files = formatFiles(files);
-  return unique(intersect(lookFor, files).concat(names));
+/**
+ * Guess at which files should be included in package.json `files`.
+ * This isn't meant to be comprehensive, it's intended to tip you
+ * off that you need to fill in the field.
+ */
+
+module.exports = function(patterns, options) {
+  var defaults = ['index.js', 'cli.js', 'lib/', 'bin/', 'completion/', 'templates/', 'app/'];
+  patterns = patterns ? formatPatterns(patterns) : [];
+
+  return function (files) {
+    return unique(mm(files, defaults, options).concat(patterns));
+  }
 };
 
-function formatFiles(files) {
+function formatPatterns(files) {
   var res = [], i = 0;
   var len;
   if (files && (len = files.length)) {

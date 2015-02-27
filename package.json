@@ -1,7 +1,7 @@
 {
   "name": "update",
   "description": "Update the year in all files in a project using glob patterns.",
-  "version": "0.3.3",
+  "version": "0.3.5",
   "homepage": "https://github.com/jonschlinkert/update",
   "author": {
     "name": "Jon Schlinkert",
@@ -14,7 +14,9 @@
   "license": "MIT",
   "files": [
     "cli.js",
-    "lib/"
+    "lib/",
+    "plugins/",
+    "templates/"
   ],
   "main": "index.js",
   "preferGlobal": true,
@@ -33,33 +35,25 @@
     "array-unique": "^0.1.1",
     "chalk": "^1.0.0",
     "del": "^1.1.1",
-    "delete": "^0.1.5",
-    "export-files": "^1.0.0",
-    "glob": "^4.4.0",
+    "export-files": "^1.1.0",
+    "glob": "^4.4.1",
     "gray-matter": "^1.2.5",
     "gulp-util": "^3.0.4",
     "has-banner": "^0.2.0",
-    "js-yaml": "^3.2.7",
     "kind-of": "^1.1.0",
-    "log-symbols": "^1.0.1",
-    "merge-deep": "^0.1.5",
+    "log-symbols": "^1.0.2",
+    "merge-deep": "^1.0.1",
     "micromatch": "^1.4.2",
-    "mixin-deep": "^1.0.1",
     "parse-copyright": "^0.4.0",
-    "relative": "^2.0.0",
-    "remote-origin-url": "^0.3.0",
     "requires-regex": "^0.2.0",
     "sort-object": "^1.0.0",
-    "template-utils": "^0.4.1",
     "through2": "^0.6.3",
     "update-banner": "^0.1.1",
     "update-license": "^0.3.0",
-    "update-package": "^0.1.1",
-    "verb": "^0.5.0"
+    "update-package": "^0.2.0",
+    "verb": "^0.6.1"
   },
-  "devDependencies": {
-    "should": "^5.0.1"
-  },
+  "devDependencies": {},
   "keywords": [
     "javascript",
     "keys",
