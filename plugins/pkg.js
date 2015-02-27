@@ -7,6 +7,7 @@
 var path = require('path');
 var diff = require('arr-diff');
 var gutil = require('gulp-util');
+var omitEmpty = require('omit-empty');
 var through = require('through2');
 var update = require('update-package');
 var sortObj = require('sort-object');
@@ -64,6 +65,7 @@ module.exports = function(verb) {
           // fix the `license` and `licenses` properties
           pkg = helpers.licenses.normalize(pkg);
           pkg = helpers.license.normalize(pkg);
+          pkg = omitEmpty(pkg);
 
           var keys = helpers.keys.concat(diff(Object.keys(pkg), helpers.keys));
           var sorted = sortObj(pkg, keys);
