@@ -5,6 +5,7 @@ var through = require('through2');
 var should = require('../lib/tests/should');
 var paths = require('../lib/tests/paths');
 
+
 module.exports = function (verb) {
   return function () {
     return through.obj(function (file, enc, cb) {

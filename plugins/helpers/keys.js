@@ -13,6 +13,8 @@ module.exports = [
   'version',
   'homepage',
   'author',
+  'authors',
+  'contributors',
   'maintainers',
   'repository',
   'bugs',
@@ -29,5 +31,6 @@ module.exports = [
   'scripts',
   'dependencies',
   'devDependencies',
-  'keywords'
+  'keywords',
+  'verb'
 ];

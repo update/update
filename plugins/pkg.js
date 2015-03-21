@@ -5,17 +5,14 @@
  */
 
 var path = require('path');
-var diff = require('arr-diff');
 var gutil = require('gulp-util');
-var omitEmpty = require('omit-empty');
 var through = require('through2');
-var update = require('update-package');
 
 /**
  * Local dependencies
  */
 
-var normalize = require('./helpers');
+var normalize = require('./helpers/');
 
 /**
  * virtually everything in this file is a temporary
@@ -31,16 +28,12 @@ module.exports = function(verb) {
       }
 
       try {
-        if (verb.exists('package.json')) {
-          file = normalize(file, verb);
-        }
-
+        file = normalize(file, verb);
       } catch (err) {
         console.log(err);
         this.emit('error', new gutil.PluginError('update:pkg', err));
         return cb();
       }
-
 
       this.push(file);
       cb();

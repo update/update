@@ -20,7 +20,9 @@ module.exports = function(verb) {
       var str = file.contents.toString();
       var log = logger(str);
 
-      if (hasBanner(str) || opts.banner) {
+      // TODO: implement better logic for ignoring banners that shouldn't
+      // be stripped
+      if ((hasBanner(str) || opts.banner) && !/@attribution/.test(str)) {
         var copyright = parse(str);
         if (copyright && copyright.length) {
           file.data.copyright = copyright[0];

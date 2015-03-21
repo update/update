@@ -1,14 +1,27 @@
 'use strict';
 
-var authors = [
-  '{%= include("authors", {',
-  '  authors: [',
-  '    {name: \'Jon Schlinkert\', username: \'jonschlinkert\'},',
-  '    {name: \'Brian Woodward\', username: \'doowb\'}',
-  '  ]',
-  '}) %}'
-].join('\n');
+var unique = require('array-unique');
 
+function unknownHelpers(str, verb) {
+  var helpers = Object.keys(verb._.helpers);
+  var async = Object.keys(verb._.asyncHelpers);
+  var keys = unique(helpers.concat(async)).sort();
+
+  var re = /\{%=\s*(\w+)\(([\s\S]+?)%}/;
+  var match, res = [];
+  var orig = str;
+
+  while (match = re.exec(str)) {
+    str = str.replace(match[0], '');
+    var name = match[1];
+    if (keys.indexOf(name) === -1) {
+      res.push(name);
+    }
+  }
+
+  verb.set('stats.unknownHelpers', res);
+  return orig;
+}
 
 function addTravisBadge(str, stats) {
   if (stats && stats.hasTravis && !/badge\(.travis/.test(str)) {
@@ -24,6 +37,22 @@ function fixInstall(str) {
   return str;
 }
 
+function installGlobal(str, verb) {
+  // TODO: if `preferGlobal` or `bin` are in package.json, add
+  // {%= include("install-global") %}
+  return str;
+}
+
+var authors = [
+  '{%= include("authors", {',
+  '  authors: [',
+  '    {name: \'Jon Schlinkert\', username: \'jonschlinkert\'},',
+  '    {name: \'Brian Woodward\', username: \'doowb\'}',
+  '  ]',
+  '}) %}'
+].join('\n');
+
+
 function fixHelpers(str) {
   str = str.split('{%= jscomments').join('{%= apidocs');
   str = str.split('{%= contrib("jon") %}').join('{%= include("author") %}');
@@ -32,6 +61,11 @@ function fixHelpers(str) {
   str = str.split('{%= contrib("author") %}').join('{%= include("author") %}');
   str = str.split('{%= contrib("authors") %}').join(authors);
   return str;
+}
+
+function matchHelper(name, args) {
+  var str = '{%=\\s*' + name + (args || '([\\s\\S]+?)') + '\\s*%}';
+  return new RegExp(str);
 }
 
 function fixCopyright(str, year) {
@@ -47,10 +81,14 @@ function runningTests(str) {
   return str.replace(re, '## Running tests\n{%= include("tests") %}');
 }
 
-module.exports = function (str, stats) {
+module.exports = function (str, verb) {
+  var stats = verb.get('stats');
+
   str = addTravisBadge(str, stats);
   str = runningTests(str);
   str = fixInstall(str);
   str = fixHelpers(str);
+
+  unknownHelpers(str, verb);
   return str;
 };

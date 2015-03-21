@@ -4,15 +4,17 @@
  * Module dependencies
  */
 
-var sortObj = require('sort-object');
 var helpers = require('export-files')(__dirname);
+var sortObj = require('sort-object');
+var omitEmpty = require('omit-empty');
+var update = require('update-package');
+var diff = require('arr-diff');
 
 /**
  * Local dependencies
  */
 
-var logger = require('../lib/logging');
-var utils = require('../lib/utils');
+var logger = require('../../lib/logging');
 
 /**
  * Normalize fields in package.json
@@ -33,8 +35,10 @@ module.exports = function (file, verb) {
 
   // populate the `files` property. Not exposed on options
   // currently, but can be if someone suggests a good option
-  var matched = require('./helpers/files')(pkg.files);
-  var files = verb.get('stats.files');
+  var matched = require('./files')(pkg.files);
+  var stats = verb.get('stats');
+  var files = stats.files;
+
   pkg.files = matched(files);
 
   // fix the scripts property
@@ -42,13 +46,18 @@ module.exports = function (file, verb) {
 
   // if should doesn't exist, remove it
   if (!verb.get('data.hasShould')) {
-    pkg = helpers.devDependencies.removeShould(pkg);
+    // pkg = helpers.devDependencies.removeShould(pkg);
   }
 
   // fix the `license` and `licenses` properties
   pkg = helpers.licenses.normalize(pkg);
   pkg = helpers.license.normalize(pkg);
   pkg = omitEmpty(pkg);
+
+  // if (stats.unknownHelpers.length) {
+
+  // // console.log(stats.unknownHelpers)
+  // }
 
   var keys = helpers.keys.concat(diff(Object.keys(pkg), helpers.keys));
   var sorted = sortObj(pkg, keys);
@@ -57,4 +66,4 @@ module.exports = function (file, verb) {
   log.results(res, 'updated properties in', file.relative);
   file.contents = new Buffer(res);
   return file;
-}
+};

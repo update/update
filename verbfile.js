@@ -7,23 +7,15 @@ var verb = require('verb');
 var gutil = require('gulp-util');
 var parse = require('parse-copyright');
 var logger = require('./lib/logging');
-var log = logger({nocompare: true});
 var plugins = require('./plugins')(verb);
-var verbmd = require('./lib/verbmd');
+var verbmd = require('./plugins/readme/verbmd');
 var utils = require('./lib/utils');
 var glob = require('glob');
+var pkg = require(__dirname + '/package.json');
+var log = logger({nocompare: true});
 
-verb.transform('_init', function (verb) {
-  verb.set('stats.hasTravis', verb.exists('.travis.yml'));
 
-  var verbfile = verb.files('.verb*');
-  if (verbfile.length) {
-    var fp = verbfile[0];
-    var str = utils.antimatter(fp);
-    str = verbmd(str, verb.get('stats'));
-    utils.writeFile(fp, str);
-  }
-});
+verb.transform('start', require('./transforms/start'));
 
 verb.onLoad(/./, function (file, next) {
   file.render = false;
@@ -31,10 +23,10 @@ verb.onLoad(/./, function (file, next) {
   next();
 });
 
-verb.onLoad(/\.js$/, function (file, next) {
-  file.data.copyright = parse(file.content);
-  next();
-});
+// verb.onLoad(/\.js$/, function (file, next) {
+//   file.data.copyright = parse(file.content);
+//   next();
+// });
 
 verb.copy('.verbrc.md', function (file) {
   file.path = '.verb.md';
@@ -127,7 +119,7 @@ verb.task('dotfiles', function () {
 
       if (exists.length) {
         del(exists, cb);
-        log.info('deleted', exists.join(', '));
+        log.deleted('deleted', exists.join(', '));
       }
     })
 });
