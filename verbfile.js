@@ -3,42 +3,44 @@
 var fs = require('fs');
 var del = require('del');
 var path = require('path');
-var verb = require('verb');
+var verb = require('../../verb/verb');
+var debug = require('debug')('update:tasks');
 var gutil = require('gulp-util');
 var parse = require('parse-copyright');
-var logger = require('./lib/logging');
 var plugins = require('./plugins')(verb);
 var verbmd = require('./plugins/readme/verbmd');
 var utils = require('./lib/utils');
 var glob = require('glob');
 var pkg = require(__dirname + '/package.json');
+var logger = require('./lib/logging');
 var log = logger({nocompare: true});
 
 
 verb.transform('start', require('./transforms/start'));
-
 verb.onLoad(/./, function (file, next) {
   file.render = false;
   file.readme = false;
   next();
 });
 
-// verb.onLoad(/\.js$/, function (file, next) {
-//   file.data.copyright = parse(file.content);
-//   next();
-// });
+verb.onLoad(/\.js$/, function (file, next) {
+  file.data.copyright = parse(file.content);
+  next();
+});
 
 verb.copy('.verbrc.md', function (file) {
+  debug('copy .verbrc.md');
   file.path = '.verb.md';
   log.success('renamed', file.relative);
   return path.dirname(file.relative);
 });
 
-var singleTest = false;
+var hasOneTestfile = false;
 if (verb.files('test{,*.js,/*.js').length) {
-  singleTest = true;
-  verb.set('singleTest', true);
+  hasOneTestfile = true;
+  verb.set('hasOneTestfile', true);
   verb.copy('test/test.js', function (file) {
+  debug('copy test.js');
     file.path = 'test.js';
     log.success('moved', file.path);
     return file.base;
@@ -46,12 +48,14 @@ if (verb.files('test{,*.js,/*.js').length) {
 }
 
 verb.copy('LICENSE-MIT', function (file) {
+  debug('copy LICENSE-MIT');
   file.path = 'LICENSE';
   log.success('renamed', file.relative);
   return path.dirname(file.relative);
 });
 
 verb.task('banners', function () {
+  debug('banners task');
   verb.src(['*.js', 'test/*.js', 'lib/*.js'], {render: false})
     .pipe(plugins.banners())
     .on('error', gutil.log)
@@ -91,7 +95,7 @@ verb.task('tests', function () {
 
 verb.task('license', function () {
   verb.src('LICENSE{,-MIT}', {render: false})
-    .pipe(plugins.license())
+    // .pipe(plugins.license())
     .on('error', gutil.log)
     .pipe(verb.dest(function (file) {
       file.path = 'LICENSE';
@@ -113,7 +117,7 @@ verb.task('dotfiles', function () {
       var res = utils.exists(files);
 
       var exists = res.EXISTS;
-      if (verb.get('singleTest')) {
+      if (verb.get('hasOneTestfile')) {
         exists.push('test');
       }
 
@@ -124,13 +128,14 @@ verb.task('dotfiles', function () {
     })
 });
 
-verb.task('pkg', function () {
-  verb.src('package.json', {render: false})
+verb.task('json', function () {
+  verb.src('{bower,package}.json', {render: false})
     .pipe(plugins.pkg())
+    .pipe(plugins.bower())
     .on('error', gutil.log)
     .pipe(verb.dest('.'))
     .on('end', function () {
-      log.success(true, 'package.json');
+      log.success(true, 'updated package.json');
     });
 });
 
@@ -139,7 +144,7 @@ verb.task('readme', function () {
     .pipe(verb.dest('.'))
     .on('error', gutil.log)
     .on('end', function () {
-      log.success(true, 'updated.');
+      log.success(true, 'updated readme.');
     });
 });
 
@@ -150,7 +155,7 @@ verb.task('default', [
   'travis',
   'jshint',
   'license',
-  'pkg',
+  'json',
   'readme'
 ]);
 
