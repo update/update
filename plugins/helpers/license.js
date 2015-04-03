@@ -1,9 +1,11 @@
 'use strict';
 
 var typeOf = require('kind-of');
+var debug = require('debug')('update:helpers');
 var utils = require('../../lib/utils');
 
-exports.normalize = function normalize(pkg) {
+exports.normalize = function license_(pkg) {
+  debug('helpers:license %j', pkg);
   var license = pkg.license;
 
   if (!license) { return pkg; }

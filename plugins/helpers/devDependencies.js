@@ -1,10 +1,14 @@
 'use strict';
 
+var debug = require('debug')('update:helpers');
+
 /**
  * Remove the old verb
  */
 
 exports.removeVerb = function(pkg) {
+  debug('removeVerb');
+
   if (pkg && pkg.devDependencies && pkg.devDependencies['verb-tag-jscomments']) {
     delete pkg.devDependencies['verb-tag-jscomments'];
     delete pkg.devDependencies.verb;

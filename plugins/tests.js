@@ -1,12 +1,13 @@
 'use strict';
 
+var debug = require('debug')('update:plugin');
 var gutil = require('gulp-util');
 var through = require('through2');
 var should = require('../lib/tests/should');
 var paths = require('../lib/tests/paths');
 
-
-module.exports = function (verb) {
+module.exports = function tests_(verb) {
+  debug('tests plugin');
   return function () {
     return through.obj(function (file, enc, cb) {
       if (file.isNull() || !file.isBuffer()) {

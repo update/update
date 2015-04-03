@@ -4,6 +4,7 @@
  * Module dependencies
  */
 
+var debug = require('debug')('update:plugin');
 var path = require('path');
 var gutil = require('gulp-util');
 var through = require('through2');
@@ -19,14 +20,15 @@ var normalize = require('./helpers/');
  * hack until I get update-package straightened out.
  */
 
-module.exports = function(verb) {
+module.exports = function pkg_(verb) {
+  debug('pkg plugin');
+
   return function() {
     return through.obj(function (file, enc, cb) {
       if (file.isNull() || !file.isBuffer() || path.basename(file.path) !== 'package.json') {
         this.push(file);
         return cb();
       }
-
       try {
         file = normalize(file, verb);
       } catch (err) {
@@ -34,7 +36,6 @@ module.exports = function(verb) {
         this.emit('error', new gutil.PluginError('update:pkg', err));
         return cb();
       }
-
       this.push(file);
       cb();
     });

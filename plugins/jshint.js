@@ -1,5 +1,6 @@
 'use strict';
 
+var debug = require('debug')('update:plugin');
 var gutil = require('gulp-util');
 var through = require('through2');
 var merge = require('merge-deep');
@@ -7,7 +8,8 @@ var sortObj = require('sort-object');
 var logger = require('../lib/logging');
 var utils = require('../lib/utils');
 
-module.exports = function jshint(verb) {
+module.exports = function jshint_(verb) {
+  debug('jshint plugin');
   return function() {
     return through.obj(function (file, enc, cb) {
       if (file.isNull() || !file.isBuffer()) {

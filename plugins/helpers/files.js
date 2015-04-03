@@ -1,7 +1,7 @@
 'use strict';
 
-var fs = require('fs');
 var mm = require('micromatch');
+var debug = require('debug')('update:helpers');
 var unique = require('array-unique');
 var utils = require('../../lib/utils');
 
@@ -19,6 +19,7 @@ var defaults = ['index.js', 'cli.js', 'lib/', 'bin/', 'completion/', 'templates/
  */
 
 module.exports = function(patterns, options) {
+  debug('helpers:files %j', patterns);
   patterns = patterns ? ensureSlash(patterns) : [];
   return function (files) {
     return unique(mm(files, defaults, options).concat(patterns));
@@ -30,6 +31,7 @@ module.exports = function(patterns, options) {
  */
 
 function ensureSlash(files) {
+
   var res = [], i = 0;
   var len;
   if (files && (len = files.length)) {

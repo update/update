@@ -1,5 +1,6 @@
 'use strict';
 
+var debug = require('debug')('update:plugin');
 var gutil = require('gulp-util');
 var through = require('through2');
 var logger = require('../lib/logging');
@@ -9,7 +10,8 @@ var logger = require('../lib/logging');
  * if the file is missing but tests exist.
  */
 
-module.exports = function travis(verb) {
+module.exports = function travis_(verb) {
+  debug('travis plugin');
   return function () {
     return through.obj(function (file, enc, cb) {
       this.push(file);
@@ -27,7 +29,6 @@ module.exports = function travis(verb) {
         this.push(file);
         log.success(true, 'writing', file.relative);
       }
-
       cb();
     });
   };

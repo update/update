@@ -1,6 +1,9 @@
 'use strict';
 
-exports.normalize = function normalize(pkg) {
+var debug = require('debug')('update:helpers');
+
+exports.normalize = function licenses_(pkg) {
+  debug('helpers:licenses %j', pkg);
   var licenses = pkg.licenses;
 
   if (Array.isArray(licenses) && licenses.length === 1) {

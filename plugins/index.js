@@ -5,6 +5,7 @@
 module.exports = function (verb) {
  return {
     banners       : require('./banners.js')(verb),
+    bower       : require('./bower.js')(verb),
     dotfiles      : require('./dotfiles.js')(verb),
     editorconfig  : require('./editorconfig.js')(verb),
     gitignore     : require('./gitignore.js')(verb),

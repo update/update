@@ -1,12 +1,14 @@
 'use strict';
 
+var debug = require('debug')('update:plugin');
 var gutil = require('gulp-util');
 var difference = require('arr-diff');
 var through = require('through2');
 var utils = require('../lib/utils');
 var logger = require('../lib/logging');
 
-module.exports = function gitignore(verb) {
+module.exports = function gitignore_(verb) {
+  debug('gitignore plugin');
   return function() {
     return through.obj(function (file, enc, cb) {
       if (file.isNull() || !file.isBuffer()) {

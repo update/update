@@ -1,8 +1,10 @@
 'use strict';
 
+var debug = require('debug')('update:readme');
 var unique = require('array-unique');
 
 function unknownHelpers(str, verb) {
+  debug('unknownHelpers');
   var helpers = Object.keys(verb._.helpers);
   var async = Object.keys(verb._.asyncHelpers);
   var keys = unique(helpers.concat(async)).sort();
@@ -24,6 +26,8 @@ function unknownHelpers(str, verb) {
 }
 
 function addTravisBadge(str, stats) {
+  debug('addTravisBadge');
+
   if (stats && stats.hasTravis && !/badge\(.travis/.test(str)) {
     str = str.split('{%= badge("fury") %}').join('{%= badge("fury") %} {%= badge("travis") %}');
   }
@@ -31,6 +35,7 @@ function addTravisBadge(str, stats) {
 }
 
 function fixInstall(str) {
+  debug('fixInstall');
   var re = /## Install[\s\n]+{%= include/g;
   str = str.replace(re, '{%= include');
   str = str.split('{%= include("install") %}').join('{%= include("install-npm", {save: true}) %}');
