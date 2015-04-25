@@ -1,0 +1,12 @@
+#!/usr/bin/env fish
+
+# Borrowed from gulp:
+
+# Usage:
+#
+# To enable fish <tab> completion for update, add the following line to
+# your ~/.config/fish/config.fish file:
+#
+# update --completion=fish | source
+
+complete -c update -a "(update --tasks-simple)" -f
