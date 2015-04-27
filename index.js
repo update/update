@@ -75,7 +75,6 @@ Update.prototype.plugin = function(name, fn) {
   } else {
     this.plugins[name] = fn;
   }
-  console.log(this)
   return this;
 };
 

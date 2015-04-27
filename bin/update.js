@@ -17,13 +17,12 @@ var updater = typeof name !== 'undefined'
   ? update.updater(name)
   : exit(0);
 
-// var updater = update.updater(name);
-var file = updater.module;
+var fp = updater.module;
 
-if (file) {
-  var cwd = path.dirname(file);
+if (fp) {
+  var cwd = path.dirname(fp);
+  var instance = require(fp);
 
-  var instance = require(file);
   instance.set('updater.cwd', cwd);
   instance.set('updater.templates', cwd + '/templates');
   instance.emit('init');
