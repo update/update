@@ -4,7 +4,8 @@
 
 <!-- toc -->
 
-* [Usage](#usage)  - [What's this about?](#what-s-this-about-)
+* [Usage](#usage)
+  - [What's this about?](#what-s-this-about-)
   - [The goal](#the-goal)
   - [Next](#next)
 
@@ -54,16 +55,17 @@ etc... this is maybe 20% of what it does currently. There are some bugs to work 
 The goal is to be able to easily update and normalize existing projects from the command line using a compbination of:
 
 * **global defaults** for project metadata, like your github username, license preference, and other properties that change very little if at all from project-to-project.
-* **normalizers** that will normalize and update virtually anything in the project to:  - use your (latest) preference
+* **normalizers** that will normalize and update virtually anything in the project to:
+  - use your (latest) preference
   - meet the (latest) standards for whatever piece of metadata is being updated. For example, it would lint your `.travis.md` files to ensure that `iojs` has been added to the `node_js` versions.
 
 ### Next
 
 After I completely understand how this should work, I'll:
 
-* * remove all logic and preferences that are specific to my own projects.
-* Split everything out into plugins, helpers, utils etc.
-* Try to make everything compatible with gulp plugins, so we don't need to think about another format.
+1. remove all logic and preferences that are specific to my own projects.
+2. Split everything out into plugins, helpers, utils etc.
+3. Try to make everything compatible with gulp plugins, so we don't need to think about another format.
 
 For now, however, this project is not at all idiomatic. A lot of the logic is pretty opinionated, there is a lot of duplication, and some of the plugins are just sloppy. As a rule-of-thumb I like to get things working as a POC before I spend time cleaning up code.
 
