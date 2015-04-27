@@ -8,21 +8,27 @@ var taskTree = require('../lib/utils/task-tree');
 var update = require('..');
 
 var argv = require('minimist')(process.argv.slice(2));
-update.extend('args', argv);
 
 var stack = argv._;
 var name = stack.shift();
 var tasks = stack.length ? stack : ['default'];
 
-var updater = update.updater(name);
+var updater = typeof name !== 'undefined'
+  ? update.updater(name)
+  : exit(0);
+
+// var updater = update.updater(name);
 var file = updater.module;
 
 if (file) {
   var cwd = path.dirname(file);
-  update.set('updater.cwd', cwd);
-  update.emit('loaded');
 
   var instance = require(file);
+  instance.set('updater.cwd', cwd);
+  instance.set('updater.templates', cwd + '/templates');
+  instance.emit('init');
+  instance.emit('loaded');
+  instance.extend('argv', argv);
 
   process.nextTick(function () {
     instance.start.apply(instance, tasks);
