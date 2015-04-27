@@ -8,11 +8,12 @@
 'use strict';
 
 var path = require('path');
-var extend = require('lodash')._.extend;
 var through = require('through2');
 var Template = require('template');
+var toVinyl = require('to-vinyl');
 var Task = require('orchestrator');
 var vfs = require('vinyl-fs');
+var _ = require('lodash');
 
 /**
  * Local dependencies
@@ -21,6 +22,7 @@ var vfs = require('vinyl-fs');
 var plugins = require('./lib/plugins');
 var session = require('./lib/session');
 var stack = require('./lib/stack');
+var utils = require('./lib/utils');
 var init = require('./lib/init');
 
 /**
@@ -36,12 +38,11 @@ var init = require('./lib/init');
 function Update(opts) {
   Template.call(this, opts);
   Task.call(this, opts);
-  this.transforms = this.transforms || {};
   this.session = session;
   init.call(this, this);
 }
 
-extend(Update.prototype, Task.prototype);
+_.extend(Update.prototype, Task.prototype);
 Template.extend(Update.prototype);
 
 /**
@@ -134,7 +135,29 @@ Update.prototype.dest = function(dest, opts) {
  */
 
 Update.prototype.copy = function(glob, dest, opts) {
-  return vfs.src(this, glob).pipe(vfs.dest(dest, opts));
+  return stack.templates(this, glob, {cwd: cwd})
+    .pipe(this.process(opts))
+    .pipe(vfs.dest(dest, opts));
+};
+
+/**
+ * Plugin for processing templates using any registered engine.
+ * If this plugin is NOT used, engines will be selected based
+ * on file extension.
+ *
+ * ```js
+ * app.process();
+ * ```
+ *
+ * @param  {String|Array} `glob`
+ * @param  {String|Function} `dest`
+ * @return {Stream} Stream to allow doing additional work.
+ */
+
+Update.prototype.process = function(locals, options) {
+  locals = _.merge({id: this.gettask()}, this.cache.data, locals);
+  locals.options = _.merge({}, this.options, options, locals.options);
+  return through.obj(plugins.process.call(this, locals, options));
 };
 
 /**
@@ -154,29 +177,49 @@ Update.prototype.copy = function(glob, dest, opts) {
 Update.prototype.task = Update.prototype.add;
 
 /**
- * Get the name of the currently running task. This is
- * primarily used inside plugins.
+ * Get the id from the current task. Used in plugins to get
+ * the current session.
  *
  * ```js
- * app.gettask();
+ * var id = verb.getTask();
+ * verb.views[id];
  * ```
  *
  * @return {String} `task` The currently running task.
  * @api public
  */
 
-Update.prototype.gettask = function() {
+Update.prototype.getTask = function() {
   var name = this.session.get('task');
-  return typeof name != 'undefined'
+  return typeof name !== 'undefined'
     ? 'task_' + name
     : 'file';
+};
+
+/**
+ * Get the collection name (inflection) of the given
+ * template type.
+ *
+ * ```js
+ * var collection = verb.getCollection('page');
+ * // gets the `pages` collection
+ * //=> {a: {}, b: {}, ...}
+ * ```
+ *
+ * @return {String} `name` Singular name of the collection to get
+ * @api public
+ */
+
+Update.prototype.getCollection = function(name) {
+  var plural = this.inflections[name];
+  return this.views[plural];
 };
 
 /**
  * Used in plugins to get a template from the current session.
  *
  * ```js
- * var template = getFile(id, file);
+ * var views = app.getViews();
  * ```
  *
  * @return {String} `id` Pass the task-id from the current session.
@@ -184,10 +227,63 @@ Update.prototype.gettask = function() {
  * @api public
  */
 
-Update.prototype.getFile = function(file) {
-  var collection = this.inflections[this.gettask()];
-  return this.views[collection][file.id];
+Update.prototype.getViews = function() {
+  var collection = this.inflections[this.getTask()];
+  return this.views[collection];
 };
+
+/**
+ * Get a template (file) from the current session in a stream.
+ *
+ * ```js
+ * var file = app.getFile(file);
+ * ```
+ *
+ * @return {Object} `file` Vinyl file object. Must have an `id` property that matches the `id` of the session.
+ * @api public
+ */
+
+Update.prototype.getFile = function(file) {
+  return this.getViews()[file.id];
+};
+
+/**
+ * Get a template from the current session, convert it to a vinyl
+ * file, and push it into the stream.
+ *
+ * ```js
+ * app.pushToStream(file);
+ * ```
+ *
+ * @param {Stream} `stream` Vinyl stream
+ * @param {String} `id` Get the session `id` using `app.getTask()`
+ * @api public
+ */
+
+Update.prototype.pushToStream = function(id, stream) {
+  return utils.pushToStream(this.getCollection(id), stream, toVinyl);
+};
+
+/**
+ * `taskFiles` is a session-context-specific getter that
+ * returns the collection of files from the current `task`.
+ *
+ * ```js
+ * var files = verb.taskFiles;
+ * ```
+ *
+ * @name .taskFiles
+ * @return {Object} Get the files from the current task.
+ * @api public
+ */
+
+Object.defineProperty(Update.prototype, 'taskFiles', {
+  configurable: true,
+  enumerable: false,
+  get: function () {
+    return this.views[this.inflections[this.getTask()]];
+  }
+});
 
 /**
  * Set or get a generator function by `name`.
