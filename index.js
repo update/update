@@ -66,6 +66,40 @@ Template.extend(Update.prototype);
  * @api public
  */
 
+Update.prototype.plugin = function(name, fn) {
+  if (!fn) return this.plugins[name];
+  if (name && typeof name === 'object') {
+    for (var key in name) {
+      this.plugin(key, name[key]);
+    }
+  } else {
+    this.plugins[name] = fn;
+  }
+  console.log(this)
+  return this;
+};
+
+/**
+ * Glob patterns or filepaths to source files.
+ *
+ * ```js
+ * app.src('*.js')
+ * ```
+ *
+ * **Example usage**
+ *
+ * ```js
+ * app.task('web-app', function() {
+ *   app.src('templates/*')
+ *     app.dest(process.cwd())
+ * });
+ * ```
+ *
+ * @param {String|Array} `glob` Glob patterns or file paths to source files.
+ * @param {Object} `options` Options or locals to merge into the context and/or pass to `src` plugins
+ * @api public
+ */
+
 Update.prototype.src = function(glob, opts) {
   return stack.src(this, glob, opts);
 };
@@ -118,7 +152,6 @@ Update.prototype.templates = function(glob, opts) {
  */
 
 Update.prototype.dest = function(dest, opts) {
-  dest = path.resolve((opts && opts.cwd) || process.cwd(), dest);
   return stack.dest(this, dest, opts);
 };
 
@@ -135,8 +168,8 @@ Update.prototype.dest = function(dest, opts) {
  */
 
 Update.prototype.copy = function(glob, dest, opts) {
-  return stack.templates(this, glob, {cwd: cwd})
-    .pipe(this.process(opts))
+  return stack.templates(this, glob, opts)
+    // .pipe(this.process(opts))
     .pipe(vfs.dest(dest, opts));
 };
 
@@ -155,9 +188,9 @@ Update.prototype.copy = function(glob, dest, opts) {
  */
 
 Update.prototype.process = function(locals, options) {
-  locals = _.merge({id: this.gettask()}, this.cache.data, locals);
+  locals = _.merge({id: this.getTask()}, this.cache.data, locals);
   locals.options = _.merge({}, this.options, options, locals.options);
-  return through.obj(plugins.process.call(this, locals, options));
+  return plugins.process.call(this, locals, options);
 };
 
 /**
