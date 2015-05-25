@@ -1,9 +1,14 @@
 var update = require('./');
 var del = require('del');
 
-update.task('default', function (cb) {
-  console.log('deleting...');
-  del('foooo', cb);
+update.task('default', function () {
+  console.log('default...');
 });
 
-update.run();
+update.task('one', function () {
+  console.log('one...');
+});
+
+update.task('two', function () {
+  console.log('two...');
+});
