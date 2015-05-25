@@ -10,13 +10,9 @@ var tutils = require('template-utils')._;
 var vfs = require('vinyl-fs');
 var _ = require('lodash');
 
-var render = require('template-render');
-var init = require('template-init');
-
 var plugins = require('./lib/plugins');
 var session = require('./lib/session');
 var stack = require('./lib/stack');
-var utils = require('./lib/utils');
 var init = require('./lib/init');
 
 /**
