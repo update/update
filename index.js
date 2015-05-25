@@ -1,23 +1,17 @@
-/*!
- * update <https://github.com/jonschlinkert/update>
- *
- * Copyright (c) 2015, Jon Schlinkert.
- * Licensed under the MIT License.
- */
-
 'use strict';
 
-var path = require('path');
+var typeOf = require('kind-of');
+var es = require('event-stream');
 var through = require('through2');
 var Template = require('template');
 var toVinyl = require('to-vinyl');
 var Task = require('orchestrator');
+var tutils = require('template-utils')._;
 var vfs = require('vinyl-fs');
 var _ = require('lodash');
 
-/**
- * Local dependencies
- */
+var render = require('template-render');
+var init = require('template-init');
 
 var plugins = require('./lib/plugins');
 var session = require('./lib/session');
@@ -26,56 +20,66 @@ var utils = require('./lib/utils');
 var init = require('./lib/init');
 
 /**
- * Initialize `Update`.
+ * Initialize `App`
  *
- * ```js
- * var app = new Update();
- * ```
- *
- * @api public
+ * @param {Object} `context`
+ * @api private
  */
 
-function Update(opts) {
-  Template.call(this, opts);
-  Task.call(this, opts);
+function App() {
+  Template.apply(this, arguments);
+  Task.apply(this, arguments);
   this.session = session;
-  init.call(this, this);
+  this.plugins = {};
+  init(this);
 }
 
-_.extend(Update.prototype, Task.prototype);
-Template.extend(Update.prototype);
+_.extend(App.prototype, Task.prototype);
+Template.extend(App.prototype);
 
 /**
- * Glob patterns or filepaths to source files.
+ * Register a plugin by `name`
  *
- * ```js
- * app.src('*.js')
- * ```
- *
- * **Example usage**
- *
- * ```js
- * app.task('web-app', function() {
- *   app.src('templates/*')
- *     app.dest(process.cwd())
- * });
- * ```
- *
- * @param {String|Array} `glob` Glob patterns or file paths to source files.
- * @param {Object} `options` Options or locals to merge into the context and/or pass to `src` plugins
+ * @param  {String} `name`
+ * @param  {Function} `fn`
  * @api public
  */
 
-Update.prototype.plugin = function(name, fn) {
-  if (!fn) return this.plugins[name];
-  if (name && typeof name === 'object') {
-    for (var key in name) {
-      this.plugin(key, name[key]);
-    }
-  } else {
-    this.plugins[name] = fn;
+App.prototype.plugin = function(name, fn) {
+  if (arguments.length === 1) {
+    return this.plugins[name];
   }
+  if (typeof fn === 'function') {
+    fn = fn.bind(this);
+  }
+  this.plugins[name] = fn;
   return this;
+};
+
+/**
+ * Create a plugin pipeline from an array of plugins.
+ *
+ * @param  {Array} `plugins` Each plugin is a function that returns a stream, or the name of a registered plugin.
+ * @param  {Object} `options`
+ * @return {Stream}
+ * @api public
+ */
+
+App.prototype.pipeline = function(plugins, options) {
+  var res = [];
+  for (var i = 0; i < plugins.length; i++) {
+    var val = plugins[i];
+    if (typeOf(val) === 'function') {
+      res.push(val.call(this, options));
+    } else if (typeOf(val) === 'object') {
+      res.push(val);
+    } else if (this.plugins.hasOwnProperty(val) && !this.isFalse('plugin ' + val)) {
+      res.push(this.plugins[val].call(this, options));
+    } else {
+      res.push(through.obj());
+    }
+  }
+  return es.pipe.apply(es, res);
 };
 
 /**
@@ -85,22 +89,20 @@ Update.prototype.plugin = function(name, fn) {
  * app.src('*.js')
  * ```
  *
- * **Example usage**
- *
- * ```js
- * app.task('web-app', function() {
- *   app.src('templates/*')
- *     app.dest(process.cwd())
- * });
- * ```
- *
  * @param {String|Array} `glob` Glob patterns or file paths to source files.
  * @param {Object} `options` Options or locals to merge into the context and/or pass to `src` plugins
  * @api public
  */
 
-Update.prototype.src = function(glob, opts) {
-  return stack.src(this, glob, opts);
+App.prototype.src = function(glob, opts) {
+  opts = _.merge({}, this.options, opts);
+  session.set('src', opts);
+  var app = this;
+
+  return this.combine([
+    vfs.src(glob, opts),
+    app.plugin('init')(app)
+  ], opts);
 };
 
 /**
@@ -111,21 +113,12 @@ Update.prototype.src = function(glob, opts) {
  * app.templates('*.js')
  * ```
  *
- * **Example usage**
- *
- * ```js
- * app.task('licenses', function() {
- *   app.templates('templates/licenses/*')
- *     app.dest(process.cwd())
- * });
- * ```
- *
  * @param {String|Array} `glob` Glob patterns or file paths to source files.
  * @param {Object} `options` Options or locals to merge into the context and/or pass to `src` plugins
  * @api public
  */
 
-Update.prototype.templates = function(glob, opts) {
+App.prototype.templates = function(glob, opts) {
   return stack.templates(this, glob, opts);
 };
 
@@ -136,22 +129,22 @@ Update.prototype.templates = function(glob, opts) {
  * app.dest('dist', {ext: '.xml'})
  * ```
  *
- * **Example usage**
- *
- * ```js
- * app.task('foo', function() {
- *   app.src('templates/*')
- *     app.dest('dist', {ext: '.xml'})
- * });
- * ```
- *
  * @param {String|Function} `dest` File path or rename function.
- * @param {Object} `options` Options or locals to merge into the context and/or pass to `dest` plugins
+ * @param {Object} `options` Options or locals to pass to `dest` plugins
  * @api public
  */
 
-Update.prototype.dest = function(dest, opts) {
-  return stack.dest(this, dest, opts);
+App.prototype.dest = function(dest, opts) {
+  var srcOpts = session.get('src') || {};
+  opts = _.merge({}, this.options, srcOpts, opts);
+  var app = this;
+
+  return this.combine([
+    app.plugin('paths')(dest, opts),
+    app.plugin('lint'),
+    app.plugin('render')(opts),
+    app.plugin('dest')(dest, opts),
+  ], opts);
 };
 
 /**
@@ -166,7 +159,7 @@ Update.prototype.dest = function(dest, opts) {
  * @return {Stream} Stream to allow doing additional work.
  */
 
-Update.prototype.copy = function(glob, dest, opts) {
+App.prototype.copy = function(glob, dest, opts) {
   return stack.templates(this, glob, opts)
     // .pipe(this.process(opts))
     .pipe(vfs.dest(dest, opts));
@@ -186,7 +179,7 @@ Update.prototype.copy = function(glob, dest, opts) {
  * @return {Stream} Stream to allow doing additional work.
  */
 
-Update.prototype.process = function(locals, options) {
+App.prototype.process = function(locals, options) {
   locals = _.merge({id: this.getTask()}, this.cache.data, locals);
   locals.options = _.merge({}, this.options, options, locals.options);
   return plugins.process.call(this, locals, options);
@@ -197,7 +190,8 @@ Update.prototype.process = function(locals, options) {
  *
  * ```js
  * app.task('docs', function() {
- *   app.src('*.js').pipe(app.dest('.'));
+ *   app.src(['foo.js', 'bar/*.js'])
+ *     .pipe(app.dest('./'));
  * });
  * ```
  *
@@ -206,34 +200,34 @@ Update.prototype.process = function(locals, options) {
  * @api public
  */
 
-Update.prototype.task = Update.prototype.add;
+App.prototype.task = App.prototype.add;
 
 /**
- * Get the id from the current task. Used in plugins to get
- * the current session.
+ * Get the name of the current task-session. This is
+ * used in plugins to lookup data or views created in
+ * a task.
  *
  * ```js
- * var id = verb.getTask();
- * verb.views[id];
+ * var id = app.getTask();
+ * var views = app.views[id];
  * ```
  *
- * @return {String} `task` The currently running task.
+ * @return {String} `task` The name of the currently running task.
  * @api public
  */
 
-Update.prototype.getTask = function() {
+App.prototype.getTask = function() {
   var name = this.session.get('task');
   return typeof name !== 'undefined'
     ? 'task_' + name
-    : 'file';
+    : 'taskFile';
 };
 
 /**
- * Get the collection name (inflection) of the given
- * template type.
+ * Get a view collection by its singular-form `name`.
  *
  * ```js
- * var collection = verb.getCollection('page');
+ * var collection = app.getCollection('page');
  * // gets the `pages` collection
  * //=> {a: {}, b: {}, ...}
  * ```
@@ -242,41 +236,32 @@ Update.prototype.getTask = function() {
  * @api public
  */
 
-Update.prototype.getCollection = function(name) {
-  var plural = this.inflections[name];
-  return this.views[plural];
+App.prototype.getCollection = function(name) {
+  if (typeof name === 'undefined') {
+    name = this.getTask();
+  }
+
+  if (this.views.hasOwnProperty(name)) {
+    return this.views[name];
+  }
+
+  name = this.inflections[name];
+  return this.views[name];
 };
 
 /**
- * Used in plugins to get a template from the current session.
- *
- * ```js
- * var views = app.getViews();
- * ```
- *
- * @return {String} `id` Pass the task-id from the current session.
- * @return {Object} `file` Vinyl file object. Must have an `id` property that matches the `id` of the session.
- * @api public
- */
-
-Update.prototype.getViews = function() {
-  var collection = this.inflections[this.getTask()];
-  return this.views[collection];
-};
-
-/**
- * Get a template (file) from the current session in a stream.
+ * Get a file from the current session.
  *
  * ```js
  * var file = app.getFile(file);
  * ```
  *
- * @return {Object} `file` Vinyl file object. Must have an `id` property that matches the `id` of the session.
+ * @return {Object} `file` Vinyl file object. Must have an `id` property.
  * @api public
  */
 
-Update.prototype.getFile = function(file) {
-  return this.getViews()[file.id];
+App.prototype.getFile = function(file, id) {
+  return this.getCollection(id)[file.id];
 };
 
 /**
@@ -292,28 +277,28 @@ Update.prototype.getFile = function(file) {
  * @api public
  */
 
-Update.prototype.pushToStream = function(id, stream) {
-  return utils.pushToStream(this.getCollection(id), stream, toVinyl);
+App.prototype.pushToStream = function(id, stream) {
+  return tutils.pushToStream(this.getCollection(id), stream, toVinyl);
 };
 
 /**
  * `taskFiles` is a session-context-specific getter that
- * returns the collection of files from the current `task`.
+ * returns the collection of files from the currently running `task`.
  *
  * ```js
- * var files = verb.taskFiles;
+ * var taskFiles = app.taskFiles;
  * ```
  *
  * @name .taskFiles
- * @return {Object} Get the files from the current task.
+ * @return {Object} Get the files from the currently running task.
  * @api public
  */
 
-Object.defineProperty(Update.prototype, 'taskFiles', {
+Object.defineProperty(App.prototype, 'taskFiles', {
   configurable: true,
-  enumerable: false,
+  enumerable: true,
   get: function () {
-    return this.views[this.inflections[this.getTask()]];
+    return this.getCollection();
   }
 });
 
@@ -332,11 +317,32 @@ Object.defineProperty(Update.prototype, 'taskFiles', {
  * @api public
  */
 
-Update.prototype.updater = function(name, fn) {
+App.prototype.updater = function(name, fn) {
   if (arguments.length === 1 && typeof name === 'string') {
     return this.updaters[name];
   }
   this.updaters[name] = fn;
+  return this;
+};
+
+/**
+ * Register a plugin that can be arbitrarily pushed into a
+ * plugin stack.
+ *
+ * ```js
+ * app.plugin('foo', require('plugin-foo'));
+ * ```
+ *
+ * @param {String} `name` Plugin name
+ * @param {Function} `fn` Plugin function, must return a vinyl stream.
+ * @api public
+ */
+
+App.prototype.plugin = function(name, fn) {
+  if (arguments.length === 1 && typeof name === 'string') {
+    return this.plugins[name];
+  }
+  this.plugins[name] = fn;
   return this;
 };
 
@@ -351,12 +357,26 @@ Update.prototype.updater = function(name, fn) {
  * @api private
  */
 
-Update.prototype.run = function() {
+App.prototype.run = function() {
   var tasks = arguments.length ? arguments : ['default'];
-
   process.nextTick(function () {
     this.start.apply(this, tasks);
   }.bind(this));
+};
+
+/**
+ * Wrapper around Task._runTask to enable `sessions`.
+ *
+ * @param  {Object} `task` Task to run
+ * @api private
+ */
+
+App.prototype._runTask = function(task) {
+  var app = this;
+  app.session.run(function () {
+    app.session.set('task', task.name);
+    Task.prototype._runTask.call(app, task);
+  });
 };
 
 /**
@@ -373,25 +393,24 @@ Update.prototype.run = function() {
  * @api public
  */
 
-Update.prototype.watch = function(glob, opts, fn) {
+App.prototype.watch = function(glob, opts, fn) {
   if (Array.isArray(opts) || typeof opts === 'function') {
     fn = opts; opts = null;
   }
-
-  if (!Array.isArray(fn)) vfs.watch(glob, opts, fn);
+  if (!Array.isArray(fn)) return vfs.watch(glob, opts, fn);
   return vfs.watch(glob, opts, function () {
     this.start.apply(this, fn);
   }.bind(this));
 };
 
 /**
- * Expose the `Update` class on `update.Update`
+ * Expose the `App` class on `update.App`
  */
 
-Update.prototype.Update = Update;
+App.prototype.App = App;
 
 /**
  * Expose our instance of `update`
  */
 
-module.exports = new Update();
+module.exports = new App();

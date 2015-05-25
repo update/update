@@ -5,19 +5,27 @@ var chalk = require('chalk');
 var prettyTime = require('pretty-hrtime');
 var completion = require('../lib/utils/completion');
 var taskTree = require('../lib/utils/task-tree');
-var update = require('..');
+var app = require('..');
 
 var argv = require('minimist')(process.argv.slice(2));
-
 var stack = argv._;
-var name = stack.shift();
-var tasks = stack.length ? stack : ['default'];
+var len = stack.length, i = 0;
+
+while (len--) {
+  var name = stack[i++];
+  var plugin = app.updater(name);
+  console.log(plugin);
+  // app.updater(name);
+}
+
+var name = stack[0];
 
 var updater = typeof name !== 'undefined'
-  ? update.updater(name)
+  ? app.updater(name)
   : exit(0);
 
-var fp = updater.module;
+  // console.log(updater)
+var fp = updater.updatefile;
 
 if (fp) {
   var cwd = path.dirname(fp);
@@ -30,7 +38,7 @@ if (fp) {
   instance.extend('argv', argv);
 
   process.nextTick(function () {
-    instance.start.apply(instance, tasks);
+    instance.start.apply(instance, ['default']);
   }.bind(instance));
 }
 
@@ -42,49 +50,49 @@ process.once('exit', function(code) {
   }
 });
 
-update.on('last', function () {
+app.on('last', function () {
   var args;
   if (argv.set) {
     args = argv.set.split('=');
-    update.store.set.apply(update.store, args);
+    app.store.set.apply(app.store, args);
   }
 
   if (argv.has) {
     args = argv.has.split('=');
-    update.store.has.apply(update.store, args);
+    app.store.has.apply(app.store, args);
   }
 
   if (argv.omit) {
     args = argv.omit.split('=');
-    update.store.omit.apply(update.store, args);
+    app.store.omit.apply(app.store, args);
   }
 
   if (argv.del) {
-    update.store.delete({force: true});
+    app.store.delete({force: true});
   }
 });
 
-update.on('err', function () {
+app.on('err', function () {
   failed = true;
 });
 
-update.on('task_start', function (e) {
+app.on('task_start', function (e) {
   console.log('starting', '\'' + chalk.cyan(e.task) + '\'');
 });
 
-update.on('task_stop', function (e) {
+app.on('task_stop', function (e) {
   var time = prettyTime(e.hrDuration);
   console.log('finished', '\'' + chalk.cyan(e.task) + '\'', 'after', chalk.magenta(time));
 });
 
-update.on('task_err', function (e) {
+app.on('task_err', function (e) {
   var msg = formatError(e);
   var time = prettyTime(e.hrDuration);
   console.log(chalk.cyan(e.task), chalk.red('errored after'), chalk.magenta(time));
   console.log(msg);
 });
 
-update.on('task_not_found', function (err) {
+app.on('task_not_found', function (err) {
   console.log(chalk.red('task \'' + err.task + '\' is not in your updatefile'));
   console.log('please check the documentation for proper updatefile formatting');
   exit(1);
@@ -134,5 +142,5 @@ function exit(code) {
 }
 
 if (!argv._.length) {
-  update.emit('loaded');
+  app.emit('loaded');
 }
