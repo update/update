@@ -27,7 +27,7 @@ describe('set', function () {
       .render(function (err, res) {
         if (err) return done(err);
 
-        assert(res.content === 'Brooke');
+        assert(res.content === 'a Brooke b');
         done();
       });
   });

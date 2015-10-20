@@ -137,7 +137,7 @@ describe('collection', function () {
         .set('data.name', 'Brian')
         .render(function (err, res) {
           if (err) return done(err);
-          assert(res.contents.toString() === 'Brian');
+          assert(res.content === 'a Brian b');
           done();
         });
     });

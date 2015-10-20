@@ -134,7 +134,7 @@ describe('create', function () {
 
       collection.addView('test/fixtures/templates/a.tmpl');
       collection.read('a.tmpl');
-      assert(collection.getView('a.tmpl').contents.toString() === '<%= name %>');
+      assert(collection.getView('a.tmpl').contents.toString() === 'a <%= name %> b');
     });
   });
 
