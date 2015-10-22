@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "homepage": "https://github.com/jonschlinkert/update-next",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
-  "repository": "jonschlinkert/update-next",
+  "repository": "jonschlinkert/update",
   "bugs": {
     "url": "https://github.com/jonschlinkert/update-next/issues"
   },
@@ -120,5 +120,17 @@
     "plugins": {
       "@/foo": {}
     }
-  }
+  },
+  "contributors": [
+    {
+      "name": "Jon Schlinkert",
+      "email": "github@sellside.com",
+      "url": "https://github.com/jonschlinkert"
+    },
+    {
+      "name": "Brian Woodward",
+      "email": "brian.woodward@gmail.com",
+      "url": "https://github.com/doowb"
+    }
+  ]
 }
