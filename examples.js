@@ -1,18 +1,26 @@
 'use strict';
 
-var utils = require('./lib/');
-// var Update = require('./');
-// var update = new Update();
+var update = require('./');
+var foo = update();
+var bar = update();
 
-var updaters = utils.matchGlobal({
-  pattern: 'updater-*',
-  filename: 'updatefile.js',
-  fn: function() {}
+
+foo.task('files', function (cb) {
+  console.log('files');
+  cb();
 });
 
-// updaters.forEach(function (fp) {
-//   var updater = require(fp);
-//   updater(update);
-// });
+foo.task('run', function (cb) {
+  bar.build(, cb);
+  console.log('run');
+  cb();
+});
 
-console.log(updaters)
+foo.task('dest', function (cb) {
+  console.log('dest');
+  cb();
+});
+
+app.task('default', ['files', 'run', 'dest']);
+
+app.build('default', console.log);

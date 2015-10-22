@@ -9,8 +9,9 @@
 
 var ask = require('assemble-ask');
 var Core = require('assemble-core');
+var loader = require('assemble-loader');
 var plugin = require('./lib/plugins');
-var utils = require('./lib/');
+var utils = require('./lib/utils');
 
 /**
  * Create an instance of `Update` with the given `options`
@@ -28,6 +29,7 @@ function Update(options) {
     return new Update(options);
   }
   Core.call(this, options);
+  this.name = this.options.name || 'update';
   this.initUpdate(this);
 }
 
@@ -42,12 +44,13 @@ Core.extend(Update);
  */
 
 Update.prototype.initUpdate = function(base) {
-  this.set('lookups.tasks', {});
+  this.define('isUpdate', true);
   this.set('updaters', {});
 
-  this.use(plugin.locals({name: 'update'}));
-  this.use(plugin.store({name: 'update'}));
+  this.use(plugin.locals({name: this.name}));
+  this.use(plugin.store({name: this.name}));
   this.use(plugin.config());
+  this.use(loader());
   this.use(ask());
 
   this.engine(['md', 'tmpl'], require('engine-base'));
@@ -55,33 +58,33 @@ Update.prototype.initUpdate = function(base) {
     view.content = view.contents.toString();
     utils.matter.parse(view, next);
   });
-
-  this.on('base.build', function () {
-    base.lookup('tasks.base', Object.keys(base.tasks));
-  });
 };
 
-Update.prototype.lookup = function(key, value) {
-  if (arguments.length === 1) {
-    return get(this.lookups, key);
-  }
-  if (arguments.length > 1 && Array.isArray(key)) {
-    key = key.join('.');
-  }
-  utils.set(this.lookups, key, value);
-  return this;
-};
+/**
+ * Register updater `name` with the given `update`
+ * instance.
+ *
+ * @param {String} `name`
+ * @param {Object} `update` Instance of update
+ * @return {Object} Returns the instance for chaining
+ */
 
-Update.prototype.updater = function(name, instance) {
+Update.prototype.updater = function(name, update) {
   if (arguments.length === 1) {
     return this.updaters[name];
   }
+  update.use(utils.runtimes({
+    displayName: function(key) {
+      return utils.cyan(name + ':' + key);
+    }
+  }));
+  return (this.updaters[name] = update);
+};
 
-  var keys = Object.keys(instance.tasks);
-  this.lookup(['tasks', name], keys);
-  utils.union(this, 'taskMap', keys);
-  this.updaters[name] = instance;
-  return this;
+Update.prototype.build = function() {
+  var fn = Core.prototype.build;
+  this.emit('build');
+  return fn.apply(this, arguments);
 };
 
 Update.prototype.hasUpdater = function(name) {
@@ -103,3 +106,11 @@ Update.prototype.opts = function(prop, options) {
  */
 
 module.exports = Update;
+
+/**
+ * Expose `utils`
+ */
+
+module.exports.utils = utils;
+module.exports.meta = require('./package');
+module.exports.dir = __dirname;
