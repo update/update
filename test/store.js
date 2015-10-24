@@ -4,7 +4,7 @@ require('mocha');
 require('should');
 var fs = require('fs');
 var path = require('path');
-var Store = require('data-store');
+var store = require('data-store');
 var assert = require('assert');
 var App = require('../');
 var app;
@@ -12,17 +12,16 @@ var app;
 describe('store', function () {
   beforeEach(function () {
     app = new App();
+    app.store = store('update-next-tests');
   });
 
   afterEach(function (cb) {
-    app.store.del({force: true}, function (err) {
-      if (err) return cb(err);
-      cb();
-    });
+    app.store.del({force: true});
+    cb();
   });
 
-  it('should create an instance of Store', function () {
-    assert(app.store instanceof Store);
+  it('should create an instance of store', function () {
+    assert(app.store instanceof store);
   });
 
   it('should create a store at the given `cwd`', function () {
@@ -165,6 +164,16 @@ describe('store', function () {
 });
 
 describe('events', function () {
+  beforeEach(function () {
+    app = new App();
+    app.store = store('update-next-tests');
+  });
+
+  afterEach(function (cb) {
+    app.store.del({force: true});
+    cb();
+  });
+
   it('should emit `set` when an object is set:', function () {
     var keys = [];
     app.store.on('set', function (key) {
@@ -217,17 +226,17 @@ describe('events', function () {
     app.store.del('a');
   });
 
-  it('should emit deleted keys on `del`:', function () {
-    var res;
-    app.store.on('del', function (keys) {
-      keys.should.eql(['a', 'c', 'e']);
-      assert(Object.keys(app.store.data).length === 0);
+  it('should emit deleted keys on `del`:', function (done) {
+    var keys = [];
+    app.store.on('del', function (key) {
+      keys.push(key);
     });
 
     app.store.set('a', 'b');
     app.store.set('c', 'd');
     app.store.set('e', 'f');
-    app.store.data.should.have.properties(['a', 'c', 'e']);
     app.store.del({force: true});
+    keys.should.eql(['a', 'c', 'e']);
+    done();
   });
 });
