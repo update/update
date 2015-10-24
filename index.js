@@ -7,9 +7,12 @@
 
 'use strict';
 
+var argv = require('minimist');
+var cli = require('base-cli');
 var ask = require('assemble-ask');
 var Core = require('assemble-core');
 var loader = require('assemble-loader');
+var config = require('./lib/config');
 var plugin = require('./lib/plugins');
 var utils = require('./lib/utils');
 
@@ -45,19 +48,31 @@ Core.extend(Update);
 
 Update.prototype.initUpdate = function(base) {
   this.define('isUpdate', true);
+  this.set('argv', this.argv || argv(process.argv.slice(2)));
   this.set('updaters', {});
 
-  this.use(plugin.locals({name: this.name}));
-  this.use(plugin.store({name: this.name}));
-  this.use(plugin.config());
-  this.use(loader());
-  this.use(ask());
+  this
+    .use(utils.runtimes())
+    .use(plugin.locals({name: this.name}))
+    .use(plugin.store({name: this.name}))
+    .use(config())
+    .use(loader())
+    .use(ask())
+    .use(cli);
 
   this.engine(['md', 'tmpl'], require('engine-base'));
   this.onLoad(/\.(md|tmpl)$/, function (view, next) {
     view.content = view.contents.toString();
     utils.matter.parse(view, next);
   });
+};
+
+Update.prototype.flag = function(key) {
+  return utils.expandArgs(this.argv)[key];
+};
+
+Update.prototype.cmd = function(key) {
+  return utils.commands(utils.expandArgs(this.argv))[key] || false;
 };
 
 /**
@@ -81,12 +96,6 @@ Update.prototype.updater = function(name, update) {
   return (this.updaters[name] = update);
 };
 
-Update.prototype.build = function() {
-  var fn = Core.prototype.build;
-  this.emit('build');
-  return fn.apply(this, arguments);
-};
-
 Update.prototype.hasUpdater = function(name) {
   return this.updaters.hasOwnProperty(name);
 };
@@ -96,8 +105,12 @@ Update.prototype.hasTask = function(name) {
 };
 
 Update.prototype.opts = function(prop, options) {
-  var args = [].concat.apply([], [].slice.call(arguments, 1));
-  args.unshift(this.option(prop));
+  var args = [].concat.apply([], [].slice.call(arguments));
+  if (typeof opts === 'string') {
+    args.unshift(this.option(args.shift()));
+  } else {
+    args.unshift(this.options);
+  }
   return utils.extend.apply(utils.extend, args);
 };
 

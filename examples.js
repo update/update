@@ -1,26 +1,30 @@
 'use strict';
 
+var through = require('through2');
 var update = require('./');
-var foo = update();
-var bar = update();
+var del = require('del');
+var app = update()
+  .use(require('./pipeline'))
 
+app.plugin('a', require('./lib/pipeline/a')());
+app.plugin('b', require('./lib/pipeline/b'));
+app.plugin('c', require('./lib/pipeline/c')());
+// app.plugin(/foo/, require('./lib/pipeline/d')());
 
-foo.task('files', function (cb) {
-  console.log('files');
-  cb();
+app.disable('plugin.c');
+
+app.task('default', function (cb) {
+  app.src('*')
+    .on('error', console.log)
+    .pipe(through.obj(function (file, enc, next) {
+      if (file.isNull()) return next();
+      next(null, file);
+    }))
+    .pipe(app.pipeline())
+    .pipe(app.dest('actual'))
+    .on('finish', cb);
 });
 
-foo.task('run', function (cb) {
-  bar.build(, cb);
-  console.log('run');
-  cb();
+app.build('default', function(err) {
+  if (err) return console.log(err);
 });
-
-foo.task('dest', function (cb) {
-  console.log('dest');
-  cb();
-});
-
-app.task('default', ['files', 'run', 'dest']);
-
-app.build('default', console.log);
