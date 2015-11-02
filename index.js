@@ -7,17 +7,27 @@
 
 'use strict';
 
-var argv = require('minimist');
-var cli = require('base-cli');
-var ask = require('assemble-ask');
-var Core = require('assemble-core');
+/**
+ * module dependencies
+ */
+
+var path = require('path');
+var pipeline = require('base-pipeline');
+var minimist = require('minimist');
 var loader = require('assemble-loader');
+var Core = require('assemble-core');
+var ask = require('assemble-ask');
+var store = require('base-store');
+var cli = require('base-cli');
+
+var expand = require('expand-args');
 var config = require('./lib/config');
-var plugin = require('./lib/plugins');
+var locals = require('./lib/locals');
 var utils = require('./lib/utils');
 
 /**
- * Create an instance of `Update` with the given `options`
+ * Create an `update` application. This is the main function exported
+ * by the update module.
  *
  * ```js
  * var Update = require('update');
@@ -32,7 +42,7 @@ function Update(options) {
     return new Update(options);
   }
   Core.call(this, options);
-  this.name = this.options.name || 'update';
+  this.set('name', 'update');
   this.initUpdate(this);
 }
 
@@ -48,17 +58,38 @@ Core.extend(Update);
 
 Update.prototype.initUpdate = function(base) {
   this.define('isUpdate', true);
-  this.set('argv', this.argv || argv(process.argv.slice(2)));
   this.set('updaters', {});
 
-  this
-    .use(utils.runtimes())
-    .use(plugin.locals({name: this.name}))
-    .use(plugin.store({name: this.name}))
-    .use(config())
+  // custom middleware handlers
+  this.handler('onStream');
+  this.handler('preWrite');
+  this.handler('postWrite');
+
+  // parse command line arguments
+  var argv = minimist(process.argv.slice(2));
+  if (process.argv.length > 3) {
+    argv = expand(argv);
+  }
+
+  // expose `argv` on the instance
+  this.set('argv', this.argv || argv);
+
+  // expose `package.json` on `cache.data`
+  this.data(utils.pkg());
+  config(this);
+
+  this.use(utils.runtimes())
+    .use(locals('update'))
+    .use(store())
+    .use(pipeline())
     .use(loader())
     .use(ask())
-    .use(cli);
+    .use(cli())
+
+    .use(utils.defaults())
+    .use(utils.opts())
+
+  this.config.process(this.cache.data);
 
   this.engine(['md', 'tmpl'], require('engine-base'));
   this.onLoad(/\.(md|tmpl)$/, function (view, next) {
@@ -67,12 +98,39 @@ Update.prototype.initUpdate = function(base) {
   });
 };
 
+Update.prototype.cwd = function(dir) {
+  var cwd = dir || process.cwd();
+  return function() {
+    var args = [].slice.call(arguments);
+    args.unshift(cwd);
+    return path.resolve.apply(null, args);
+  };
+};
+
 Update.prototype.flag = function(key) {
-  return utils.expandArgs(this.argv)[key];
+  return this.get('argv.' + key);
 };
 
 Update.prototype.cmd = function(key) {
-  return utils.commands(utils.expandArgs(this.argv))[key] || false;
+  return utils.commands(this.argv)[key] || false;
+};
+
+Update.prototype.extendFile = function(file, config, opts) {
+  var parsed = utils.tryParse(file.content);
+  var obj = utils.extend({}, parsed, config);
+  var res = {};
+  if (opts && opts.sort === true) {
+    var keys = Object.keys(obj).sort();
+    var len = keys.length, i = -1;
+    while (++i < len) {
+      var key = keys[i];
+      res[key] = obj[key];
+    }
+  } else {
+    res = obj;
+  }
+  file.content = JSON.stringify(res, null, 2);
+  if (opts.newline) file.content += '\n';
 };
 
 /**
@@ -84,34 +142,16 @@ Update.prototype.cmd = function(key) {
  * @return {Object} Returns the instance for chaining
  */
 
-Update.prototype.updater = function(name, update) {
+Update.prototype.updater = function(name, app) {
   if (arguments.length === 1) {
     return this.updaters[name];
   }
-  update.use(utils.runtimes({
+  app.use(utils.runtimes({
     displayName: function(key) {
       return utils.cyan(name + ':' + key);
     }
   }));
-  return (this.updaters[name] = update);
-};
-
-Update.prototype.hasUpdater = function(name) {
-  return this.updaters.hasOwnProperty(name);
-};
-
-Update.prototype.hasTask = function(name) {
-  return this.taskMap.indexOf(name) > -1;
-};
-
-Update.prototype.opts = function(prop, options) {
-  var args = [].concat.apply([], [].slice.call(arguments));
-  if (typeof opts === 'string') {
-    args.unshift(this.option(args.shift()));
-  } else {
-    args.unshift(this.options);
-  }
-  return utils.extend.apply(utils.extend, args);
+  return (this.updaters[name] = app);
 };
 
 /**
@@ -125,5 +165,9 @@ module.exports = Update;
  */
 
 module.exports.utils = utils;
-module.exports.meta = require('./package');
-module.exports.dir = __dirname;
+
+/**
+ * Expose package.json metadata
+ */
+
+module.exports.pkg = require('./package');
