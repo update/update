@@ -4,60 +4,61 @@ require('mocha');
 require('should');
 var fs = require('fs');
 var path = require('path');
-var store = require('data-store');
 var assert = require('assert');
-var App = require('../');
+var store = require('base-store');
+var update = require('..');
 var app;
 
 describe('store', function () {
   beforeEach(function () {
-    app = new App();
-    app.store = store('update-next-tests');
+    app = update();
+    app.use(store('update-tests'));
   });
 
-  afterEach(function (cb) {
+  afterEach(function () {
+    app.store.data = {};
     app.store.del({force: true});
-    cb();
   });
 
-  it('should create an instance of store', function () {
-    assert(app.store instanceof store);
+  it('should create a store with the given `name`', function () {
+    app.use(store('foo-bar-baz'));
+    assert(app.store.name === 'foo-bar-baz');
   });
 
   it('should create a store at the given `cwd`', function () {
-    app = new App({store: {cwd: __dirname + '/actual'}});
-
+    var cwd = path.resolve(__dirname, 'actual');
+    app.use(store('abc', {cwd: cwd}));
     app.store.set('foo', 'bar');
-    assert(path.basename(app.store.path) === 'update.json');
-    assert(app.store.data.hasOwnProperty('foo'));
-    assert(app.store.data.foo === 'bar');
-    assert(fs.existsSync(path.join(__dirname, 'actual', 'update.json')));
+    path.basename(app.store.path).should.equal('abc.json');
+    app.store.data.should.have.property('foo', 'bar');
+    assert.equal(fs.existsSync(path.join(cwd, 'abc.json')), true);
   });
 
   it('should create a store using the given `indent` value', function () {
-    app = new App({store: {cwd: __dirname + '/actual', indent: 0}});
+    var cwd = path.resolve(__dirname, 'actual');
+    app.use(store('abc', {cwd: cwd, indent: 0}));
     app.store.set('foo', 'bar');
-    var contents = fs.readFileSync(path.join(__dirname, 'actual', 'update.json'), 'utf8');
-    assert(contents === '{"foo":"bar"}');
+    var contents = fs.readFileSync(path.resolve(cwd, 'abc.json'), 'utf8');
+    assert.equal(contents, '{"foo":"bar"}');
   });
 
-  it('should set a value on the store', function () {
+  it('should `.set()` a value on the store', function () {
     app.store.set('one', 'two');
     app.store.data.one.should.equal('two');
   });
 
-  it('should set an object', function () {
+  it('should `.set()` an object', function () {
     app.store.set({four: 'five', six: 'seven'});
     app.store.data.four.should.equal('five');
     app.store.data.six.should.equal('seven');
   });
 
-  it('should set a nested value', function () {
+  it('should `.set()` a nested value', function () {
     app.store.set('a.b.c.d', {e: 'f'});
     app.store.data.a.b.c.d.e.should.equal('f');
   });
 
-  it('should union a value onto an array on the store', function () {
+  it('should `.union()` a value on the store', function () {
     app.store.union('one', 'two');
     app.store.data.one.should.eql(['two']);
   });
@@ -150,8 +151,13 @@ describe('store', function () {
   it('should `.del()` a stored value', function () {
     app.store.set('a', 'b');
     app.store.set('c', 'd');
+    app.store.data.should.have.property('a');
+    app.store.data.should.have.property('c');
+
     app.store.del('a');
-    app.store.should.not.have.property('a');
+    app.store.del('c');
+    app.store.data.should.not.have.property('a');
+    app.store.data.should.not.have.property('c');
   });
 
   it('should `.del()` multiple stored values', function () {
@@ -165,13 +171,12 @@ describe('store', function () {
 
 describe('events', function () {
   beforeEach(function () {
-    app = new App();
-    app.store = store('update-next-tests');
+    app.use(store('abc'));
   });
 
-  afterEach(function (cb) {
+  afterEach(function () {
+    app.store.data = {};
     app.store.del({force: true});
-    cb();
   });
 
   it('should emit `set` when an object is set:', function () {
@@ -186,6 +191,7 @@ describe('events', function () {
 
   it('should emit `set` when a key/value pair is set:', function () {
     var keys = [];
+
     app.store.on('set', function (key) {
       keys.push(key);
     });
@@ -196,6 +202,7 @@ describe('events', function () {
 
   it('should emit `set` when an object value is set:', function () {
     var keys = [];
+
     app.store.on('set', function (key) {
       keys.push(key);
     });
@@ -204,21 +211,35 @@ describe('events', function () {
     keys.should.eql(['a']);
   });
 
-  it('should emit `set` when an array of objects is passed:', function () {
+  it('should emit `set` when an array of objects is passed:', function (cb) {
     var keys = [];
+
     app.store.on('set', function (key) {
       keys.push(key);
     });
 
     app.store.set([{a: 'b'}, {c: 'd'}]);
     keys.should.eql(['a', 'c']);
+    cb();
   });
 
-  it('should emit `del` when a value is delted:', function () {
-    var res;
+  it('should emit `has`:', function (cb) {
+    var keys = [];
+
+    app.store.on('has', function (val) {
+      assert(val);
+      cb();
+    });
+
+    app.store.set('a', 'b');
+    app.store.has('a');
+  });
+
+  it('should emit `del` when a value is delted:', function (cb) {
     app.store.on('del', function (keys) {
       keys.should.eql('a');
       assert(typeof app.store.get('a') === 'undefined');
+      cb();
     });
 
     app.store.set('a', {b: 'c'});
@@ -226,17 +247,30 @@ describe('events', function () {
     app.store.del('a');
   });
 
-  it('should emit deleted keys on `del`:', function (done) {
-    var keys = [];
+  it('should emit deleted keys on `del`:', function (cb) {
+    var arr = [];
+
     app.store.on('del', function (key) {
-      keys.push(key);
+      arr.push(key);
+      assert(Object.keys(app.store.data).length === 0);
     });
 
     app.store.set('a', 'b');
     app.store.set('c', 'd');
     app.store.set('e', 'f');
+
     app.store.del({force: true});
-    keys.should.eql(['a', 'c', 'e']);
-    done();
+    arr.should.eql(['a', 'c', 'e']);
+    cb();
+  });
+
+  it('should throw an error if force is not passed', function () {
+    app.store.set('a', 'b');
+    app.store.set('c', 'd');
+    app.store.set('e', 'f');
+
+    (function () {
+      app.store.del();
+    }).should.throw('options.force is required to delete the entire cache.');
   });
 });
