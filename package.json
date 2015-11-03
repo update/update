@@ -101,7 +101,9 @@
     "vinyl": "^1.1.0"
   },
   "keywords": [
+    "lint",
     "next",
+    "repo",
     "update"
   ],
   "verb": {
@@ -127,6 +129,7 @@
     ]
   },
   "update": {
+    "note": "this is just pseudo data for tests. I'll update with real stuff soon.",
     "cwd": "lib/pipeline",
     "helpers": {
       "related": "@/helper-related"
