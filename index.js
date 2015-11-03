@@ -66,16 +66,17 @@ Update.prototype.initUpdate = function(base) {
   this.handler('postWrite');
 
   // parse command line arguments
-  var argv = minimist(process.argv.slice(2));
-  if (process.argv.length > 3) {
-    argv = expand(argv);
-  }
+  var argv = expand(minimist(process.argv.slice(2)));
 
   // expose `argv` on the instance
-  this.set('argv', this.argv || argv);
+  this.mixin('argv', function(prop) {
+    var args = [].slice.call(arguments);
+    args.unshift(argv);
+    return utils.get.apply(null, args);
+  });
 
-  // expose `package.json` on `cache.data`
-  this.data(utils.pkg());
+  // load the package.json for the updater
+  this.data(utils.pkg(this.options.path));
   config(this);
 
   this.use(utils.runtimes())
@@ -89,7 +90,10 @@ Update.prototype.initUpdate = function(base) {
     .use(utils.defaults())
     .use(utils.opts())
 
-  this.config.process(this.cache.data);
+  var data = utils.get(this.cache.data, 'update');
+  data = utils.extend({}, data, argv);
+
+  this.config.process(data);
 
   this.engine(['md', 'tmpl'], require('engine-base'));
   this.onLoad(/\.(md|tmpl)$/, function (view, next) {
