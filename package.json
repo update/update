@@ -69,6 +69,7 @@
     "rimraf": "^2.4.3",
     "set-value": "^0.3.0",
     "sort-object": "^3.0.0",
+    "stream-exhaust": "^1.0.1",
     "success-symbol": "^0.1.0",
     "union-value": "^0.1.1",
     "update-copyright": "^0.1.0",
