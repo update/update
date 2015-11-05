@@ -97,7 +97,6 @@ Update.prototype.initUpdate = function(base) {
 
   this.engine(['md', 'tmpl'], require('engine-base'));
   this.onLoad(/\.(md|tmpl)$/, function (view, next) {
-    view.content = view.contents.toString();
     utils.matter.parse(view, next);
   });
 };
