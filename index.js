@@ -146,15 +146,19 @@ Update.prototype.extendFile = function(file, config, opts) {
  */
 
 Update.prototype.updater = function(name, app) {
-  if (arguments.length === 1) {
+  if (arguments.length === 1 && typeof name === 'string') {
     return this.updaters[name];
   }
+
   app.use(utils.runtimes({
     displayName: function(key) {
       return utils.cyan(name + ':' + key);
     }
   }));
-  return (this.updaters[name] = app);
+
+  this.emit('updater', name, app);
+  this.updaters[name] = app;
+  return app;
 };
 
 /**

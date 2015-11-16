@@ -3,34 +3,36 @@
 var path = require('path');
 var stamp = require('time-stamp');
 var gray = require('ansi-gray');
-var multi = require('../lib/multi')();
+var Runner = require('../lib/runner/runner')();
 var utils = require('../lib/utils');
 var argv = require('minimist')(process.argv.slice(2), {
   alias: {verbose: 'v'}
 });
 
 var cmd = utils.commands(argv);
-var cli = multi(argv);
+var runner = new Runner(argv);
+console.log(runner)
 
 var task = cmd.list ? ['list', 'default'] : 'default';
 
-cli.on('*', function (method, key, val) {
+runner.on('*', function (method, key, val) {
   console.log(method + ':', key, val);
 });
 
+
 if (argv.verbose) {
-  cli.on('register', function(key) {
+  runner.on('register', function(key) {
     utils.ok(utils.gray('registered'), 'updater', utils.cyan(key));
   });
 }
 
-cli.registerEach('update-*', {cwd: utils.gm});
+runner.registerEach('update-*', {cwd: utils.gm});
 
-cli.base.task('run', function (cb) {
-  cli.run(cb);
+runner.base.task('run', function (cb) {
+  runner.run(cb);
 });
 
-cli.base.build(task, function (err) {
+runner.base.build(task, function (err) {
   if (err) console.error(err);
   timestamp('finished');
 });
