@@ -12,15 +12,15 @@
  */
 
 var path = require('path');
-var pipeline = require('base-pipeline');
 var minimist = require('minimist');
+var expand = require('expand-args');
+var cli = require('base-cli');
+var store = require('base-store');
+var pipeline = require('base-pipeline');
 var loader = require('assemble-loader');
 var Core = require('assemble-core');
 var ask = require('assemble-ask');
-var store = require('base-store');
-var cli = require('base-cli');
 
-var expand = require('expand-args');
 var config = require('./lib/config');
 var locals = require('./lib/locals');
 var utils = require('./lib/utils');
@@ -43,6 +43,7 @@ function Update(options) {
   }
   Core.call(this, options);
   this.set('name', 'update');
+  this.isUpdate = true;
   this.initUpdate(this);
 }
 
@@ -57,7 +58,6 @@ Core.extend(Update);
  */
 
 Update.prototype.initUpdate = function(base) {
-  this.define('isUpdate', true);
   this.set('updaters', {});
 
   // custom middleware handlers

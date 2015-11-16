@@ -10,13 +10,13 @@
   ],
   "repository": "jonschlinkert/update",
   "bugs": {
-    "url": "https://github.com/jonschlinkert/update-next/issues"
+    "url": "https://github.com/jonschlinkert/update/issues"
   },
   "license": "MIT",
   "files": [
     "index.js",
     "bin",
-    "lib"
+    "lib/"
   ],
   "main": "index.js",
   "engines": {
@@ -71,6 +71,7 @@
     "sort-object": "^3.0.0",
     "stream-exhaust": "^1.0.1",
     "success-symbol": "^0.1.0",
+    "time-stamp": "^0.1.1",
     "union-value": "^0.2.0",
     "update-copyright": "^0.1.0",
     "write": "^0.2.1"
