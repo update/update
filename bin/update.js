@@ -11,7 +11,6 @@ var argv = require('minimist')(process.argv.slice(2), {
 
 var cmd = utils.commands(argv);
 var runner = new Runner(argv);
-console.log(runner)
 
 var task = cmd.list ? ['list', 'default'] : 'default';
 
