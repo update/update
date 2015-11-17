@@ -5,7 +5,7 @@
   "homepage": "https://github.com/jonschlinkert/update-next",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "contributors": [
-    "Jon Schlinkert <github@sellside.com> (https://github.com/jonschlinkert)",
+    "Jon Schlinkert (https://github.com/jonschlinkert)",
     "Brian Woodward <brian.woodward@gmail.com> (https://github.com/doowb)"
   ],
   "repository": "jonschlinkert/update",
@@ -18,7 +18,9 @@
     "bin",
     "lib/"
   ],
-  "main": "index.js",
+  "main": [
+    "index.js"
+  ],
   "engines": {
     "node": ">=0.10.0"
   },
@@ -58,6 +60,7 @@
     "lazy-cache": "^0.2.4",
     "load-pkg": "^2.0.1",
     "map-config": "^0.2.1",
+    "matched": "^0.3.2",
     "micromatch": "jonschlinkert/micromatch#2.3.0",
     "minimist": "^1.2.0",
     "object.omit": "^2.0.0",
@@ -145,5 +148,9 @@
     "set": {
       "aaa": "yyy"
     }
-  }
+  },
+  "authors": [
+    "Jon Schlinkert (https://github.com/jonschlinkert)",
+    "Brian Woodward <brian.woodward@gmail.com> (https://github.com/doowb)"
+  ]
 }
