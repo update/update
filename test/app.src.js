@@ -1,6 +1,7 @@
 'use strict';
 
-var App = require('..');
+var support = require('./support');
+var App = support.resolve();
 var assert = require('assert');
 var should = require('should');
 var join = require('path').join;

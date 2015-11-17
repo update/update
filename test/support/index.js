@@ -48,7 +48,7 @@ exports.resolve = function(filepath) {
   var fp = tryResolve(base);
 
   if (typeof fp === 'undefined') {
-    throw new Error('cannot resolve: ' + fp);
+    throw new Error('cannot resolve: ' + base);
   }
   return (cache[key] = require(fp));
 };
@@ -60,6 +60,10 @@ function tryResolve(name) {
 
   try {
     return require.resolve(path.resolve(name));
+  } catch(err) {}
+
+  try {
+    return require.resolve(path.resolve(name, 'index.js'));
   } catch(err) {}
 }
 

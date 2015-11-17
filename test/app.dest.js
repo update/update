@@ -5,7 +5,8 @@ var statSpy = spies.statSpy;
 require('mocha');
 var should = require('should');
 var assert = require('assert');
-var App = require('..');
+var support = require('./support');
+var App = support.resolve();
 var app;
 
 var path = require('path');

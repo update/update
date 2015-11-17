@@ -6,7 +6,8 @@ var rimraf = require('rimraf');
 var bufEqual = require('buffer-equal');
 var through = require('through2');
 var File = require('vinyl');
-var assemble = require('..');
+var support = require('./support');
+var App = support.resolve();
 var spies = require('./support/spy');
 var chmodSpy = spies.chmodSpy;
 var statSpy = spies.statSpy;
@@ -17,7 +18,7 @@ var wipeOut = function(cb) {
   spies.setError('false');
   statSpy.reset();
   chmodSpy.reset();
-  app = assemble();
+  app = new App();
 };
 
 var dataWrap = function(fn) {

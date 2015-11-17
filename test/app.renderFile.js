@@ -1,6 +1,7 @@
 'use strict';
 
-var assemble = require('..');
+var support = require('./support');
+var App = support.resolve();
 var assert = require('assert');
 var should = require('should');
 var path = require('path');
@@ -8,7 +9,7 @@ var app;
 
 describe('app.renderFile()', function() {
   beforeEach(function () {
-    app = assemble();
+    app = new App();
     app.engine('hbs', require('engine-handlebars'));
     app.engine('*', require('engine-base'));
 

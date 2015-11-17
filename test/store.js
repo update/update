@@ -6,7 +6,8 @@ var fs = require('fs');
 var path = require('path');
 var assert = require('assert');
 var store = require('base-store');
-var update = require('..');
+var support = require('./support');
+var update = support.resolve();
 var app;
 
 describe('store', function () {
