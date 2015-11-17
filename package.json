@@ -4,6 +4,10 @@
   "version": "0.1.0",
   "homepage": "https://github.com/jonschlinkert/update-next",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "authors": [
+    "Jon Schlinkert (https://github.com/jonschlinkert)",
+    "Brian Woodward <brian.woodward@gmail.com> (https://github.com/doowb)"
+  ],
   "contributors": [
     "Jon Schlinkert (https://github.com/jonschlinkert)",
     "Brian Woodward <brian.woodward@gmail.com> (https://github.com/doowb)"
@@ -18,9 +22,7 @@
     "bin",
     "lib/"
   ],
-  "main": [
-    "index.js"
-  ],
+  "main": "index.js",
   "engines": {
     "node": ">=0.10.0"
   },
@@ -99,9 +101,9 @@
     "is-buffer": "^1.1.0",
     "istanbul": "^0.4.0",
     "kind-of": "^2.0.1",
-    "mocha": "^2.3.4",
+    "mocha": "*",
     "resolve-glob": "^0.1.7",
-    "should": "^7.1.1",
+    "should": "*",
     "sinon": "^1.17.2",
     "swig": "^1.4.2",
     "vinyl": "^1.1.0"
@@ -148,9 +150,5 @@
     "set": {
       "aaa": "yyy"
     }
-  },
-  "authors": [
-    "Jon Schlinkert (https://github.com/jonschlinkert)",
-    "Brian Woodward <brian.woodward@gmail.com> (https://github.com/doowb)"
-  ]
+  }
 }
