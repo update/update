@@ -66,7 +66,11 @@ Update.prototype.initUpdate = function(base) {
   this.handler('postWrite');
 
   // parse command line arguments
-  var argv = expand(minimist(process.argv.slice(2)));
+  var argv = expand(minimist(process.argv.slice(2)), {
+    alias: {v: 'verbose'}
+  });
+
+  this.option('argv', argv);
 
   // expose `argv` on the instance
   this.mixin('argv', function(prop) {
@@ -108,6 +112,12 @@ Update.prototype.cwd = function(dir) {
     args.unshift(cwd);
     return path.resolve.apply(null, args);
   };
+};
+
+Update.prototype.log = function() {
+  if (this.enabled('verbose')) {
+    console.log.apply(console, arguments);
+  }
 };
 
 Update.prototype.flag = function(key) {
@@ -155,6 +165,10 @@ Update.prototype.updater = function(name, app) {
       return utils.cyan(name + ':' + key);
     }
   }));
+
+  app.on('task:starting', function() {
+    console.log('fooo')
+  })
 
   this.emit('updater', name, app);
   this.updaters[name] = app;
