@@ -636,17 +636,18 @@ describe('collection helpers', function () {
     });
 
     it('should handle engine errors', function (done) {
+      app.post('foo.hbs', {content: '{{one "two"}}'});
       app.page('one', {content: '{{posts "foo.hbs"}}'})
         .render(function (err) {
           assert(err);
           assert(typeof err === 'object');
           assert(typeof err.message === 'string');
-          assert(/is not a function/.test(err.message));
+          assert(/Missing helper: "one"/.test(err.message));
           done();
         });
     });
 
-    it('should handle engine errors', function (done) {
+    it('should handle engine errors2', function(done) {
       app.engine('tmpl', require('engine-base'));
       app.create('foo', {engine: 'tmpl'});
       app.create('bar', {engine: 'tmpl'});

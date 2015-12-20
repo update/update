@@ -26,6 +26,16 @@ describe('events', function () {
     app.emit('foo', 'bar');
   });
 
+  it('should listen for error events:', function(done) {
+    var app = new App();
+    app.on('foo', function(val) {
+      assert(val === 'bar');
+      done();
+    });
+    assert(Array.isArray(app._callbacks['$foo']));
+    app.emit('foo', 'bar');
+  });
+
   it('should listen for `view` events:', function () {
     var app = new App();
 

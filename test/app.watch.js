@@ -1,9 +1,8 @@
 'use strict';
 
-var fs = require('fs');
 var assert = require('assert');
-var support = require('./support');
-var App = support.resolve();
+var fs = require('fs');
+var App = require('..');
 var app;
 
 describe.skip('watch()', function () {

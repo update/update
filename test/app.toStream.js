@@ -1,14 +1,13 @@
 'use strict';
 
-var support = require('./support');
-var App = support.resolve();
+var update = require('..');
 var assert = require('assert');
 var should = require('should');
 var app;
 
 describe('toStream()', function() {
   beforeEach(function () {
-    app = new App();
+    app = update();
     app.create('pages');
     app.page('a', {content: 'this is A'});
     app.page('b', {content: 'this is B'});

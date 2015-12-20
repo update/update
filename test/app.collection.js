@@ -1,3 +1,5 @@
+'use strict';
+
 require('mocha');
 require('should');
 var fs = require('fs');
@@ -75,6 +77,7 @@ describe('collection', function () {
         .pages('test/fixtures/pages/c.hbs');
 
       app.pages.options.should.have.property('foo', 'bar');
+
       app.views.pages.should.have.properties([
         path.resolve('test/fixtures/pages/a.hbs'),
         path.resolve('test/fixtures/pages/b.hbs'),
@@ -129,16 +132,16 @@ describe('collection', function () {
     });
 
     it('should render a view with inherited app.render', function (done) {
+      app.cache.data = {};
+
       app.page('test/fixtures/templates/a.tmpl')
-        .use(function (view) {
-          if (!view.contents) {
-            view.contents = fs.readFileSync(view.path);
-          }
+        .use(function(view) {
+          view.contents = fs.readFileSync(view.path);
         })
         .set('data.name', 'Brian')
         .render(function (err, res) {
           if (err) return done(err);
-          assert(res.content === 'Brian');
+          assert(res.contents.toString() === 'Brian');
           done();
         });
     });

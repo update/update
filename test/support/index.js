@@ -1,8 +1,7 @@
 'use strict';
 
 var path = require('path');
-var pkg = require('load-pkg');
-var lookup = require('look-up');
+var loadpkg = require('load-pkg');
 var assert = require('assert');
 var ignore = require('./ignore');
 var cache = {};
@@ -37,6 +36,7 @@ exports.resolve = function(filepath) {
     return cache[key];
   }
 
+  var pkg = loadpkg.sync(process.cwd());
   var prefix = pkg.name !== 'templates'
     ? 'templates'
     : '';
@@ -48,7 +48,7 @@ exports.resolve = function(filepath) {
   var fp = tryResolve(base);
 
   if (typeof fp === 'undefined') {
-    throw new Error('cannot resolve: ' + base);
+    throw new Error('cannot resolve: ' + fp);
   }
   return (cache[key] = require(fp));
 };
@@ -61,19 +61,4 @@ function tryResolve(name) {
   try {
     return require.resolve(path.resolve(name));
   } catch(err) {}
-
-  try {
-    return require.resolve(path.resolve(name, 'index.js'));
-  } catch(err) {}
 }
-
-function tryRequire(name) {
-  try {
-    return require(name);
-  } catch(err) {}
-
-  try {
-    return require(path.resolve(name));
-  } catch(err) {}
-}
-

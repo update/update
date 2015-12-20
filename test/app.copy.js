@@ -2,8 +2,7 @@ require('mocha');
 var path = require('path');
 var assert = require('assert');
 var rimraf = require('rimraf');
-var support = require('./support');
-var App = support.resolve();
+var App = require('..');
 var app;
 
 var fixtures = path.join(__dirname, 'fixtures/copy/*.txt');

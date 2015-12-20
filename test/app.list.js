@@ -85,6 +85,8 @@ describe('list', function () {
       app = new App();
       app.engine('tmpl', require('engine-base'));
       app.create('pages');
+
+      app.cache.data = {};
     });
 
     it('should render a item with inherited app.render', function (done) {
