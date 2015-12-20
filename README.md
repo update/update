@@ -1,4 +1,4 @@
-# update-next [![NPM version](https://img.shields.io/npm/v/update-next.svg)](https://www.npmjs.com/package/update-next) [![Build Status](https://img.shields.io/travis/jonschlinkert/update-next.svg)](https://travis-ci.org/jonschlinkert/update-next)
+# update [![NPM version](https://img.shields.io/npm/v/update.svg)](https://www.npmjs.com/package/update) [![Build Status](https://img.shields.io/travis/jonschlinkert/update.svg)](https://travis-ci.org/jonschlinkert/update)
 
 > Update
 
@@ -9,7 +9,7 @@
 Install globally with [npm](https://www.npmjs.com/)
 
 ```sh
-$ npm i -g update-next
+$ npm i -g update
 ```
 
 ```sh
@@ -50,11 +50,11 @@ app.onStream(/lib\//, rename);
 Install with [npm](https://www.npmjs.com/)
 
 ```sh
-$ npm i update-next --save
+$ npm i update --save
 ```
 
 ```js
-var update = require('update-next');
+var update = require('update');
 ```
 
 ## API
@@ -128,7 +128,7 @@ $ npm i -d && npm test
 
 ## Contributing
 
-Pull requests and stars are always welcome. For bugs and feature requests, [please create an issue](https://github.com/jonschlinkert/update-next/issues/new).
+Pull requests and stars are always welcome. For bugs and feature requests, [please create an issue](https://github.com/jonschlinkert/update/issues/new).
 
 ## Author
 
