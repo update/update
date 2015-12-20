@@ -1,8 +1,8 @@
 {
-  "name": "update-next",
+  "name": "update",
   "description": "Update",
-  "version": "0.1.0",
-  "homepage": "https://github.com/jonschlinkert/update-next",
+  "version": "0.4.0",
+  "homepage": "https://github.com/jonschlinkert/update",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "authors": [
     "Brian Woodward <brian.woodward@gmail.com> (https://github.com/doowb)",
