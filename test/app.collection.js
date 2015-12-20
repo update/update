@@ -129,11 +129,10 @@ describe('collection', function () {
       app = new App();
       app.engine('tmpl', require('engine-base'));
       app.create('pages');
+      app.cache.data = {};
     });
 
     it('should render a view with inherited app.render', function (done) {
-      app.cache.data = {};
-
       app.page('test/fixtures/templates/a.tmpl')
         .use(function(view) {
           view.contents = fs.readFileSync(view.path);

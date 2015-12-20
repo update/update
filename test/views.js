@@ -335,18 +335,18 @@ describe('views', function () {
     });
 
     it('should load an array of items from an event:', function () {
-      var pages = new Views();
+      var collection = new Views();
 
-      pages.on('addList', function (list) {
+      collection.on('addList', function(list) {
         while (list.length) {
-          pages.addView({path: list.pop()});
+          collection.addView({path: list.pop()});
         }
         this.loaded = true;
       });
 
-      pages.addList(['a.txt', 'b.txt', 'c.txt']);
-      assert(pages.views.hasOwnProperty('a.txt'));
-      assert(pages.views['a.txt'].path === 'a.txt');
+      collection.addList(['a.txt', 'b.txt', 'c.txt']);
+      assert(collection.views.hasOwnProperty('a.txt'));
+      assert(collection.views['a.txt'].path === 'a.txt');
     });
 
     it('should load an array of items from the addList callback:', function () {
