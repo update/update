@@ -18,7 +18,7 @@ var cli = require('base-cli');
 var store = require('base-store');
 var pipeline = require('base-pipeline');
 var loader = require('assemble-loader');
-var Core = require('assemble-core');
+var Base = require('assemble-core');
 var ask = require('assemble-ask');
 
 var config = require('./lib/config');
@@ -41,8 +41,8 @@ function Update(options) {
   if (!(this instanceof Update)) {
     return new Update(options);
   }
-  Core.call(this, options);
-  this.set('name', 'update');
+  Base.call(this, options);
+  this.name = this.options.name || 'update';
   this.isUpdate = true;
   this.initUpdate(this);
 }
@@ -51,7 +51,7 @@ function Update(options) {
  * Inherit assemble-core
  */
 
-Core.extend(Update);
+Base.extend(Update);
 
 /**
  * Initialize Updater defaults
@@ -80,11 +80,16 @@ Update.prototype.initUpdate = function(base) {
   });
 
   // load the package.json for the updater
-  this.data(utils.pkg(this.options.path));
+  this.data(utils.pkg.sync(this.options.path));
   config(this);
 
-  this.use(utils.runtimes())
-    .use(locals('update'))
+  this.use(utils.runtimes({
+    displayName: function (key) {
+      return this.name === key ? key : (this.name + ':' + key);
+    }
+  }))
+
+  this.use(locals('update'))
     .use(store())
     .use(pipeline())
     .use(loader())
@@ -162,13 +167,9 @@ Update.prototype.updater = function(name, app) {
 
   app.use(utils.runtimes({
     displayName: function(key) {
-      return utils.cyan(name + ':' + key);
+      return name + ':' + key;
     }
   }));
-
-  app.on('task:starting', function() {
-    console.log('fooo')
-  })
 
   this.emit('updater', name, app);
   this.updaters[name] = app;
