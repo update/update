@@ -85,7 +85,7 @@ Update.prototype.initUpdate = function(base) {
 
   this.use(utils.runtimes({
     displayName: function (key) {
-      return this.name === key ? key : (this.name + ':' + key);
+      return base.name === key ? key : (base.name + ':' + key);
     }
   }))
 
@@ -167,7 +167,7 @@ Update.prototype.updater = function(name, app) {
 
   app.use(utils.runtimes({
     displayName: function(key) {
-      return name + ':' + key;
+      return app.name === key ? key : (app.name + ':' + key);
     }
   }));
 
