@@ -1,9 +1,7 @@
 'use strict';
 
 /**
- * temporary test code
+ * temporary noop
  */
 
-module.exports = function (app) {
-  app.task('lint', require('./lib/tasks/lint'));
-};
+module.exports = function() {};

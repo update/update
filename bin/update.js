@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 var path = require('path');
+var gm = require('global-modules');
 var Runner = require('../lib/runner/runner')();
 var utils = require('../lib/utils');
 var argv = require('minimist')(process.argv.slice(2), {
@@ -25,7 +26,7 @@ if (argv.verbose) {
   });
 }
 
-runner.registerEach('update-*', {cwd: utils.gm});
+runner.registerEach('update-*', {cwd: gm});
 
 runner.base.task('run', function(cb) {
   runner.run(cb);

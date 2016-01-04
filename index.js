@@ -7,19 +7,10 @@
 
 'use strict';
 
-/**
- * module dependencies
- */
-
 var path = require('path');
 var minimist = require('minimist');
 var expand = require('expand-args');
-var cli = require('base-cli');
-var store = require('base-store');
-var pipeline = require('base-pipeline');
-var loader = require('assemble-loader');
 var Base = require('assemble-core');
-
 var config = require('./lib/config');
 var locals = require('./lib/locals');
 var utils = require('./lib/utils');
@@ -82,31 +73,41 @@ Update.prototype.initUpdate = function(base) {
   this.data(utils.pkg.sync(this.options.path));
   config(this);
 
-  this.use(utils.runtimes({
-    displayName: function (key) {
-      return base.name === key ? key : (base.name + ':' + key);
-    }
-  }))
-
   this.use(locals('update'))
-    .use(store())
-    .use(pipeline())
-    .use(loader())
-    .use(cli())
-
+    .use(utils.runtimes({
+      displayName: function(key) {
+        return base.name === key ? key : (base.name + ':' + key);
+      }
+    }))
+    .use(utils.store())
+    .use(utils.pipeline())
+    .use(utils.loader())
+    .use(utils.cli())
     .use(utils.defaults())
     .use(utils.opts())
 
   var data = utils.get(this.cache.data, 'update');
-  data = utils.extend({}, data, argv);
-
-  this.config.process(data);
+  this.config.process(utils.extend({}, data, argv));
 
   this.engine(['md', 'tmpl'], require('engine-base'));
-  this.onLoad(/\.(md|tmpl)$/, function (view, next) {
+  this.onLoad(/\.(md|tmpl)$/, function(view, next) {
     utils.matter.parse(view, next);
   });
 };
+
+/**
+ * Returns a function for resolving filepaths from the given `directory`
+ * or from the user's current working directory if no directory
+ * is passed.
+ *
+ * ```js
+ * var cwd = update.cwd('foo');
+ * var a = cwd('bar');
+ * var b = cwd('baz');
+ * ```
+ * @param {String} `dir`
+ * @return {Function}
+ */
 
 Update.prototype.cwd = function(dir) {
   var cwd = dir || process.cwd();
@@ -117,36 +118,16 @@ Update.prototype.cwd = function(dir) {
   };
 };
 
+/**
+ * Temporary logger method.
+ * TODO: add event logger
+ */
+
 Update.prototype.log = function() {
+  this.emit.bind(this, 'log').apply(this, arguments);
   if (this.enabled('verbose')) {
     console.log.apply(console, arguments);
   }
-};
-
-Update.prototype.flag = function(key) {
-  return this.get('argv.' + key);
-};
-
-Update.prototype.cmd = function(key) {
-  return utils.commands(this.argv)[key] || false;
-};
-
-Update.prototype.extendFile = function(file, config, opts) {
-  var parsed = utils.tryParse(file.content);
-  var obj = utils.extend({}, parsed, config);
-  var res = {};
-  if (opts && opts.sort === true) {
-    var keys = Object.keys(obj).sort();
-    var len = keys.length, i = -1;
-    while (++i < len) {
-      var key = keys[i];
-      res[key] = obj[key];
-    }
-  } else {
-    res = obj;
-  }
-  file.content = JSON.stringify(res, null, 2);
-  if (opts.newline) file.content += '\n';
 };
 
 /**
@@ -181,13 +162,8 @@ Update.prototype.updater = function(name, app) {
 module.exports = Update;
 
 /**
- * Expose `utils`
+ * Expose `utils` and package.json metadata
  */
 
 module.exports.utils = utils;
-
-/**
- * Expose package.json metadata
- */
-
 module.exports.pkg = require('./package');
