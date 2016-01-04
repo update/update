@@ -19,7 +19,6 @@ var store = require('base-store');
 var pipeline = require('base-pipeline');
 var loader = require('assemble-loader');
 var Base = require('assemble-core');
-var ask = require('assemble-ask');
 
 var config = require('./lib/config');
 var locals = require('./lib/locals');
@@ -93,7 +92,6 @@ Update.prototype.initUpdate = function(base) {
     .use(store())
     .use(pipeline())
     .use(loader())
-    .use(ask())
     .use(cli())
 
     .use(utils.defaults())
