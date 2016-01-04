@@ -1,6 +1,6 @@
 {
   "name": "update",
-  "description": "Update",
+  "description": "Easily keep anything in your project up-to-date by installing the updaters you want to use and running `update` in the command line! Update the copyright date, licence type, ensure that a project uses your latest eslint or jshint configuration, remove deprecated package.json fields, or anything you can think of!",
   "version": "0.4.1",
   "homepage": "https://github.com/jonschlinkert/update",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
@@ -39,7 +39,6 @@
     "ansi-green": "^0.1.1",
     "ansi-red": "^0.1.1",
     "ansi-yellow": "^0.1.1",
-    "assemble-ask": "^0.1.4",
     "assemble-core": "^0.8.0",
     "assemble-loader": "^0.2.6",
     "async": "^1.5.1",
@@ -90,6 +89,7 @@
     "buffer-equal": "^1.0.0",
     "consolidate": "^0.13.1",
     "coveralls": "^2.11.6",
+    "data-store": "^0.12.1",
     "engine-handlebars": "^0.8.0",
     "event-stream": "^3.3.2",
     "graceful-fs": "^4.1.2",
