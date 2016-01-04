@@ -1,7 +1,7 @@
 {
   "name": "update",
   "description": "Update",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "homepage": "https://github.com/jonschlinkert/update",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "authors": [
