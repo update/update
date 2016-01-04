@@ -2,7 +2,7 @@
   "name": "update",
   "description": "Easily keep anything in your project up-to-date by installing the updaters you want to use and running `update` in the command line! Update the copyright date, licence type, ensure that a project uses your latest eslint or jshint configuration, remove deprecated package.json fields, or anything you can think of!",
   "version": "0.4.1",
-  "homepage": "https://github.com/jonschlinkert/update",
+  "homepage": "https://github.com/update/update",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "authors": [
     "Brian Woodward <brian.woodward@gmail.com> (https://github.com/doowb)",
@@ -12,9 +12,9 @@
     "Brian Woodward <brian.woodward@gmail.com> (https://github.com/doowb)",
     "Jon Schlinkert (https://github.com/jonschlinkert)"
   ],
-  "repository": "jonschlinkert/update",
+  "repository": "update/update",
   "bugs": {
-    "url": "https://github.com/jonschlinkert/update/issues"
+    "url": "https://github.com/update/update/issues"
   },
   "license": "MIT",
   "files": [
