@@ -13,7 +13,7 @@ var runner = new Runner(argv);
 runner.base.option(argv);
 runner.option(argv);
 
-var task = cmd.list ? ['list', 'default'] : 'default';
+var task = cmd.list ? ['list', 'default'] : ['default'];
 
 runner.on('*', function(method, key, val) {
   console.log(method + ':', key, val);
@@ -33,5 +33,5 @@ runner.base.task('run', function(cb) {
 
 runner.base.build(task, function(err) {
   if (err) return console.error(err);
-  utils.timestamp('done ' + utils.green(utils.successSymbol));
+  utils.timestamp('finished ' + utils.green(utils.successSymbol));
 });
