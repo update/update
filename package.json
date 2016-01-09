@@ -1,7 +1,7 @@
 {
   "name": "update",
   "description": "Easily keep anything in your project up-to-date by installing the updaters you want to use and running `update` in the command line! Update the copyright date, licence type, ensure that a project uses your latest eslint or jshint configuration, remove deprecated package.json fields, or anything you can think of!",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "homepage": "https://github.com/update/update",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "authors": [
