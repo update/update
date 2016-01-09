@@ -1,29 +1,23 @@
-/*!
- * update <https://github.com/jonschlinkert/update>
- *
- * Copyright (c) 2015, Jon Schlinkert.
- * Licensed under the MIT License.
- */
-
 'use strict';
 
+/**
+ * module dependencies
+ */
+
 var path = require('path');
-var Base = require('assemble-core');
-var expand = require('expand-args');
-var minimist = require('minimist');
-var config = require('./lib/config');
-var locals = require('./lib/locals');
+var Generate = require('generate');
 var utils = require('./lib/utils');
+var cli = require('./lib/cli');
 
 /**
- * Create an `update` application. This is the main function exported
+ * Create an `update` instance. This is the main function exported
  * by the update module.
  *
  * ```js
- * var Update = require('update');
- * var update = new Update();
+ * var update = require('update');
+ * var app = update();
  * ```
- * @param {Object} `options`
+ * @param {Object} `options` Optionally pass default options to use.
  * @api public
  */
 
@@ -31,139 +25,101 @@ function Update(options) {
   if (!(this instanceof Update)) {
     return new Update(options);
   }
-  Base.call(this, options);
-  this.name = this.options.name || 'update';
+
+  Generate.apply(this, arguments);
   this.isUpdate = true;
-  this.initUpdate(this);
+
+  this.initDefaults(this);
+  this.initPlugins(this);
+  this.initCollections(this);
 }
 
 /**
- * Inherit assemble-core
+ * Inherit Generate
  */
 
-Base.extend(Update);
+Generate.extend(Update);
 
 /**
- * Initialize Updater defaults
- */
-
-Update.prototype.initUpdate = function(base) {
-  this.set('updaters', {});
-
-  // custom middleware handlers
-  this.handler('onStream');
-  this.handler('preWrite');
-  this.handler('postWrite');
-
-  // parse command line arguments
-  var argv = expand(minimist(process.argv.slice(2)), {
-    alias: {v: 'verbose'}
-  });
-
-  this.option('argv', argv);
-
-  // expose `argv` on the instance
-  this.mixin('argv', function(prop) {
-    var args = [].slice.call(arguments);
-    args.unshift(argv);
-    return utils.get.apply(null, args);
-  });
-
-  // load the package.json for the updater
-  this.data(utils.pkg.sync(this.options.path));
-  config(this);
-
-  this.use(locals('update'))
-    .use(utils.runtimes({
-      displayName: function(key) {
-        return base.name === key ? key : (base.name + ':' + key);
-      }
-    }))
-    .use(utils.store())
-    .use(utils.pipeline())
-    .use(utils.loader())
-    .use(utils.cli())
-    .use(utils.defaults())
-    .use(utils.opts())
-
-  var data = utils.get(this.cache.data, 'update');
-  this.config.process(utils.extend({}, data, argv));
-
-  this.engine(['md', 'tmpl'], require('engine-base'));
-  this.onLoad(/\.(md|tmpl)$/, function(view, next) {
-    utils.matter.parse(view, next);
-  });
-};
-
-/**
- * Returns a function for resolving filepaths from the given `directory`
- * or from the user's current working directory if no directory
- * is passed.
+ * Load default plugins. Built-in plugins can be disabled
+ * on the `update` options.
  *
  * ```js
- * var cwd = update.cwd('foo');
- * var a = cwd('bar');
- * var b = cwd('baz');
+ * var app = update({
+ *   plugins: {
+ *     loader: false,
+ *     store: false
+ *   }
+ * });
  * ```
- * @param {String} `dir`
- * @return {Function}
  */
 
-Update.prototype.cwd = function(dir) {
-  var cwd = dir || process.cwd();
-  return function() {
-    var args = [].slice.call(arguments);
-    args.unshift(cwd);
-    return path.resolve.apply(null, args);
-  };
-};
+Update.prototype.initPlugins = function(app) {
+  enable('middleware', utils.middleware);
+  enable('loader', utils.loader);
+  enable('config', utils.config);
+  enable('argv', utils.argv);
+  enable('cli', cli);
 
-/**
- * Temporary logger method.
- * TODO: add event logger
- */
-
-Update.prototype.log = function() {
-  this.emit.bind(this, 'log').apply(this, arguments);
-  if (this.enabled('verbose')) {
-    console.log.apply(console, arguments);
-  }
-};
-
-/**
- * Register updater `name` with the given `update`
- * instance.
- *
- * @param {String} `name`
- * @param {Object} `update` Instance of update
- * @return {Object} Returns the instance for chaining
- */
-
-Update.prototype.updater = function(name, app) {
-  if (arguments.length === 1 && typeof name === 'string') {
-    return this.updaters[name];
-  }
-
-  app.use(utils.runtimes({
-    displayName: function(key) {
-      return app.name === key ? key : (app.name + ':' + key);
+  function enable(name, fn) {
+    if (app.option('plugins') === false) return;
+    if (app.option('plugins.' + name) !== false) {
+      app.use(fn(app.options));
     }
-  }));
-
-  this.emit('updater', name, app);
-  this.updaters[name] = app;
-  return app;
+  }
 };
+
+/**
+ * Built-in view collections
+ *  | partials
+ *  | layouts
+ *  | pages
+ */
+
+Update.prototype.initCollections = function(app) {
+  if (this.option('collections') === false) return;
+
+  var engine = this.options.defaultEngine || 'hbs';
+  this.create('partials', {
+    engine: engine,
+    viewType: 'partial',
+    renameKey: function(fp) {
+      return path.basename(fp, path.extname(fp));
+    }
+  });
+
+  this.create('layouts', {
+    engine: engine,
+    viewType: 'layout',
+    renameKey: function(fp) {
+      return path.basename(fp, path.extname(fp));
+    }
+  });
+
+  this.create('pages', {
+    engine: engine,
+    renameKey: function(fp) {
+      return fp;
+    }
+  });
+};
+
+/**
+ * Ensure `name` is set on the instance for lookups.
+ */
+
+Object.defineProperty(Update.prototype, 'name', {
+  configurable: true,
+  set: function(name) {
+    this.options.name = name;
+  },
+  get: function() {
+    return this.options.name || 'base';
+  }
+});
 
 /**
  * Expose `Update`
  */
 
 module.exports = Update;
-
-/**
- * Expose `utils` and package.json metadata
- */
-
-module.exports.utils = utils;
-module.exports.pkg = require('./package');

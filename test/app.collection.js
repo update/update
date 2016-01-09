@@ -3,7 +3,6 @@
 require('mocha');
 require('should');
 var fs = require('fs');
-var path = require('path');
 var assert = require('assert');
 var define = require('define-property');
 var support = require('./support');
@@ -49,11 +48,7 @@ describe('collection', function() {
         });
 
       app.engine('tmpl', require('engine-base'));
-      app.create('pages', {
-        renameKey: function(fp) {
-          return path.relative(process.cwd(), fp);
-        }
-      });
+      app.create('pages');
     });
 
     it('should load a view onto the respective collection:', function() {
@@ -166,11 +161,7 @@ describe('collection singular method', function() {
     beforeEach(function() {
       app = new App();
       app.engine('tmpl', require('engine-base'));
-      app.create('page', {
-        renameKey: function(fp) {
-          return path.relative(process.cwd(), fp);
-        }
-      });
+      app.create('page');
     });
 
     it('should add a view to the created collection:', function() {

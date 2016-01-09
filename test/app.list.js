@@ -3,7 +3,6 @@
 require('mocha');
 require('should');
 var fs = require('fs');
-var path = require('path');
 var assert = require('assert');
 var support = require('./support');
 var App = support.resolve();
@@ -35,11 +34,7 @@ describe('list', function() {
     beforeEach(function() {
       app = new App();
       app.engine('tmpl', require('engine-base'));
-      app.create('pages', {
-        renameKey: function(fp) {
-          return path.relative(process.cwd(), fp);
-        }
-      });
+      app.create('pages');
     });
 
     it('should add an item to a list:', function() {

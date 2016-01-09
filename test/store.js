@@ -23,16 +23,16 @@ describe('store', function() {
   it('should create a store at the given `cwd`', function() {
     app = new App({store: {cwd: __dirname + '/actual'}});
     app.store.set('foo', 'bar');
-    assert(path.basename(app.store.path) === 'update.json');
+    assert(path.basename(app.store.path) === 'generate.json');
     assert(app.store.data.hasOwnProperty('foo'));
     assert(app.store.data.foo === 'bar');
-    assert(fs.existsSync(path.join(__dirname, 'actual', 'update.json')));
+    assert(fs.existsSync(path.join(__dirname, 'actual', 'generate.json')));
   });
 
   it('should create a store using the given `indent` value', function() {
     app = new App({store: {cwd: __dirname + '/actual', indent: 0}});
     app.store.set('foo', 'bar');
-    var contents = fs.readFileSync(path.join(__dirname, 'actual', 'update.json'), 'utf8');
+    var contents = fs.readFileSync(path.join(__dirname, 'actual', 'generate.json'), 'utf8');
     assert(contents === '{"foo":"bar"}');
   });
 
@@ -166,7 +166,7 @@ describe('store', function() {
 describe('events', function() {
   beforeEach(function() {
     app = new App();
-    app.store = new Store('update-tests');
+    app.store = new Store('generate-tests');
   });
 
   afterEach(function(cb) {
@@ -228,7 +228,6 @@ describe('events', function() {
 
   it('should emit deleted keys on `del`:', function(cb) {
     app.store.once('del', function(key) {
-      console.log(key)
       assert(key === 'a');
       cb();
     });

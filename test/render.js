@@ -1,5 +1,3 @@
-'use strict';
-
 require('mocha');
 require('should');
 var assert = require('assert');
@@ -7,7 +5,7 @@ var support = require('./support');
 var App = support.resolve();
 var app;
 
-describe.skip('render', function() {
+describe('render', function() {
   describe('engine', function() {
     var view;
 

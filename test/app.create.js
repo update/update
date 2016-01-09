@@ -137,11 +137,7 @@ describe('create', function() {
     beforeEach(function() {
       app = new App();
       app.engine('tmpl', require('engine-base'));
-      app.create('page', {
-        renameKey: function(fp) {
-          return path.relative(process.cwd(), fp);
-        }
-      });
+      app.create('page');
     });
 
     it('should create views from key-value pairs:', function() {
