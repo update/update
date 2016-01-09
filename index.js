@@ -8,9 +8,9 @@
 'use strict';
 
 var path = require('path');
-var minimist = require('minimist');
-var expand = require('expand-args');
 var Base = require('assemble-core');
+var expand = require('expand-args');
+var minimist = require('minimist');
 var config = require('./lib/config');
 var locals = require('./lib/locals');
 var utils = require('./lib/utils');
