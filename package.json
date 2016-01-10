@@ -35,10 +35,9 @@
   },
   "dependencies": {
     "ansi-colors": "^0.1.0",
+    "array-unique": "^0.2.1",
     "assemble-loader": "^0.2.6",
     "async": "^1.5.2",
-    "base-argv": "^0.3.0",
-    "base-cli": "^0.4.0",
     "base-config": "^0.3.3",
     "common-middleware": "^0.2.2",
     "define-property": "^0.2.5",
@@ -58,7 +57,9 @@
     "mixin-deep": "^1.1.3",
     "namify": "^0.1.3",
     "opn": "^3.0.3",
+    "parse-gitignore": "^0.2.0",
     "parser-front-matter": "^1.3.0",
+    "pkg-store": "^0.1.0",
     "project-name": "^0.2.3",
     "resolve-dir": "^0.1.0",
     "rimraf": "^2.5.0",
@@ -99,6 +100,10 @@
     "update"
   ],
   "lint-deps": {
+    "devDpendencies": [
+      "coveralls",
+      "istanbul"
+    ],
     "ignore": [
       "bin2",
       "lib2",
@@ -141,6 +146,10 @@
     "helpers": {
       "related": "@/helper-related"
     },
+    "ignore": [
+      "lib2",
+      "test2"
+    ],
     "plugins": {
       "./lib/pipeline/a": {},
       "./lib/pipeline/b": {},

@@ -58,22 +58,6 @@ module.exports = function(update, base, env) {
   });
 
   /**
-   * Default configuration settings
-   */
-
-  update.task('defaultConfig', function(cb) {
-    update.engine(['md', 'text'], require('engine-base'));
-    update.data({year: new Date().getFullYear()});
-    update.create('files', {
-      renameKey: function(key) {
-        return path.basename(key, path.extname(key));
-      }
-    });
-
-    cb();
-  });
-
-  /**
    * User prompts
    */
 
@@ -97,13 +81,23 @@ module.exports = function(update, base, env) {
   });
 
   /**
+   * Default configuration settings
+   */
+
+  update.task('defaultConfig', function(cb) {
+    update.engine(['md', 'text'], require('engine-base'));
+    update.data({year: new Date().getFullYear()});
+    update.create('files');
+    cb();
+  });
+
+  /**
    * Load files to be rendered
    */
 
   update.task('files', ['defaultConfig'], function(cb) {
-    var opts = { cwd: env.user.cwd, dot: true, ignore: ['**/node_modules/**'] };
-    var patterns = ['**/*', 'lib/*.js', 'bin/*.js', 'test/*.js'];
-    update.files(patterns, opts);
+    var opts = { cwd: update.cwd, dot: true, ignore: update.ignores()};
+    update.files(['**/*'], opts);
     cb();
   });
 
@@ -111,12 +105,12 @@ module.exports = function(update, base, env) {
    * Write files to disk
    */
 
-  // update.task('write', function() {
-  //   var data = update.get('answers');
-  //   return update.toStream('files')
-  //     // .pipe(update.renderFile('text', data))
-  //     .pipe(update.dest(rename(dest)));
-  // });
+  update.task('write', function() {
+    var data = update.get('answers');
+    return update.toStream('files')
+      // .pipe(update.renderFile('text', data))
+      // .pipe(update.dest(rename(dest)));
+  });
 
   /**
    * Generate a new project
