@@ -5,25 +5,25 @@ require('mocha');
 require('should');
 var assert = require('assert');
 var support = require('./support');
-var Generate = support.resolve();
+var Update = support.resolve();
 var update;
 
 describe('update', function() {
   describe('constructor', function() {
-    it('should create an instance of Generate:', function() {
-      update = new Generate();
-      assert(update instanceof Generate);
+    it('should create an instance of Update:', function() {
+      update = new Update();
+      assert(update instanceof Update);
     });
 
     it('should new up without new:', function() {
-      update = Generate();
-      assert(update instanceof Generate);
+      update = Update();
+      assert(update instanceof Update);
     });
   });
 
   describe('prototype methods', function() {
     beforeEach(function() {
-      update = new Generate();
+      update = new Update();
     });
 
     it('should expose `addLeaf`', function() {
@@ -73,7 +73,7 @@ describe('update', function() {
 
   describe('prototype properties', function() {
     beforeEach(function() {
-      update = new Generate();
+      update = new Update();
     });
 
     it('should expose `name`', function() {
@@ -87,7 +87,7 @@ describe('update', function() {
 
   describe('instance', function() {
     beforeEach(function() {
-      update = new Generate();
+      update = new Update();
     });
 
     it('should set `name` to `update` when `_name` is defined', function() {
@@ -111,7 +111,7 @@ describe('update', function() {
     });
 
     it('should use `options.name` for `name`', function() {
-      update = new Generate({name: 'update'});
+      update = new Update({name: 'update'});
       delete update._name;
       assert.equal(update.name, 'update');
     });
@@ -121,13 +121,13 @@ describe('update', function() {
     });
 
     it('should return generator "base" as `base`', function() {
-      var base = new Generate();
+      var base = new Update();
       update.register('base', base);
       update.base.should.deepEqual(base);
     });
 
     it('should return update as `base`', function() {
-      var child = new Generate();
+      var child = new Update();
       update.register('child', child);
       child.base.should.deepEqual(update);
     });

@@ -3,13 +3,13 @@ require('mocha');
 require('should');
 var assert = require('assert');
 var support = require('./support');
-var Generate = support.resolve();
-var Base = Generate.Base;
+var Update = support.resolve();
+var Base = Update.Base;
 var update;
 
 describe('update.registerPath', function() {
   beforeEach(function() {
-    update = new Generate();
+    update = new Update();
   });
 
   it('should register a generator function from a filepath', function() {
@@ -19,7 +19,7 @@ describe('update.registerPath', function() {
     update.generators.one.should.deepEqual(one);
   });
 
-  it('should register a Generate instance from a filepath', function() {
+  it('should register a Update instance from a filepath', function() {
     var two = update.registerPath('two', './test/fixtures/two/updatefile.js');
     update.generators.should.have.property('two');
     assert(typeof update.generators.two === 'object');

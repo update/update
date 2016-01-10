@@ -3,17 +3,17 @@ require('mocha');
 require('should');
 var assert = require('assert');
 var support = require('./support');
-var Generate = support.resolve();
-var Base = Generate.Base;
+var Update = support.resolve();
+var Base = Update.Base;
 var update;
 
 describe('update.register', function() {
   beforeEach(function() {
-    update = new Generate();
+    update = new Update();
   });
 
-  it('should register a Generate instance', function() {
-    var child = new Generate();
+  it('should register a Update instance', function() {
+    var child = new Update();
     update.register('child', child);
     update.generators.should.have.property('child');
     assert(typeof update.generators.child === 'object');
@@ -25,7 +25,7 @@ describe('update.register', function() {
     var child = update.register('child', function(app, base, env) {
       registered = true;
       assert(typeof app === 'object');
-      assert(app.isGenerate === true);
+      assert(app.isUpdate === true);
     });
     assert(registered);
     update.generators.should.have.property('child');

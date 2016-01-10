@@ -7,7 +7,7 @@ var assert = require('assert');
 var rimraf = require('rimraf');
 var through = require('through2');
 var files = require('expand-files');
-var Generate = require('..');
+var Update = require('..');
 var app, files, config;
 
 var fixtures = path.join(__dirname, 'fixtures');
@@ -44,7 +44,7 @@ function base(cb) {
 
 describe('process plugins', function() {
   beforeEach(function(cb) {
-    app = new Generate();
+    app = new Update();
     rimraf(actual, cb);
   });
 
@@ -150,7 +150,7 @@ describe('process plugins', function() {
 
 describe('process()', function() {
   beforeEach(function(cb) {
-    app = new Generate();
+    app = new Update();
     rimraf(actual, cb);
   });
 

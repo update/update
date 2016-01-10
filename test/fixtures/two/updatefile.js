@@ -1,7 +1,7 @@
 'use strict';
 
-var Generate = require('../../..');
-var update = new Generate();
+var Update = require('../../..');
+var update = new Update();
 
 update.task('default', function() {});
 update.task('a', function() {});
@@ -15,7 +15,7 @@ update.register('foo', function(app) {
 });
 
 /**
- * Expose this instance of `Generate`
+ * Expose this instance of `Update`
  */
 
 module.exports = update;

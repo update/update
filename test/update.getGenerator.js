@@ -1,10 +1,10 @@
 var assert = require('assert');
-var Generate = require('..');
+var Update = require('..');
 var update;
 
 describe('.getGenerator', function() {
   beforeEach(function() {
-    update = new Generate();
+    update = new Update();
   });
 
   it('should get a generator from the base instance', function() {

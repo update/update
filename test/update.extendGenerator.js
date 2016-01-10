@@ -3,17 +3,17 @@ require('mocha');
 require('should');
 var assert = require('assert');
 var support = require('./support');
-var Generate = support.resolve();
-var Base = Generate.Base;
+var Update = support.resolve();
+var Base = Update.Base;
 var update;
 
 describe('update.extendGenerator', function() {
   beforeEach(function() {
-    update = new Generate();
+    update = new Update();
   });
 
   it('should throw an error when trying to extend an instance', function(done) {
-    var foo = new Generate({name: 'foo'});
+    var foo = new Update({name: 'foo'});
     try {
       update.extendGenerator(foo);
       done(new Error('Expected an error.'));
