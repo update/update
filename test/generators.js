@@ -1,10 +1,10 @@
 var assert = require('assert');
-var Generate = require('..');
+var Update = require('..');
 var app;
 
 describe('generators', function() {
   beforeEach(function() {
-    app = new Generate();
+    app = new Update();
   });
 
   it('should add a generator to app.generators', function() {
@@ -13,8 +13,8 @@ describe('generators', function() {
     assert(typeof app.generators.abc === 'object');
   });
 
-  it('should be an instance of generate', function() {
+  it('should be an instance of update', function() {
     app.register('foo', function() {});
-    assert(app.generators.foo instanceof Generate);
+    assert(app.generators.foo instanceof Update);
   });
 });

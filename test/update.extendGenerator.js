@@ -5,17 +5,17 @@ var assert = require('assert');
 var support = require('./support');
 var Generate = support.resolve();
 var Base = Generate.Base;
-var generate;
+var update;
 
-describe('generate.extendGenerator', function() {
+describe('update.extendGenerator', function() {
   beforeEach(function() {
-    generate = new Generate();
+    update = new Generate();
   });
 
   it('should throw an error when trying to extend an instance', function(done) {
     var foo = new Generate({name: 'foo'});
     try {
-      generate.extendGenerator(foo);
+      update.extendGenerator(foo);
       done(new Error('Expected an error.'));
     } catch (err) {
       err.message.should.equal('generators must export a function to extend other generators');
@@ -24,11 +24,11 @@ describe('generate.extendGenerator', function() {
   });
 
   it('should extend a generator', function() {
-    var foo = generate.generator('foo', function(app) {
+    var foo = update.generator('foo', function(app) {
       app.task('foo', function(cb) { cb(); });
     });
 
-    var bar = generate.generator('bar', function(app) {
+    var bar = update.generator('bar', function(app) {
       app.task('bar', function(cb) { cb(); });
     });
 

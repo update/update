@@ -273,7 +273,7 @@ describe('async helpers', function() {
 });
 
 describe('built-in helpers:', function() {
-  describe('automatically generated helpers for default view types:', function() {
+  describe('automatically updated helpers for default view types:', function() {
     beforeEach(function() {
       app = new App({rethrow: false});
       app.engine('md', require('engine-base'));
@@ -475,7 +475,7 @@ describe('built-in helpers:', function() {
       /**
        * Partial
        */
-      
+
       app.partial('a.hbs', {
         content: '---\nname: "AAA"\n---\n<title>{{name}}</title>',
         locals: {
@@ -486,7 +486,7 @@ describe('built-in helpers:', function() {
       /**
        * Pages
        */
-      
+
       app.page('a.hbs', {
         path: 'a.hbs',
         content: '<title>{{author}}</title>',

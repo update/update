@@ -5,46 +5,46 @@ var assert = require('assert');
 var support = require('./support');
 var Generate = support.resolve();
 var Base = Generate.Base;
-var generate;
+var update;
 
-describe('generate.register', function() {
+describe('update.register', function() {
   beforeEach(function() {
-    generate = new Generate();
+    update = new Generate();
   });
 
   it('should register a Generate instance', function() {
     var child = new Generate();
-    generate.register('child', child);
-    generate.generators.should.have.property('child');
-    assert(typeof generate.generators.child === 'object');
-    generate.generators.child.should.deepEqual(child);
+    update.register('child', child);
+    update.generators.should.have.property('child');
+    assert(typeof update.generators.child === 'object');
+    update.generators.child.should.deepEqual(child);
   });
 
   it('should register a generator function', function() {
     var registered = false;
-    var child = generate.register('child', function(app, base, env) {
+    var child = update.register('child', function(app, base, env) {
       registered = true;
       assert(typeof app === 'object');
       assert(app.isGenerate === true);
     });
     assert(registered);
-    generate.generators.should.have.property('child');
-    assert(typeof generate.generators.child === 'object');
-    generate.generators.child.should.deepEqual(child);
+    update.generators.should.have.property('child');
+    assert(typeof update.generators.child === 'object');
+    update.generators.child.should.deepEqual(child);
   });
 
-  it('should register a non-generate instance', function() {
+  it('should register a non-update instance', function() {
     var child = new Base();
-    generate.register('child', child);
-    generate.generators.should.have.property('child');
-    assert(typeof generate.generators.child === 'object');
-    generate.generators.child.should.deepEqual(child);
+    update.register('child', child);
+    update.generators.should.have.property('child');
+    assert(typeof update.generators.child === 'object');
+    update.generators.child.should.deepEqual(child);
   });
 
   it('should register a generator from a string', function() {
-    var one = generate.register('one', './test/fixtures/one/generator.js');
-    generate.generators.should.have.property('one');
-    assert(typeof generate.generators.one === 'object');
-    generate.generators.one.should.deepEqual(one);
+    var one = update.register('one', './test/fixtures/one/generator.js');
+    update.generators.should.have.property('one');
+    assert(typeof update.generators.one === 'object');
+    update.generators.one.should.deepEqual(one);
   });
 });

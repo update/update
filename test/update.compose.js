@@ -5,17 +5,17 @@ var assert = require('assert');
 var support = require('./support');
 var Generate = support.resolve();
 var Base = Generate.Base;
-var generate;
+var update;
 
-describe('generate.compose', function() {
+describe('update.compose', function() {
   beforeEach(function() {
-    generate = new Generate();
+    update = new Generate();
   });
 
   it('should throw an error when trying to compose an instance', function(cb) {
     var foo = new Generate({name: 'foo'});
     try {
-      generate.compose(foo);
+      update.compose(foo);
       cb(new Error('Expected an error.'));
     } catch (err) {
       assert.equal(err.message, 'generators must export a function to extend other generators');
@@ -24,13 +24,13 @@ describe('generate.compose', function() {
   });
 
   it('should compose a generator', function() {
-    var foo = generate.generator('foo', function(app) {
+    var foo = update.generator('foo', function(app) {
       app.task('foo', function(cb) {
         cb();
       });
     });
 
-    var bar = generate.generator('bar', function(app) {
+    var bar = update.generator('bar', function(app) {
       app.task('bar', function(cb) {
         cb();
       });
@@ -49,13 +49,13 @@ describe('generate.compose', function() {
   });
 
   it('should compose a generator by name', function() {
-    var foo = generate.generator('foo', function(app) {
+    var foo = update.generator('foo', function(app) {
       app.task('foo', function(cb) {
         cb();
       });
     });
 
-    var bar = generate.generator('bar', function(app) {
+    var bar = update.generator('bar', function(app) {
       app.task('bar', function(cb) {
         cb();
       });
@@ -67,9 +67,9 @@ describe('generate.compose', function() {
     bar.tasks.should.not.have.property('foo');
     foo.tasks.should.not.have.property('bar');
 
-    generate.compose('foo', bar);
+    update.compose('foo', bar);
     bar.tasks.should.have.property('foo');
-    generate.compose('bar', foo);
+    update.compose('bar', foo);
     foo.tasks.should.have.property('bar');
   });
 });

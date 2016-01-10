@@ -1,12 +1,12 @@
 'use strict';
 
-module.exports = function(generate, base) {
-  generate.task('default', function() {});
-  generate.task('a', function() {});
-  generate.task('b', function() {});
-  generate.task('c', function() {});
+module.exports = function(update, base) {
+  update.task('default', function() {});
+  update.task('a', function() {});
+  update.task('b', function() {});
+  update.task('c', function() {});
 
-  generate.register('foo', function(app) {
+  update.register('foo', function(app) {
     app.task('x', function() {});
     app.task('y', function() {});
     app.task('z', function() {});

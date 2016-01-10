@@ -5,24 +5,24 @@ var assert = require('assert');
 var support = require('./support');
 var Generate = support.resolve();
 var Base = Generate.Base;
-var generate;
+var update;
 
-describe('generate.registerPath', function() {
+describe('update.registerPath', function() {
   beforeEach(function() {
-    generate = new Generate();
+    update = new Generate();
   });
 
-  it('should register a generator function from a file path', function() {
-    var one = generate.registerPath('one', './test/fixtures/one/generator.js');
-    generate.generators.should.have.property('one');
-    assert(typeof generate.generators.one === 'object');
-    generate.generators.one.should.deepEqual(one);
+  it('should register a generator function from a filepath', function() {
+    var one = update.registerPath('one', './test/fixtures/one/generator.js');
+    update.generators.should.have.property('one');
+    assert(typeof update.generators.one === 'object');
+    update.generators.one.should.deepEqual(one);
   });
 
-  it('should register a Generate instance from a file path', function() {
-    var two = generate.registerPath('two', './test/fixtures/two/generate.js');
-    generate.generators.should.have.property('two');
-    assert(typeof generate.generators.two === 'object');
-    generate.generators.two.should.deepEqual(two);
+  it('should register a Generate instance from a filepath', function() {
+    var two = update.registerPath('two', './test/fixtures/two/updatefile.js');
+    update.generators.should.have.property('two');
+    assert(typeof update.generators.two === 'object');
+    update.generators.two.should.deepEqual(two);
   });
 });

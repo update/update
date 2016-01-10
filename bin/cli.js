@@ -23,44 +23,66 @@ function run(cb) {
 
   if (argv.cwd && cwd !== path.resolve(argv.cwd)) {
     process.chdir(argv.cwd);
+    cwd = process.cwd();
     utils.timestamp('cwd changed to ' + utils.colors.yellow('~/' + argv.cwd));
   }
+
+  /**
+   * Create the base "update" instance
+   */
+
+  var baseDir = path.resolve(__dirname, '..');
+  var baseEnv = createEnv('updatefile.js', baseDir);
+
+  // instantiate
+  var base = update();
+  base.env = baseEnv;
+
+  // set the updater function on the instance
+  base.fn = require('../updatefile.js');
 
   /**
    * Get the updatefile.js to use
    */
 
   var updatefile = path.resolve(process.cwd(), 'updatefile.js');
-
-  /**
-   * Notify the user if updatefile.js is not found
-   */
-
   if (!utils.exists(updatefile)) {
-    cb('updatefile');
-    return;
+    if (utils.isEmpty(process.cwd())) {
+      argv._.unshift('defaults:init');
+      utils.logConfigfile(baseDir, 'updatefile.js');
+      base.fn.call(base, base, base, base.env);
+      cb(null, base);
+      return;
+    }
+
+    updatefile = path.resolve(__dirname, '../updatefile.js');
+    cwd = path.dirname(updatefile);
   }
 
   /**
-   * Get the `update` instance to use
+   * Create the user's "update" instance
    */
 
-  var app = require(updatefile);
-  if (typeof app === 'function') {
-    var fn = app;
-    app = update();
+  var fn = require(updatefile);
+  var env = createEnv('updatefile.js', cwd);
+  var app;
+
+  function register(app, env, fn) {
     app.option(argv);
-    app.fn = fn;
-    fn(app);
+    app.register('base', base.fn, base.env);
+    app.env = env;
+    if (fn) app.fn = fn;
   }
 
-  app.generator('base', require('../lib/generator'));
+  if (typeof fn === 'function') {
+    app = update();
+    register(app, env, fn);
+    fn.call(app, app, base, env);
 
-  /**
-   * Create enviroment
-   */
-
-  app.env = createEnv('updatefile.js', process.cwd());
+  } else {
+    app = fn;
+    register(app, env);
+  }
 
   /**
    * Process command line arguments
@@ -73,8 +95,7 @@ function run(cb) {
    * Show path to updatefile
    */
 
-  var fp = utils.homeRelative(root, updatefile);
-  utils.timestamp('using updatefile ' + fp);
+  utils.logConfigfile(root, updatefile);
 
   /**
    * Support `--emit` for debugging
@@ -93,6 +114,7 @@ function run(cb) {
    */
 
   app.env.on('config', function(name, env) {
+    console.log(name)
     app.register(name, env.config.fn, env);
   });
 
@@ -110,11 +132,6 @@ function run(cb) {
       cwd: utils.gm
     });
 
-  /**
-   * Process command line arguments
-   */
-
-  app.cli.process(args);
   cb(null, app);
 }
 
@@ -124,6 +141,10 @@ function run(cb) {
 
 run(function(err, app) {
   if (err) handleError(err);
+
+  if (!app) {
+    process.exit(0);
+  }
 
   /**
    * Listen for errors
@@ -138,7 +159,10 @@ run(function(err, app) {
    */
 
   app.build(argv, function(err) {
-    if (err) throw err;
+    if (err) {
+      console.error(err.stack);
+      process.exit(1);
+    }
     utils.timestamp('finished ' + utils.success());
     process.exit(0);
   });

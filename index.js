@@ -27,11 +27,9 @@ function Update(options) {
   }
 
   Generate.apply(this, arguments);
+  this.updaters = this.generators;
   this.isUpdate = true;
-
-  this.initDefaults(this);
   this.initPlugins(this);
-  this.initCollections(this);
 }
 
 /**
@@ -58,7 +56,6 @@ Update.prototype.initPlugins = function(app) {
   enable('middleware', utils.middleware);
   enable('loader', utils.loader);
   enable('config', utils.config);
-  enable('argv', utils.argv);
   enable('cli', cli);
 
   function enable(name, fn) {
@@ -67,41 +64,6 @@ Update.prototype.initPlugins = function(app) {
       app.use(fn(app.options));
     }
   }
-};
-
-/**
- * Built-in view collections
- *  | partials
- *  | layouts
- *  | pages
- */
-
-Update.prototype.initCollections = function(app) {
-  if (this.option('collections') === false) return;
-
-  var engine = this.options.defaultEngine || 'hbs';
-  this.create('partials', {
-    engine: engine,
-    viewType: 'partial',
-    renameKey: function(fp) {
-      return path.basename(fp, path.extname(fp));
-    }
-  });
-
-  this.create('layouts', {
-    engine: engine,
-    viewType: 'layout',
-    renameKey: function(fp) {
-      return path.basename(fp, path.extname(fp));
-    }
-  });
-
-  this.create('pages', {
-    engine: engine,
-    renameKey: function(fp) {
-      return fp;
-    }
-  });
 };
 
 /**
@@ -114,7 +76,7 @@ Object.defineProperty(Update.prototype, 'name', {
     this.options.name = name;
   },
   get: function() {
-    return this.options.name || 'base';
+    return this.options.name || 'update';
   }
 });
 
