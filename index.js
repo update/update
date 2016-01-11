@@ -31,7 +31,10 @@ function Update(options) {
   Generate.apply(this, arguments);
   this.updaters = this.generators;
   this.isUpdate = true;
-  this.initPlugins(this);
+
+  this.initPlugins();
+  this.lazyCollections();
+  this.initUpdate(this);
 }
 
 /**
@@ -39,6 +42,17 @@ function Update(options) {
  */
 
 Generate.extend(Update);
+
+/**
+ * Lazily initialize default collections
+ */
+
+Update.prototype.lazyCollections = function() {
+  if (!this.templates) {
+    this.create('files');
+    this.create('templates');
+  }
+};
 
 /**
  * Load default plugins. Built-in plugins can be disabled
@@ -64,14 +78,32 @@ Update.prototype.initPlugins = function() {
 
 /**
  * Lazily add gitignore patterns to `update.cache.ignores`
- *
- * @return {[type]}
  */
 
 Update.prototype.lazyIgnores = function() {
   if (!this.cache.ignores) {
-    this.set('cache.ignores', ignore.gitignore(this.cwd));
+    this.union('ignores', ignore.gitignore(this.cwd));
   }
+};
+
+/**
+ * Initialize `update` defaults
+ */
+
+Update.prototype.initUpdate = function(app) {
+  this.on('build', function(app, env) {
+    var ignores = app.get('cache.ignores');
+    var cwd = env.config.cwd;
+
+    app.templates('templates/*', {
+      ignore: ignores,
+      cwd: cwd,
+      renameKey: function(key, view) {
+        var cwd = path.resolve(env.config.cwd);
+        return path.relative(cwd, path.resolve(cwd, key));
+      }
+    });
+  });
 };
 
 /**
@@ -128,21 +160,22 @@ Update.prototype.fillin = function(prop, val) {
  */
 
 Update.prototype.getFile = function(pattern) {
-  // "views" are "template objects", but we're
-  // exposing them as `files`
-  var file = this.files.getView(pattern);
-  if (file) return file;
-  for (var key in this.views.files) {
-    var file = this.views.files[key];
-    if (file.basename === pattern) return file;
-    if (file.filename === pattern) return file;
-    if (file.path === pattern) return file;
-    if (file.key === pattern) return file;
-    if (utils.mm.isMatch(key, pattern)) {
-      return file;
-    }
-  }
-  return null;
+  return utils.getFile(this, 'files', pattern);
+};
+
+/**
+ * Get a template from the `update.templates` collection.
+ *
+ * ```js
+ * update.getTemplate('foo.tmpl');
+ * ```
+ * @param {String} `pattern` Pattern to use for matching. Checks against
+ * @return {Object} If successful, a `file` object is returned, otherwise `null`
+ * @api public
+ */
+
+Update.prototype.getTemplate = function(pattern) {
+  return utils.getFile(this, 'templates', pattern);
 };
 
 /**
