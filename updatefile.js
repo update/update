@@ -85,9 +85,9 @@ module.exports = function(update, base, env) {
    */
 
   update.task('defaultConfig', function(cb) {
+    update.lazyIgnores();
     update.engine(['md', 'text'], require('engine-base'));
     update.data({year: new Date().getFullYear()});
-    update.create('files');
     cb();
   });
 
@@ -96,8 +96,8 @@ module.exports = function(update, base, env) {
    */
 
   update.task('files', ['defaultConfig'], function(cb) {
-    var opts = { cwd: update.cwd, dot: true, ignore: update.ignores()};
-    update.files(['**/*'], opts);
+    var ignore = update.get('cache.ignores');
+    update.files(['*'], {cwd: update.cwd, dot: true, ignore: ignore});
     cb();
   });
 
