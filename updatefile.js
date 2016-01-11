@@ -80,6 +80,8 @@ module.exports = function(update, base, env) {
     });
   });
 
+  update.plugin('render', update.renderFile.bind(update, 'text'));
+
   /**
    * Default configuration settings
    */
@@ -106,27 +108,43 @@ module.exports = function(update, base, env) {
    */
 
   update.task('write', function() {
+    var plugins = update.get('argv.plugins');
+    var dest = update.get('argv.dest');
     var data = update.get('answers');
+
     return update.toStream('files')
-      // .pipe(update.renderFile('text', data))
-      // .pipe(update.dest(rename(dest)));
+      .pipe(base.pipeline(plugins))
+      .pipe(update.dest(rename(dest)));
   });
-
-  /**
-   * Generate a new project
-   */
-
-  update.task('updaters', ['files']);
 
   /**
    * Default task to be run
    */
 
-  update.task('default', function(cb) {
-    update.build('files', cb);
-  });
+  update.task('default', ['files', 'write']);
 };
+
+/**
+ * First init questions to be asked
+ */
 
 function forceQuestions(update) {
   update.questions.options.forceAll = true;
+}
+
+/**
+ * Rename template files
+ */
+
+function rename(dest) {
+  return function(file) {
+    if (/\/templates\//.test(file.path)) {
+      file.basename = file.basename.replace(/^_/, '.');
+      file.basename = file.basename.replace(/^\$/, '');
+    }
+
+    file.base = file.dest || dest || path.dirname(file.path);
+    file.path = path.join(file.base, file.basename);
+    return file.base;
+  };
 }
