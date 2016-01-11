@@ -12,12 +12,12 @@ var utils = require('./lib/utils');
 var cli = require('./lib/cli');
 
 /**
- * Create an `update` instance. This is the main function exported
- * by the update module.
+ * Create an instance of `Update`. This is the main function exported
+ * by the update module, used for creating `updaters`.
  *
  * ```js
- * var update = require('update');
- * var app = update();
+ * var Update = require('update');
+ * var update = new Update();
  * ```
  * @param {Object} `options` Optionally pass default options to use.
  * @api public
