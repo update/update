@@ -6,6 +6,7 @@
 
 var path = require('path');
 var Generate = require('generate');
+var config = require('./lib/config');
 var ignore = require('./lib/ignore');
 var utils = require('./lib/utils');
 var cli = require('./lib/cli');
@@ -53,20 +54,42 @@ Generate.extend(Update);
  * ```
  */
 
-Update.prototype.initPlugins = function(app) {
-  enable('ignore', ignore);
-  enable('middleware', utils.middleware);
-  enable('loader', utils.loader);
-  enable('config', utils.config);
-  enable('pkg', utils.pkg);
-  enable('cli', cli);
+Update.prototype.initPlugins = function() {
+  this.use(utils.middleware())
+    .use(utils.loader())
+    .use(utils.pkg())
+    .use(config())
+    .use(cli());
+};
 
-  function enable(name, fn) {
-    if (app.option('plugins') === false) return;
-    if (app.option('plugins.' + name) !== false) {
-      app.use(fn(app.options));
-    }
+/**
+ * Lazily add gitignore patterns to `update.cache.ignores`
+ *
+ * @return {[type]}
+ */
+
+Update.prototype.lazyIgnores = function() {
+  if (!this.cache.ignores) {
+    this.set('cache.ignores', ignore.gitignore(this.cwd));
   }
+};
+
+/**
+ * Add ignore patterns to the `update.cache.ignores` array. This
+ * array is initially populated with patterns from `gitignore`
+ *
+ * ```js
+ * update.ignore(['foo', 'bar']);
+ * ```
+ * @param {String|Array} `patterns`
+ * @return {Object} returns the instance for chaining
+ * @api public
+ */
+
+Update.prototype.ignore = function(patterns) {
+  this.lazyIgnores();
+  this.union('ignores', ignore.toGlobs(patterns));
+  return this;
 };
 
 /**
@@ -79,8 +102,8 @@ Update.prototype.initPlugins = function(app) {
  * console.log(app.get('cwd'));
  * //=> 'foo'
  * ```
- * @param {String} prop
- * @param {any} val
+ * @param {String} `prop` The name of the property to define
+ * @param {any} `val` The value to use if a value is _not already defined_
  * @return {Object} Returns the instance for chaining
  * @api public
  */
@@ -90,6 +113,60 @@ Update.prototype.fillin = function(prop, val) {
   if (typeof current === 'undefined') {
     this.set(prop, val);
   }
+  return this;
+};
+
+/**
+ * Get a file from the `update.files` collection.
+ *
+ * ```js
+ * update.getFile('LICENSE');
+ * ```
+ * @param {String} `pattern` Pattern to use for matching. Checks against
+ * @return {Object} If successful, a `file` object is returned, otherwise `null`
+ * @api public
+ */
+
+Update.prototype.getFile = function(pattern) {
+  // "views" are "template objects", but we're
+  // exposing them as `files`
+  var file = this.files.getView(pattern);
+  if (file) return file;
+  for (var key in this.views.files) {
+    var file = this.views.files[key];
+    if (file.basename === pattern) return file;
+    if (file.filename === pattern) return file;
+    if (file.path === pattern) return file;
+    if (file.key === pattern) return file;
+    if (utils.mm.isMatch(key, pattern)) {
+      return file;
+    }
+  }
+  return null;
+};
+
+/**
+ * Create or append array `name` on `update.cache` with the
+ * given (uniqueified) `items`. Supports setting deeply nested
+ * properties using using object-paths/dot notation.
+ *
+ * ```js
+ * update.union('foo', 'bar');
+ * update.union('foo', 'baz');
+ * update.union('foo', 'qux');
+ * update.union('foo', 'qux');
+ * update.union('foo', 'qux');
+ * console.log(update.cache.foo);
+ * //=> ['bar', 'baz', 'qux'];
+ * ```
+ * @param {String} `name`
+ * @param {any} `items`
+ * @return {Object} returns the instance for chaining
+ * @api public
+ */
+
+Update.prototype.union = function(name, items) {
+  utils.union(this.cache, name, utils.arrayify(items));
   return this;
 };
 
@@ -118,7 +195,7 @@ Object.defineProperty(Update.prototype, 'cwd', {
   },
   get: function() {
     var cwd = this.get('env.user.cwd') || this.options.cwd || process.cwd();
-    return (this.options.cwd = path.resolve(cwd));
+    return path.resolve(cwd);
   }
 });
 
