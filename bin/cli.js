@@ -92,6 +92,13 @@ function run(cb) {
   app.set('argv', args);
 
   /**
+   * Process configuration settings defined on the
+   * `update` property in package.json
+   */
+
+  app.config.process(app.get('env.user.pkg.update'));
+
+  /**
    * Show path to updatefile
    */
 
@@ -114,7 +121,6 @@ function run(cb) {
    */
 
   app.env.on('config', function(name, env) {
-    console.log(name)
     app.register(name, env.config.fn, env);
   });
 
