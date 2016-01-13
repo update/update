@@ -1,3 +1,5 @@
+'use strict';
+
 /* deps: coveralls istanbul */
 require('mocha');
 require('should');
@@ -14,8 +16,10 @@ describe('update.compose', function() {
 
   it('should throw an error when trying to compose an instance', function(cb) {
     var foo = new Update({name: 'foo'});
+    delete foo.fn;
+
     try {
-      update.compose(foo);
+      update.compose(foo, 'foo');
       cb(new Error('Expected an error.'));
     } catch (err) {
       assert.equal(err.message, 'generators must export a function to extend other generators');
@@ -42,9 +46,9 @@ describe('update.compose', function() {
     bar.tasks.should.not.have.property('foo');
     foo.tasks.should.not.have.property('bar');
 
-    foo.compose(bar);
+    foo.compose(bar, 'foo');
     bar.tasks.should.have.property('foo');
-    bar.compose(foo);
+    bar.compose(foo, 'bar');
     foo.tasks.should.have.property('bar');
   });
 
@@ -67,9 +71,9 @@ describe('update.compose', function() {
     bar.tasks.should.not.have.property('foo');
     foo.tasks.should.not.have.property('bar');
 
-    update.compose('foo', bar);
+    update.compose(bar, 'foo');
     bar.tasks.should.have.property('foo');
-    update.compose('bar', foo);
+    update.compose(foo, 'bar');
     foo.tasks.should.have.property('bar');
   });
 });

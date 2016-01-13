@@ -1,3 +1,5 @@
+'use strict';
+
 /* deps: coveralls istanbul */
 require('mocha');
 require('should');
@@ -12,14 +14,16 @@ describe('update.extendGenerator', function() {
     update = new Update();
   });
 
-  it('should throw an error when trying to extend an instance', function(done) {
+  it('should throw an error when trying to extend an instance', function(cb) {
     var foo = new Update({name: 'foo'});
+    delete foo.fn;
+
     try {
       update.extendGenerator(foo);
-      done(new Error('Expected an error.'));
+      cb(new Error('Expected an error.'));
     } catch (err) {
       err.message.should.equal('generators must export a function to extend other generators');
-      done();
+      cb();
     }
   });
 

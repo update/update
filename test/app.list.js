@@ -3,6 +3,7 @@
 require('mocha');
 require('should');
 var fs = require('fs');
+var path = require('path');
 var assert = require('assert');
 var support = require('./support');
 var App = support.resolve();
@@ -34,14 +35,24 @@ describe('list', function() {
     beforeEach(function() {
       app = new App();
       app.engine('tmpl', require('engine-base'));
-      app.create('pages');
+      app.create('pages')
+        .use(function(views) {
+          var fn = views.getView;
+          views.getView = function(name) {
+            var view = fn.apply(this, arguments);
+            if (!view && fs.existsSync(path.resolve(name))) {
+              view = this.addView(name, {content: fs.readFileSync(name)});
+            }
+            return view;
+          };
+        });
     });
 
     it('should add an item to a list:', function() {
       app.pages('test/fixtures/pages/a.hbs');
       var list = app.list();
       list.addItem(app.pages.getView('test/fixtures/pages/a.hbs'));
-      assert(list.hasItem('test/fixtures/pages/a.hbs'));
+      assert(list.hasItem('a.hbs'));
     });
 
     it('should expose the `option` method from a list:', function() {

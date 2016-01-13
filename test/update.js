@@ -90,19 +90,19 @@ describe('update', function() {
       update = new Update();
     });
 
-    it('should set `name` to `update` when `_name` is defined', function() {
-      assert.equal(update.name, 'update');
+    it('should set `name` to `base` when `_name` is defined', function() {
+      assert.equal(update.name, 'base');
     });
 
-    it('should set `name` to `update` when `_name` is not defined', function() {
+    it('should set `name` to `base` when `_name` is not defined', function() {
       delete update._name;
-      assert.equal(update.name, 'update');
+      assert.equal(update.name, 'base');
     });
 
-    it('should set `name` to `update` when `_appname` is not defined', function() {
+    it('should set `name` to `base` when `_appname` is not defined', function() {
       delete update._name;
       delete update._appname;
-      assert.equal(update.name, 'update');
+      assert.equal(update.name, 'base');
     });
 
     it('should allow name setter to be set (configurable)', function() {
