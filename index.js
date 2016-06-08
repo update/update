@@ -1,239 +1,193 @@
-'use strict';
-
-/**
- * module dependencies
+/*!
+ * update <https://github.com/jonschlinkert/update>
+ *
+ * Copyright (c) 2016, Jon Schlinkert.
+ * Licensed under the MIT License.
  */
 
-var path = require('path');
-var Generate = require('generate');
-var config = require('./lib/config');
-var ignore = require('./lib/ignore');
+'use strict';
+
+var Base = require('base-app');
+var resolve = require('resolve-file');
 var utils = require('./lib/utils');
 var cli = require('./lib/cli');
 
 /**
- * Create an instance of `Update`. This is the main function exported
- * by the update module, used for creating `updaters`.
+ * Create a update application with `options`.
  *
  * ```js
- * var Update = require('update');
- * var update = new Update();
+ * var update = require('update');
+ * var app = update();
  * ```
- * @param {Object} `options` Optionally pass default options to use.
+ * @param {Object} `options` Settings to initialize with.
  * @api public
  */
 
 function Update(options) {
-  if (!(this instanceof Update)) {
-    return new Update(options);
-  }
-
-  Generate.apply(this, arguments);
-  this.updaters = this.generators;
-  this.isUpdate = true;
-
-  this.initPlugins();
-  this.lazyCollections();
+  Base.call(this, options);
+  this.is('update');
   this.initUpdate(this);
+  this.initDefaults();
 }
 
 /**
- * Inherit Generate
+ * Inherit `Base`
  */
 
-Generate.extend(Update);
+Base.extend(Update);
 
 /**
- * Lazily initialize default collections
+ * Initialize defaults, emit events before and after
  */
 
-Update.prototype.lazyCollections = function() {
-  if (!this.templates) {
-    this.create('files');
-    this.create('templates');
+Update.prototype.initUpdate = function() {
+  Update.emit('update.preInit', this);
+  Update.plugins(this);
+  Update.emit('update.postInit', this);
+};
+
+/**
+ * Initialize `Update` defaults
+ */
+
+Update.prototype.initDefaults = function() {
+  this.define('generators', this.generators);
+  this.updaters = this.generators;
+
+  this.option('help', {
+    configname: 'updater',
+    appname: 'update'
+  });
+
+  this.define('update', function() {
+    return this.generate.apply(this, arguments);
+  });
+
+  this.option('toAlias', function(name) {
+    return name.replace(/^updater?-(.*)$/, '$1');
+  });
+
+  function isUpdater(name) {
+    return /^updater?-/.test(name);
   }
-};
 
-/**
- * Load default plugins. Built-in plugins can be disabled
- * on the `update` options.
- *
- * ```js
- * var app = update({
- *   plugins: {
- *     loader: false,
- *     store: false
- *   }
- * });
- * ```
- */
+  this.option('lookup', function(name) {
+    var patterns = [];
+    if (!isUpdater(name)) {
+      patterns.push(`updater-${name}`);
+    }
+    return patterns;
+  });
 
-Update.prototype.initPlugins = function() {
-  this.use(utils.middleware())
-    .use(utils.loader())
-    .use(utils.pkg())
-    .use(config())
-    .use(cli());
-};
-
-/**
- * Lazily add gitignore patterns to `update.cache.ignores`
- */
-
-Update.prototype.lazyIgnores = function() {
-  if (!this.cache.ignores) {
-    this.union('ignores', ignore.gitignore(this.cwd));
-  }
-};
-
-/**
- * Initialize `update` defaults
- */
-
-Update.prototype.initUpdate = function(app) {
-  this.on('build', function(app, env) {
-    var ignores = app.get('cache.ignores');
-    var cwd = env.config.cwd;
-
-    app.templates('templates/*', {
-      ignore: ignores,
-      cwd: cwd,
-      renameKey: function(key, view) {
-        var cwd = path.resolve(env.config.cwd);
-        return path.relative(cwd, path.resolve(cwd, key));
-      }
-    });
+  this.on('unresolved', function(search, app) {
+    if (!isUpdater(search.name)) return;
+    var resolved = resolve.file(search.name) || resolve.file(search.name, {cwd: utils.gm});
+    if (resolved) {
+      search.app = app.generator(search.name, require(resolved.path));
+    }
   });
 };
 
 /**
- * Add ignore patterns to the `update.cache.ignores` array. This
- * array is initially populated with patterns from `gitignore`
- *
- * ```js
- * update.ignore(['foo', 'bar']);
- * ```
- * @param {String|Array} `patterns`
- * @return {Object} returns the instance for chaining
- * @api public
+ * Expose plugins on the constructor to allow other `base`
+ * apps to use the plugins before instantiating.
  */
 
-Update.prototype.ignore = function(patterns) {
-  this.lazyIgnores();
-  this.union('ignores', ignore.toGlobs(patterns));
-  return this;
+Update.prototype.configfile = function(cwd) {
+  return utils.configfile(cwd)
 };
 
 /**
- * Set `prop` with the given `value`, but only if `prop` is
- * not already defined.
- *
- * ```js
- * app.set('cwd', 'foo');
- * app.fillin('cwd', process.cwd());
- * console.log(app.get('cwd'));
- * //=> 'foo'
- * ```
- * @param {String} `prop` The name of the property to define
- * @param {any} `val` The value to use if a value is _not already defined_
- * @return {Object} Returns the instance for chaining
- * @api public
+ * Get the list of updaters to run
  */
 
-Update.prototype.fillin = function(prop, val) {
-  var current = this.get(prop);
-  if (typeof current === 'undefined') {
-    this.set(prop, val);
+Update.prototype.getUpdaters = function(names, options) {
+  var updaters = this.option('updaters');
+  this.addUpdaters(names, options);
+  if (utils.isEmpty(updaters)) {
+    updaters = this.pkg.get('update.updaters');
   }
-  return this;
+  if (utils.isEmpty(updaters)) {
+    updaters = this.store.get('updaters');
+  }
+  if (options.remove) {
+    updaters = utils.remove(updaters, utils.toArray(options.remove));
+  }
+  if (options.add) {
+    updaters = utils.union([], updaters, utils.toArray(options.add));
+  }
+  return updaters;
 };
 
 /**
- * Get a file from the `update.files` collection.
- *
- * ```js
- * update.getFile('LICENSE');
- * ```
- * @param {String} `pattern` Pattern to use for matching. Checks against
- * @return {Object} If successful, a `file` object is returned, otherwise `null`
- * @api public
+ * Get the list of updaters to run
  */
 
-Update.prototype.getFile = function(pattern) {
-  return utils.getFile(this, 'files', pattern);
+Update.prototype.addUpdaters = function(names, options) {
+  options = options || {};
+  if (typeof names === 'string') {
+    names = utils.toArray(names);
+  }
+  if (options.config) {
+    this.pkg.union('update.updaters', names);
+  }
+  if (options.global) {
+    this.store.union('updaters', names);
+  }
 };
 
 /**
- * Get a template from the `update.templates` collection.
- *
- * ```js
- * update.getTemplate('foo.tmpl');
- * ```
- * @param {String} `pattern` Pattern to use for matching. Checks against
- * @return {Object} If successful, a `file` object is returned, otherwise `null`
- * @api public
+ * Expose plugins on the constructor to allow other `base`
+ * apps to use the plugins before instantiating.
  */
 
-Update.prototype.getTemplate = function(pattern) {
-  return utils.getFile(this, 'templates', pattern);
+Update.plugins = function(app) {
+  app.use(utils.store('update'));
+  app.use(utils.runtimes());
+  app.use(utils.questions());
+  app.use(utils.config());
+  app.use(utils.cli());
 };
 
 /**
- * Create or append array `name` on `update.cache` with the
- * given (uniqueified) `items`. Supports setting deeply nested
- * properties using using object-paths/dot notation.
- *
- * ```js
- * update.union('foo', 'bar');
- * update.union('foo', 'baz');
- * update.union('foo', 'qux');
- * update.union('foo', 'qux');
- * update.union('foo', 'qux');
- * console.log(update.cache.foo);
- * //=> ['bar', 'baz', 'qux'];
- * ```
- * @param {String} `name`
- * @param {any} `items`
- * @return {Object} returns the instance for chaining
- * @api public
+ * Expose logging methods
  */
 
-Update.prototype.union = function(name, items) {
-  utils.union(this.cache, name, utils.arrayify(items));
-  return this;
-};
-
-/**
- * Ensure `name` is set on the instance for lookups.
- */
-
-Object.defineProperty(Update.prototype, 'name', {
+Object.defineProperty(Update.prototype, 'log', {
   configurable: true,
-  set: function(name) {
-    this.options.name = name;
-  },
   get: function() {
-    return this.options.name || 'update';
+    function log() {
+      return console.log.apply(console, arguments);
+    }
+    log.warn = function(msg) {
+      return utils.logger('warning', 'yellow').apply(null, arguments);
+    };
+
+    log.success = function() {
+      return utils.logger('success', 'green').apply(null, arguments);
+    };
+
+    log.info = function() {
+      return utils.logger('info', 'cyan').apply(null, arguments);
+    };
+
+    log.error = function() {
+      return utils.logger('error', 'red').apply(null, arguments);
+    };
+    log.__proto__ = utils.log;
+    return log;
   }
 });
 
+
 /**
- * Ensure `name` is set on the instance for lookups.
+ * Expose static `cli` method
  */
 
-Object.defineProperty(Update.prototype, 'cwd', {
-  configurable: true,
-  set: function(cwd) {
-    this.options.cwd = path.resolve(cwd);
-  },
-  get: function() {
-    var cwd = this.get('env.user.cwd') || this.options.cwd || process.cwd();
-    return path.resolve(cwd);
-  }
-});
+Update.cli = cli;
 
 /**
- * Expose `Update`
+ * Expose `update`
  */
 
 module.exports = Update;
