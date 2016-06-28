@@ -12,7 +12,7 @@ $ npm install --global update
 
 This adds the `update` command to your system path, allowing it to be run from any directory.
 
-You should now be able to use the `update` command to execute code in a local `updatefile.js` file, or to execute globally installed updaters by their [aliases](#aliases).
+You should now be able to use the `update` command to execute code in a local `updatefile.js` file, or to run any locally or globally installed updaters by their [aliases](tasks.md#alias-tasks) or full names.
 
 **Init**
 
@@ -23,7 +23,7 @@ If it's your first time using update, run `update init` to set your global defau
 ```
 Usage: update <command> [options]
 
-Command: Generator or tasks to run
+Command: Updater or tasks to run
 
 Examples:
 

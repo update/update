@@ -11,13 +11,15 @@
 - [API](#api)
 - [Update](#update)
 
-## What is update?
+## What is "Update"?
 
-Update is a new, open-source developer framework for automating updates of any kind to code projects.
+Update is a new, open-source developer framework for automating updates of any kind in code projects.
 
-* update files that are typically excluded from the automated parts of the software lifecycle, and thus are mostly forgotten about after they're created.
-* fix dates in copyrights, licenses and banners, removing deprecated fields from project manifests, updating settings in runtime config files, preferences in dotfiles, and so on.
 * normalize configuration settings, verbiage, or preferences across all of your projects
+* update files that are typically excluded from the automated parts of the software lifecycle, and are often forgotten about after they're created.
+* fix dates in copyrights, licenses and banners
+* removing deprecated fields from project manifests
+* updating settings in runtime config files, preferences in dotfiles, and so on.
 
 ## How does it work?
 
@@ -89,9 +91,9 @@ by passing the names of updaters to run to the `.update`
 
 Updaters via CLI or API. (tasks are powered by [bach](https://github.com/gulpjs/bach), the same library used in [gulp](http://gulpjs.com) v4.0).
 
-The main export of the library is a constructor function, `Update`.
+The main export of the library is the `Update` constructor function.
 
-Updaters themselves are just functions that take an instance of `Update`. wrap code to be executed when the
+Updaters themselves are just functions that take an instance of `Update`.
 
 Update gives you a way to automate the maintenance of files that are typically excluded from the automated parts of the software lifecycle, and thus are mostly forgotten about after they're created.
 
