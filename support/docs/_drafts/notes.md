@@ -1,5 +1,11 @@
-Visit the [getting started guide][getting-started] to learn more.
+---
+title: Notes
+layout: default
+related:
+  docs: []
+---
 
+Visit the [getting started guide][getting-started] to learn more.
 
 Not all generators are created for rendering templates and writing files to the file system. Some generators are created to handle a specific part of the build workflow. For example, [generate-dest][] does one specific thing: when `gen dest` is run in the command line, it will prompt you for the destination directory to use for any generated files. So you can run `gen dest foo` to set the destination directory for files written by `generator-foo`. You can run a generator more than once in the same command, so it's also possible to do: `gen dest foo dest bar`, if both `foo` and `bar` require different destinations.
 
@@ -13,7 +19,6 @@ maintain a separation of concerns between configuration and application logic.
 
 use of [generators](#generators) and [tasks](#tasks)
 
-
 ## tldr
 
 Install `update` globally with the following command:
@@ -22,23 +27,15 @@ Install `update` globally with the following command:
 $ npm install --global update
 ```
 
-
-
 Update is installed globally and run with the `update` command.
-
-
 
 - download
 - git commit!
 - run `update`
 
-
-
 ```js
 var updater = require('{%= name %}');
 ```
-
-
 
 **Example**
 

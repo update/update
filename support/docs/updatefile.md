@@ -1,4 +1,9 @@
-# updatefile.js
+---
+title: Updatefile
+layout: default
+related:
+  docs: ['installing-updaters', 'updaters', 'tasks']
+---
 
 If an `updatefile.js` exists in the current working directoy, Update's CLI will attempt to load it and run any updaters or tasks you've specified for it to run.
 
@@ -38,9 +43,3 @@ module.exports = function(app) {
   });
 };
 ```
-
-## Related
-
-* [installing-updaters](installing-updaters.md)
-* [updaters](updaters.md)
-* [tasks](tasks.md)

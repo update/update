@@ -1,4 +1,9 @@
-# FAQ
+---
+title: Faq
+layout: default
+related:
+  docs: ['features', 'introduction']
+---
 
 <a name="aliases">
 

@@ -1,4 +1,9 @@
-# .register
+---
+title: Register
+layout: default
+related:
+  api: ['updater', 'plugin']
+---
 
 Register an updater function by name. Similar to [.updater](updater.md) but does not invoke the updater function.
 

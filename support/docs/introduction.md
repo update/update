@@ -1,4 +1,9 @@
-# Introduction
+---
+title: Introduction
+layout: default
+related:
+  docs: ['updaters', 'updatefile', 'tasks', 'features', 'faq']
+---
 
 ## What is update?
 
@@ -92,10 +97,3 @@ For example, if we were to sift the files in the average code project into major
 * **everything else**: LICENSE and copyright files, dotfiles, manifests, config files, and so on.
 
 Update maintains **everything else**.
-
-## Related
-
-* [updaters](updaters.md)
-* [tasks](tasks.md)
-* [features](features.md)
-* [faq](faq.md)

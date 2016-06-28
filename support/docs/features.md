@@ -1,4 +1,9 @@
-# Features
+---
+title: Features
+layout: default
+related:
+  docs: ['faq', 'introduction']
+---
 
 Update offers an elegant and robust suite of methods, carefully organized to help you accomplish common activities in less time, including:
 

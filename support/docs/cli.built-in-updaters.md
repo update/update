@@ -1,4 +1,9 @@
-# Built-in updaters
+---
+title: Built in updaters
+layout: default
+related:
+  docs: []
+---
 
 Update only has a few built-in [updaters](docs/updaters.md) (these might be externalized at some point):
 

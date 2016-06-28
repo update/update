@@ -1,4 +1,9 @@
-# Updaters
+---
+title: Updaters
+layout: default
+related:
+  docs: []
+---
 
 Updaters are [plugins](plugins.md) that are registered by name. This document describes how to create, register and run updaters.
 

@@ -1,4 +1,9 @@
-# Installing the CLI
+---
+title: Installing the cli
+layout: default
+related:
+  docs: ['installing-updaters']
+---
 
 To run update from the command line, you'll need to install Update's CLI globally first. You can do that now with the following command:
 
