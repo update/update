@@ -33,7 +33,7 @@ Update.cli(Update, argv, function(err, app) {
     if (err) app.emit('error', err);
 
     var tasks = argv._.length ? argv._ : ['default'];
-    if (app.updatefile !== true) {
+    if (app.updatefile !== true || argv.run) {
       tasks = Update.resolveTasks(app, argv);
     }
 
