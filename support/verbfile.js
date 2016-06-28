@@ -9,6 +9,7 @@ var paths = require('./lib/paths');
 var lib = require('./lib');
 
 module.exports = function(app) {
+  var dest = paths.site();
   app.use(lib.middleware());
   app.use(lib.common());
 
@@ -24,7 +25,7 @@ module.exports = function(app) {
     return app.toStream('docs')
       .pipe(drafts())
       .pipe(app.renderFile('*'))
-      // .pipe(reflinks())
+      .pipe(reflinks())
       .pipe(format())
       .pipe(app.dest(paths.docs()));
   });

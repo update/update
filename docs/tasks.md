@@ -2,18 +2,17 @@
 
 Tasks are used for wrapping code that should be executed at a later point, either when specified by command line or explicitly run when using the API.
 
-  * [Creating tasks](#creating-tasks)
-  * [Running tasks](#running-tasks)
-    + [Command line](#command-line)
-    + [Task API](#task-api)
-      - [.task](#task)
-      - [.build](#build)
-      - [.update](#update)
-    + [Task composition](#task-composition)
-      - [Task dependencies](#task-dependencies)
-      - [Alias tasks](#alias-tasks)
-    + [default task](#default-task)
-- [Related](#related)
+- [Creating tasks](#creating-tasks)
+- [Running tasks](#running-tasks)
+  * [Command line](#command-line)
+  * [Task API](#task-api)
+    + [.task](#task)
+    + [.build](#build)
+    + [.update](#update)
+  * [Task composition](#task-composition)
+    + [Task dependencies](#task-dependencies)
+    + [Alias tasks](#alias-tasks)
+  * [default task](#default-task)
 
 ## Creating tasks
 
@@ -158,10 +157,10 @@ app.build(function(err) {
 });
 ```
 
-# Related
+true
 
 **Docs**
 
-* [running-updaters](running-updaters.md)
+* [updaters](updaters.md#running-updaters)
 * [updaters](updaters.md)
 * [updatefile](updatefile.md)

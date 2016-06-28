@@ -1,28 +1,43 @@
 'use strict';
 
-var hasValue = require('has-value');
-var helpers = require('template-helpers');
-var isValid = require('is-valid-app');
 var path = require('path');
+var utils = require('./utils');
 
 module.exports = function(options) {
   return function(app) {
-    if (!isValid(app, 'update-support-helpers')) return;
-    app.helpers(helpers());
+    if (!utils.isValid(app, 'update-support-helpers')) return;
+    app.helpers(utils.helpers());
     app.helper('hasValue', function(val, str) {
-      return hasValue(val) ? str : '';
+      return utils.hasValue(val) ? str : '';
     });
-    app.helper('links', function(arr) {
-      arr = arr ? (Array.isArray(arr) ? arr : [arr]) : [];
+    app.helper('hasAny', function(arr) {
+      arr = utils.arrayify(arr);
+      return utils.hasValue(arr);
+    });
+    app.helper('links', function(related, prop) {
+      var arr = related[prop] || (related[prop] = []);
+      arr = utils.arrayify(arr);
+      if (arr.length === 0) {
+        return '';
+      }
+
+      var fp = this.view.stem;
+      var dir = 'docs';
+      var segs = fp.split('.');
+      if (segs.length > 1) {
+        dir = segs[0];
+      }
       var links = arr.map(function(link) {
-        return createLink(link);
+        return createLink(dir, prop, link);
       });
       return links.join('\n');
     });
   };
 };
 
-function createLink(link) {
+function createLink(dir, prop, link) {
+  var key = (prop === 'doc') ? 'docs' : prop;
+
   var filepath = name;
   var name = link;
   var anchor = '';
@@ -34,6 +49,11 @@ function createLink(link) {
   var filename = name;
   if (!/\.md$/.test(filename) && !/#/.test(filename)) {
     filename += '.md';
+  }
+  if (dir !== key) {
+    filename = path.join('..', key, filename);
+  } else if (key !== 'docs') {
+    filename = path.join(key, filename);
   }
   return `- [${name}](${filename}${anchor})`;
 }

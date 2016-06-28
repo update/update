@@ -1,18 +1,17 @@
 # Updaters
 
-Updaters are [plugins](plugins.md) that are registered by name. This document describes how to create, register and run updaters.
+Updaters are [plugins](api/plugins.md) that are registered by name. This document describes how to create, register and run updaters.
 
-  * [What is an updater?](#what-is-an-updater)
-  * [Creating updaters](#creating-updaters)
-  * [Registering updaters](#registering-updaters)
-  * [Running updaters](#running-updaters)
-  * [Resolving updaters](#resolving-updaters)
-    + [Tasks and updaters](#tasks-and-updaters)
-    + [Naming tips](#naming-tips)
-    + [Order of precendence](#order-of-precendence)
-  * [Discovering updaters](#discovering-updaters)
-  * [Default updater](#default-updater)
-- [Related](#related)
+- [What is an updater?](#what-is-an-updater)
+- [Creating updaters](#creating-updaters)
+- [Registering updaters](#registering-updaters)
+- [Running updaters](#running-updaters)
+- [Resolving updaters](#resolving-updaters)
+  * [Tasks and updaters](#tasks-and-updaters)
+  * [Naming tips](#naming-tips)
+  * [Order of precendence](#order-of-precendence)
+- [Discovering updaters](#discovering-updaters)
+- [Default updater](#default-updater)
 
 ## What is an updater?
 
@@ -164,7 +163,7 @@ module.exports = function(app) {
 When the command line is used, Update's CLI resolves updaters in the following order:
 
 1. [default updater](#default-updater): attempts to match given names to updaters and tasks registered on the `default` updater
-2. built-in updaters: attempts to match given names to Update's [built-in updaters](built-in-updaters.md)
+2. built-in updaters: attempts to match given names to Update's [built-in updaters](cli/built-in-updaters.md)
 3. locally installed updaters
 4. globally installed updaters
 
@@ -184,7 +183,7 @@ _The only way to register a `default` updater is by creating an [updatefile.js](
 
 When used by command line, Update's CLI will then use node's `require()` system to get the function exported by `updatefile.js` and use it as the `default` updater.
 
-# Related
+true
 
 **Docs**
 

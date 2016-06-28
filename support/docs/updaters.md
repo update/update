@@ -4,7 +4,7 @@ related:
   doc: ['tasks', 'updatefile', 'installing-updaters']
 ---
 
-Updaters are [plugins](plugins.md) that are registered by name. This document describes how to create, register and run updaters.
+Updaters are [plugins](api/plugins.md) that are registered by name. This document describes how to create, register and run updaters.
 
 <!-- toc -->
 
@@ -158,7 +158,7 @@ module.exports = function(app) {
 When the command line is used, Update's CLI resolves updaters in the following order:
 
 1. [default updater](#default-updater): attempts to match given names to updaters and tasks registered on the `default` updater
-2. built-in updaters: attempts to match given names to Update's [built-in updaters](built-in-updaters.md)
+2. built-in updaters: attempts to match given names to Update's [built-in updaters](cli/built-in-updaters.md)
 3. locally installed updaters
 4. globally installed updaters
 

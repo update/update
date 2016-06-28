@@ -1,6 +1,6 @@
 # Plugins
 
-A plugin is function that takes an instance of `Update` and is registered with the `.use` method. See the [base-plugins][] documentation for additional details.
+A plugin is function that takes an instance of `Update` and is registered with the `.use` method. See the [base-plugins](https://github.com/node-base/base-plugins) documentation for additional details.
 
 ### .use
 
@@ -55,17 +55,15 @@ This can continue indefinitely as long as the plugin returns a function and the 
 
 ## Updaters
 
-When plugins are [registered by name](../docs/updaters.md), they are referred to as "updaters". See the [updater documentation](../docs/updaters.md) for more details.
+When plugins are [registered by name](docs/updaters.md), they are referred to as "updaters". See the [updater documentation](docs/updaters.md) for more details.
 
-# Related
+true
 
 **Docs**
 
-* [default-updater](default-updater.md)
-* [resolving-updaters](resolving-updaters.md)
-* [registering-updaters](registering-updaters.md)
+* [updaters](../docs/updaters.md)
 
 **API**
 
-* [updater](updater.md)
-* [register](register.md)
+* [updater](api/updater.md)
+* [register](api/register.md)

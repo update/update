@@ -1,6 +1,6 @@
 # Tutorial
 
-The following intro only skims the surface of what update has to offer. For a more in-depth introduction, we highly recommend visiting the [getting started guide][getting-started].
+The following intro only skims the surface of what update has to offer. For a more in-depth introduction, we highly recommend visiting the [getting started guide](https://github.com/taunus/getting-started).
 
 **Create an updater**
 
@@ -104,8 +104,10 @@ And run:
 $ update
 ```
 
-You're now a master at running tasks with update! You can do anything with update tasks that you can do with [gulp][] tasks (we use and support gulp libraries after all!).
+You're now a master at running tasks with update! You can do anything with update tasks that you can do with [gulp](http://gulpjs.com) tasks (we use and support gulp libraries after all!).
 
 **Next steps**
 
 Update does much more than this. For a more in-depth introduction, we highly recommend visiting the [getting started guide](https://github.com/update/getting-started).
+
+true

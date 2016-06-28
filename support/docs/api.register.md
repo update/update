@@ -1,7 +1,7 @@
 ---
 title: Register
 related:
-  api: ['updater', 'plugin']
+  api: ['updater', 'plugins']
 ---
 
 Register an updater function by name. Similar to [.updater](updater.md) but does not invoke the updater function.

@@ -43,7 +43,7 @@ Examples:
   by specifying a task on the updater. Example: `update foo:default`
 ```
 
-# Related
+true
 
 **Docs**
 

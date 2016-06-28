@@ -1,16 +1,15 @@
 # Introduction
 
-  * [What is update?](#what-is-update)
-  * [How does it work?](#how-does-it-work)
-  * [Updaters](#updaters)
-  * [Command line](#command-line)
-    + [updatefile.js](#updatefilejs)
-    + [Running updaters](#running-updaters)
-    + [Aliases](#aliases)
-  * [Resolving updaters](#resolving-updaters)
-  * [API](#api)
-  * [Update](#update)
-- [Related](#related)
+- [What is update?](#what-is-update)
+- [How does it work?](#how-does-it-work)
+- [Updaters](#updaters)
+- [Command line](#command-line)
+  * [updatefile.js](#updatefilejs)
+  * [Running updaters](#running-updaters)
+  * [Aliases](#aliases)
+- [Resolving updaters](#resolving-updaters)
+- [API](#api)
+- [Update](#update)
 
 ## What is update?
 
@@ -88,7 +87,7 @@ by passing the names of updaters to run to the `.update`
 
 ## Update
 
-Updaters via CLI or API. (tasks are powered by [bach][], the same library used in [gulp][] v4.0).
+Updaters via CLI or API. (tasks are powered by [bach](https://github.com/gulpjs/bach), the same library used in [gulp](http://gulpjs.com) v4.0).
 
 The main export of the library is a constructor function, `Update`.
 
@@ -105,7 +104,7 @@ For example, if we were to sift the files in the average code project into major
 
 Update maintains **everything else**.
 
-# Related
+true
 
 **Docs**
 

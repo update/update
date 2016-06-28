@@ -27,9 +27,9 @@ app.update('foo', function(err) {
 });
 ```
 
-# Related
+true
 
 **API**
 
-* [updater](updater.md)
-* [plugin](plugin.md)
+* [updater](api/updater.md)
+* [plugins](api/plugins.md)

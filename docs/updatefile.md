@@ -2,7 +2,7 @@
 
 If an `updatefile.js` exists in the current working directoy, Update's CLI will attempt to load it and run any updaters or tasks you've specified for it to run.
 
-Moreover, Update's CLI will use `updatefile.js` to create the ["default" updater](default-updater.md).
+Moreover, Update's CLI will use `updatefile.js` to create the ["default" updater](updaters.md#default-updater).
 
 ## Creating an updatefile.js
 
@@ -39,7 +39,7 @@ module.exports = function(app) {
 };
 ```
 
-# Related
+true
 
 **Docs**
 

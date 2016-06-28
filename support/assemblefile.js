@@ -6,6 +6,7 @@ var paths = require('./lib/paths');
 var lib = require('./lib');
 
 module.exports = function(app) {
+  var dest = paths.site();
   app.use(generators());
   app.use(lib.common());
   app.register('verb', require('./verbfile'));
@@ -19,7 +20,9 @@ module.exports = function(app) {
     app.includes(paths.tmpl('includes/*.hbs'));
     app.pages(paths.docs('**/*.md'));
     return app.toStream('pages')
+      .pipe(lib.plugins.buildPaths(dest))
+      .pipe(lib.plugins.lintPaths(dest))
       .pipe(app.renderFile())
-      .pipe(app.dest(paths.site()));
+      .pipe(app.dest(dest));
   });
 };

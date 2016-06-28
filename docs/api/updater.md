@@ -27,9 +27,9 @@ app.update('bar', function(err) {
 });
 ```
 
-# Related
+true
 
 **API**
 
-* [register](register.md)
-* [plugin](plugin.md)
+* [register](api/register.md)
+* [plugins](api/plugins.md)

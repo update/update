@@ -49,3 +49,5 @@ Display a help menu with all available commands:
 ```sh
 $ update help
 ```
+
+true
