@@ -14,8 +14,7 @@ module.exports = function(app) {
   app.use(lib.common());
 
   app.task('clean', function(cb) {
-    // del(paths.docs(), {force: true}, cb);
-    cb()
+    del(paths.docs(), {force: true}, cb);
   });
 
   app.task('docs', ['clean'], function(cb) {

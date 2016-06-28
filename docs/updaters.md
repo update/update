@@ -183,7 +183,7 @@ _The only way to register a `default` updater is by creating an [updatefile.js](
 
 When used by command line, Update's CLI will then use node's `require()` system to get the function exported by `updatefile.js` and use it as the `default` updater.
 
-true
+# Related
 
 **Docs**
 

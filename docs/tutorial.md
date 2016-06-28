@@ -109,5 +109,3 @@ You're now a master at running tasks with update! You can do anything with updat
 **Next steps**
 
 Update does much more than this. For a more in-depth introduction, we highly recommend visiting the [getting started guide](https://github.com/update/getting-started).
-
-true

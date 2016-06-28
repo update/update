@@ -10,9 +10,17 @@ module.exports = function(options) {
     app.helper('hasValue', function(val, str) {
       return utils.hasValue(val) ? str : '';
     });
-    app.helper('hasAny', function(arr) {
+    app.helper('hasAny', function(arr, str) {
       arr = utils.arrayify(arr);
-      return utils.hasValue(arr);
+      var len = arr.length;
+      var idx = -1;
+      while (++idx < len) {
+        var ele = arr[idx];
+        if (ele.length) {
+          return str;
+        }
+      }
+      return '';
     });
     app.helper('links', function(related, prop) {
       var arr = related[prop] || (related[prop] = []);
