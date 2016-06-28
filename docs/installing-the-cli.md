@@ -1,8 +1,4 @@
----
-title: Installing the cli
-related:
-  doc: ['installing-updaters']
----
+# Installing the cli
 
 To run update from the command line, you'll need to install Update's CLI globally first. You can do that now with the following command:
 
@@ -46,3 +42,9 @@ Examples:
   If there is a conflict, you can force update to run updater "foo"
   by specifying a task on the updater. Example: `update foo:default`
 ```
+
+# Related
+
+**Docs**
+
+* [installing-updaters](installing-updaters.md)

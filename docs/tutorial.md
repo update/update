@@ -1,8 +1,4 @@
----
-title: Tutorial
-related:
-  doc: []
----
+# Tutorial
 
 The following intro only skims the surface of what update has to offer. For a more in-depth introduction, we highly recommend visiting the [getting started guide][getting-started].
 

@@ -1,9 +1,4 @@
----
-title: Plugins
-related:
-  api: ['updater', 'register']
-  doc: ['default-updater', 'resolving-updaters', 'registering-updaters']
----
+# Plugins
 
 A plugin is function that takes an instance of `Update` and is registered with the `.use` method. See the [base-plugins][] documentation for additional details.
 
@@ -61,3 +56,16 @@ This can continue indefinitely as long as the plugin returns a function and the 
 ## Updaters
 
 When plugins are [registered by name](../docs/updaters.md), they are referred to as "updaters". See the [updater documentation](../docs/updaters.md) for more details.
+
+# Related
+
+**Docs**
+
+* [default-updater](default-updater.md)
+* [resolving-updaters](resolving-updaters.md)
+* [registering-updaters](registering-updaters.md)
+
+**API**
+
+* [updater](updater.md)
+* [register](register.md)

@@ -15,7 +15,7 @@
   //   data += '\n';
   //   data += 'layout: default\n';
   //   data += 'related:\n';
-  //   data += '  docs: []\n';
+  //   data += '  doc: []\n';
   //   data += '---\n\n';
   //   view.content = data + view.content;
   //   next();

@@ -1,8 +1,4 @@
----
-title: Faq
-related:
-  doc: ['features', 'introduction']
----
+# Faq
 
 <a name="aliases">
 
@@ -13,3 +9,10 @@ Update tries to find globally installed updaters using an "alias" first, falling
 A updater's alias is created by stripping the substring `update-` from the _full name_ of updater. Thus, when publishing a updater the naming convention `update-foo` should be used (where `foo` is the alias, and `update-foo` is the full name).
 
 Note that **no dots may be used in published updater names**. Aside from that, any characters considered valid by npm are fine.
+
+# Related
+
+**Docs**
+
+* [features](features.md)
+* [introduction](introduction.md)

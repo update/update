@@ -1,8 +1,7 @@
 ---
 title: Notes
-layout: default
 related:
-  docs: []
+  doc: []
 ---
 
 Visit the [getting started guide][getting-started] to learn more.

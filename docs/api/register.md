@@ -1,8 +1,4 @@
----
-title: Register
-related:
-  api: ['updater', 'plugin']
----
+# Register
 
 Register an updater function by name. Similar to [.updater](updater.md) but does not invoke the updater function.
 
@@ -30,3 +26,10 @@ app.update('foo', function(err) {
   if (err) return console.log(err);
 });
 ```
+
+# Related
+
+**API**
+
+* [updater](updater.md)
+* [plugin](plugin.md)

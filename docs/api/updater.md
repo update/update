@@ -1,8 +1,4 @@
----
-title: Updater
-related:
-  api: ['register', 'plugin']
----
+# Updater
 
 Register an updater function by name. Similar to [.register](register.md) but immediately invokes the updater function upon registering it.
 
@@ -30,3 +26,10 @@ app.update('bar', function(err) {
   if (err) return console.log(err);
 });
 ```
+
+# Related
+
+**API**
+
+* [register](register.md)
+* [plugin](plugin.md)

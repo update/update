@@ -1,8 +1,4 @@
----
-title: Features
-related:
-  doc: ['faq', 'introduction']
----
+# Features
 
 Update offers an elegant and robust suite of methods, carefully organized to help you accomplish common activities in less time, including:
 
@@ -16,3 +12,10 @@ Update offers an elegant and robust suite of methods, carefully organized to hel
 * **stores**: persist configuration settings, global defaults, project-specific defaults, answers to prompts, and so on.
 
 Visit the [getting started guide][getting-started] to learn more.
+
+# Related
+
+**Docs**
+
+* [faq](faq.md)
+* [introduction](introduction.md)

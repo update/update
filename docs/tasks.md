@@ -1,12 +1,19 @@
----
-title: Tasks
-related:
-  doc: ['running-updaters', 'updaters', 'updatefile']
----
+# Tasks
 
 Tasks are used for wrapping code that should be executed at a later point, either when specified by command line or explicitly run when using the API.
 
-<!-- toc -->
+  * [Creating tasks](#creating-tasks)
+  * [Running tasks](#running-tasks)
+    + [Command line](#command-line)
+    + [Task API](#task-api)
+      - [.task](#task)
+      - [.build](#build)
+      - [.update](#update)
+    + [Task composition](#task-composition)
+      - [Task dependencies](#task-dependencies)
+      - [Alias tasks](#alias-tasks)
+    + [default task](#default-task)
+- [Related](#related)
 
 ## Creating tasks
 
@@ -150,3 +157,11 @@ app.build(function(err) {
   console.log('done');
 });
 ```
+
+# Related
+
+**Docs**
+
+* [running-updaters](running-updaters.md)
+* [updaters](updaters.md)
+* [updatefile](updatefile.md)

@@ -1,12 +1,18 @@
----
-title: Updaters
-related:
-  doc: ['tasks', 'updatefile', 'installing-updaters']
----
+# Updaters
 
 Updaters are [plugins](plugins.md) that are registered by name. This document describes how to create, register and run updaters.
 
-<!-- toc -->
+  * [What is an updater?](#what-is-an-updater)
+  * [Creating updaters](#creating-updaters)
+  * [Registering updaters](#registering-updaters)
+  * [Running updaters](#running-updaters)
+  * [Resolving updaters](#resolving-updaters)
+    + [Tasks and updaters](#tasks-and-updaters)
+    + [Naming tips](#naming-tips)
+    + [Order of precendence](#order-of-precendence)
+  * [Discovering updaters](#discovering-updaters)
+  * [Default updater](#default-updater)
+- [Related](#related)
 
 ## What is an updater?
 
@@ -177,3 +183,11 @@ There is a catch...
 _The only way to register a `default` updater is by creating an [updatefile.js](updatefile.md) in the current working directory._
 
 When used by command line, Update's CLI will then use node's `require()` system to get the function exported by `updatefile.js` and use it as the `default` updater.
+
+# Related
+
+**Docs**
+
+* [tasks](tasks.md)
+* [updatefile](updatefile.md)
+* [installing-updaters](installing-updaters.md)

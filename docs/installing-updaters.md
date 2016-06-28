@@ -1,8 +1,4 @@
----
-title: Installing updaters
-related:
-  doc: ['installing-the-cli']
----
+# Installing updaters
 
 Updaters are responsible for all of the "updating" that happens in update. You can find [updaters to install](#updaters to install) on npm, or create your own.
 
@@ -23,3 +19,9 @@ If `updater-license` installed successfully, you should now be able to run it wi
 ```sh
 $ update license
 ```
+
+# Related
+
+**Docs**
+
+* [installing-the-cli](installing-the-cli.md)

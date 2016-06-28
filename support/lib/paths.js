@@ -10,7 +10,7 @@ exports.docs = function(fp) {
 };
 
 exports.site = function(fp) {
-  var res = exports.memo('../_gh-pages')(fp);
+  var res = exports.memo('../_gh_pages')(fp);
   return fp ? res() : res;
 };
 

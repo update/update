@@ -1,7 +1,8 @@
 'use strict';
 
-var isValid = require('is-valid-app');
 var path = require('path');
+var isValid = require('is-valid-app');
+var utils = require('./utils');
 
 module.exports = function(options) {
   return function(app) {
@@ -9,7 +10,15 @@ module.exports = function(options) {
     app.cache.views = {docs: []};
 
     app.onLoad(/\.md$/, function(view, next) {
-      view.data.related = view.data.related || {};
+      var related = view.data.related || (view.data.related = {});
+      related.doc = utils.arrayify(related.doc);
+      related.api = utils.arrayify(related.api);
+      related.url = utils.arrayify(related.url);
+
+      if (view.content.indexOf('<!-- toc -->') !== -1) {
+        view.data.toc = true;
+      }
+
       view.data.layout = 'default';
       if (view.data.toc === true) {
         view.data.toc = {render: true};
@@ -29,6 +38,8 @@ module.exports = function(options) {
       if (segs.length > 1) {
         file.path = path.resolve(file.base, segs.join('/') + file.extname);
       }
+      file.content = file.content.trim();
+      file.content += '\n';
       next();
     });
   };

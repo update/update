@@ -1,10 +1,16 @@
----
-title: Introduction
-related:
-  doc: ['updaters', 'updatefile', 'tasks', 'features', 'faq']
----
+# Introduction
 
-<!-- toc -->
+  * [What is update?](#what-is-update)
+  * [How does it work?](#how-does-it-work)
+  * [Updaters](#updaters)
+  * [Command line](#command-line)
+    + [updatefile.js](#updatefilejs)
+    + [Running updaters](#running-updaters)
+    + [Aliases](#aliases)
+  * [Resolving updaters](#resolving-updaters)
+  * [API](#api)
+  * [Update](#update)
+- [Related](#related)
 
 ## What is update?
 
@@ -98,3 +104,13 @@ For example, if we were to sift the files in the average code project into major
 * **everything else**: LICENSE and copyright files, dotfiles, manifests, config files, and so on.
 
 Update maintains **everything else**.
+
+# Related
+
+**Docs**
+
+* [updaters](updaters.md)
+* [updatefile](updatefile.md)
+* [tasks](tasks.md)
+* [features](features.md)
+* [faq](faq.md)

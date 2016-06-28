@@ -1,5 +1,6 @@
 'use strict';
 
+var hasValue = require('has-value');
 var helpers = require('template-helpers');
 var isValid = require('is-valid-app');
 var path = require('path');
@@ -8,6 +9,9 @@ module.exports = function(options) {
   return function(app) {
     if (!isValid(app, 'update-support-helpers')) return;
     app.helpers(helpers());
+    app.helper('hasValue', function(val, str) {
+      return hasValue(val) ? str : '';
+    });
     app.helper('links', function(arr) {
       arr = arr ? (Array.isArray(arr) ? arr : [arr]) : [];
       var links = arr.map(function(link) {

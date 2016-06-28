@@ -1,18 +1,13 @@
----
-title: Default
-layout: default
-related:
-  docs: []
----
+# <%= title %>
 
 {% body %}
 
 # Related
-**Docs**
-<%= links(related.docs) %>
+<%= hasValue(related.doc, '**Docs**') %>
+<%= links(related.doc) %>
 
-**API**
-<%= links(related.docs) %>
+<%= hasValue(related.api, '**API**') %>
+<%= links(related.api) %>
 
-**URL**
-<%= links(related.docs) %>
+<%= hasValue(related.url, '**Links**') %>
+<%= links(related.url) %>
