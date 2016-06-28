@@ -1,6 +1,6 @@
 {
   "name": "update",
-  "description": "Update your projects.",
+  "description": "Update is a developer framework and CLI for automating updates of any kind in code projects, using globally or locally installed `updaters`.",
   "version": "0.1.0",
   "homepage": "https://github.com/jonschlinkert/update",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
@@ -26,25 +26,26 @@
     "test": "mocha"
   },
   "dependencies": {
-    "base-app": "^0.2.5",
-    "base-cli-process": "^0.1.11",
-    "base-config-process": "^0.1.6",
+    "arr-union": "^3.1.0",
+    "base-app": "^0.2.6",
+    "base-cli-process": "^0.1.13",
+    "base-config-process": "^0.1.7",
     "base-questions": "^0.6.6",
     "base-runtimes": "^0.1.11",
     "base-store": "^0.4.4",
+    "export-files": "^2.1.1",
     "extend-shallow": "^2.0.1",
     "find-pkg": "^0.1.2",
     "fs-exists-sync": "^0.1.0",
     "global-modules": "^0.2.2",
-    "gulp-choose-files": "^0.1.0",
+    "gulp-choose-files": "^0.1.2",
+    "is-valid-app": "^0.2.0",
     "lazy-cache": "^2.0.1",
     "log-utils": "^0.1.4",
     "os-homedir": "^1.0.1",
     "resolve-file": "^0.2.0",
     "set-blocking": "^2.0.0",
     "through2": "^2.0.1",
-    "window-size": "^0.2.0",
-    "word-wrap": "^1.1.0",
     "yargs-parser": "^2.4.0"
   },
   "devDependencies": {
@@ -53,6 +54,7 @@
     "gulp-format-md": "^0.1.9",
     "gulp-istanbul": "^0.10.4",
     "gulp-mocha": "^2.2.0",
+    "gulp-reflinks": "^0.1.0",
     "gulp-unused": "^0.1.2",
     "mocha": "^2.5.3"
   },
@@ -75,10 +77,8 @@
     ]
   },
   "verb": {
-    "related": {
-      "list": []
-    },
-    "toc": false,
+    "run": true,
+    "toc": true,
     "layout": "default",
     "tasks": [
       "readme"
@@ -86,19 +86,21 @@
     "plugins": [
       "gulp-format-md"
     ],
-    "lint": {
-      "reflinks": true
+    "related": {
+      "list": [
+        "assemble",
+        "base",
+        "generate",
+        "verb"
+      ]
     },
     "reflinks": [
-      "assemble",
       "base",
-      "gulp",
-      "handlebars",
-      "lodash",
-      "pug",
-      "swig",
       "verb",
       "verb-readme-generator"
-    ]
+    ],
+    "lint": {
+      "reflinks": true
+    }
   }
 }
