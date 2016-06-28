@@ -68,7 +68,7 @@ Update.prototype.initDefaults = function() {
   });
 
   function isUpdater(name) {
-    return /^updater?-/.test(name);
+    return /^(updater|generate)?-/.test(name);
   }
 
   this.option('lookup', function(name) {
@@ -147,6 +147,28 @@ Update.plugins = function(app) {
   app.use(utils.questions());
   app.use(utils.config());
   app.use(utils.cli());
+};
+
+/**
+ * Get the updaters or tasks to run from user config
+ */
+
+Update.resolveTasks = function(app, argv) {
+  var tasks = utils.arrayify(argv._);
+  if (tasks.length && utils.contains(['help', 'list', 'new', 'default'], tasks)) {
+    app.enable('silent');
+    return tasks;
+  }
+
+  if (tasks.length && !utils.contains(['help', 'list', 'new', 'default'], tasks)) {
+    return tasks;
+  }
+
+  tasks = app.getUpdaters(argv.add, argv);
+  if (!tasks || !tasks.length) {
+    return ['init'];
+  }
+  return tasks;
 };
 
 /**
