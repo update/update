@@ -1,6 +1,6 @@
 {
   "name": "update",
-  "description": "Update is a developer framework and CLI for automating updates of any kind in code projects, using globally or locally installed `updaters`.",
+  "description": "Update is a developer framework and CLI for automating updates of any kind in code projects. All updating is accomplished using plugins called _updaters_, which can be installed globally, locally, or in a local updatefile.js",
   "version": "0.1.0",
   "homepage": "https://github.com/jonschlinkert/update",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
@@ -54,7 +54,6 @@
     "gulp-format-md": "^0.1.9",
     "gulp-istanbul": "^0.10.4",
     "gulp-mocha": "^2.2.0",
-    "gulp-reflinks": "^0.1.0",
     "gulp-unused": "^0.1.2",
     "mocha": "^2.5.3"
   },
@@ -78,8 +77,8 @@
   },
   "verb": {
     "run": true,
-    "toc": true,
-    "layout": "default",
+    "toc": false,
+    "layout": "common-minimal",
     "tasks": [
       "readme"
     ],
@@ -95,9 +94,15 @@
       ]
     },
     "reflinks": [
+      "assemble",
+      "bach",
       "base",
-      "verb",
-      "verb-readme-generator"
+      "getting-started",
+      "gulp",
+      "handlebars",
+      "lodash",
+      "pug",
+      "swig"
     ],
     "lint": {
       "reflinks": true
