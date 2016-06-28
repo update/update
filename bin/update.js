@@ -1,38 +1,47 @@
 #!/usr/bin/env node
 
-var path = require('path');
-var gm = require('global-modules');
-var Runner = require('../lib/runner/runner')();
+require('set-blocking')(true);
+
+var Update = require('..');
+var commands = require('../lib/commands');
 var utils = require('../lib/utils');
-var argv = require('minimist')(process.argv.slice(2), {
-  alias: {verbose: 'v'}
-});
+var argv = require('yargs-parser')(process.argv.slice(2), utils.opts);
 
-var cmd = utils.commands(argv);
-var runner = new Runner(argv);
+/**
+ * Listen for errors
+ */
 
-runner.base.option(argv);
-runner.option(argv);
-
-var task = cmd.list ? ['list', 'default'] : ['default'];
-
-runner.on('*', function(method, key, val) {
-  console.log(method + ':', key, val);
-});
-
-if (argv.verbose) {
-  runner.on('register', function(key) {
-    utils.ok(utils.gray('registered'), 'updater', utils.cyan(key));
+Update.on('update.preInit', function(app) {
+  app.on('error', function(err) {
+    console.log(err.stack);
+    process.exit(1);
   });
-}
-
-runner.registerEach('update-*', {cwd: gm});
-
-runner.base.task('run', function(cb) {
-  runner.run(cb);
 });
 
-runner.base.build(task, function(err) {
-  if (err) return console.error(err);
-  utils.timestamp('finished ' + utils.green(utils.successSymbol));
+Update.on('update.postInit', function(app) {
+  commands(app);
+});
+
+/**
+ * Init CLI
+ */
+
+Update.cli(Update, argv, function(err, app) {
+  if (err) return console.log(err);
+
+  app.cli.process(argv, function(err) {
+    if (err) app.emit('error', err);
+
+    var tasks = argv._.length ? argv._ : ['default'];
+    if (app.updatefile !== true || argv.run) {
+      tasks = Update.resolveTasks(app, argv);
+    }
+
+    app.log.success('running:', tasks);
+    app.update(tasks, function(err) {
+      if (err) return console.log(err);
+      app.emit('done');
+      process.exit();
+    });
+  });
 });

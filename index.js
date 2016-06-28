@@ -1,169 +1,215 @@
 /*!
  * update <https://github.com/jonschlinkert/update>
  *
- * Copyright (c) 2015, Jon Schlinkert.
+ * Copyright (c) 2016, Jon Schlinkert.
  * Licensed under the MIT License.
  */
 
 'use strict';
 
-var path = require('path');
-var Base = require('assemble-core');
-var expand = require('expand-args');
-var minimist = require('minimist');
-var config = require('./lib/config');
-var locals = require('./lib/locals');
+var Base = require('base-app');
+var resolve = require('resolve-file');
 var utils = require('./lib/utils');
+var cli = require('./lib/cli');
 
 /**
- * Create an `update` application. This is the main function exported
- * by the update module.
+ * Create a update application with `options`.
  *
  * ```js
- * var Update = require('update');
- * var update = new Update();
+ * var update = require('update');
+ * var app = update();
  * ```
- * @param {Object} `options`
+ * @param {Object} `options` Settings to initialize with.
  * @api public
  */
 
 function Update(options) {
-  if (!(this instanceof Update)) {
-    return new Update(options);
-  }
   Base.call(this, options);
-  this.name = this.options.name || 'update';
-  this.isUpdate = true;
+  this.is('update');
   this.initUpdate(this);
+  this.initDefaults();
 }
 
 /**
- * Inherit assemble-core
+ * Inherit `Base`
  */
 
 Base.extend(Update);
 
 /**
- * Initialize Updater defaults
+ * Initialize defaults, emit events before and after
  */
 
-Update.prototype.initUpdate = function(base) {
-  this.set('updaters', {});
-
-  // custom middleware handlers
-  this.handler('onStream');
-  this.handler('preWrite');
-  this.handler('postWrite');
-
-  // parse command line arguments
-  var argv = expand(minimist(process.argv.slice(2)), {
-    alias: {v: 'verbose'}
-  });
-
-  this.option('argv', argv);
-
-  // expose `argv` on the instance
-  this.mixin('argv', function(prop) {
-    var args = [].slice.call(arguments);
-    args.unshift(argv);
-    return utils.get.apply(null, args);
-  });
-
-  // load the package.json for the updater
-  this.data(utils.pkg.sync(this.options.path));
-  config(this);
-
-  this.use(locals('update'))
-    .use(utils.runtimes({
-      displayName: function(key) {
-        return base.name === key ? key : (base.name + ':' + key);
-      }
-    }))
-    .use(utils.store())
-    .use(utils.pipeline())
-    .use(utils.loader())
-    .use(utils.cli())
-    .use(utils.defaults())
-    .use(utils.opts())
-
-  var data = utils.get(this.cache.data, 'update');
-  this.config.process(utils.extend({}, data, argv));
-
-  this.engine(['md', 'tmpl'], require('engine-base'));
-  this.onLoad(/\.(md|tmpl)$/, function(view, next) {
-    utils.matter.parse(view, next);
-  });
+Update.prototype.initUpdate = function() {
+  Update.emit('update.preInit', this);
+  Update.plugins(this);
+  Update.emit('update.postInit', this);
 };
 
 /**
- * Returns a function for resolving filepaths from the given `directory`
- * or from the user's current working directory if no directory
- * is passed.
- *
- * ```js
- * var cwd = update.cwd('foo');
- * var a = cwd('bar');
- * var b = cwd('baz');
- * ```
- * @param {String} `dir`
- * @return {Function}
+ * Initialize `Update` defaults
  */
 
-Update.prototype.cwd = function(dir) {
-  var cwd = dir || process.cwd();
-  return function() {
-    var args = [].slice.call(arguments);
-    args.unshift(cwd);
-    return path.resolve.apply(null, args);
-  };
-};
+Update.prototype.initDefaults = function() {
+  this.define('generators', this.generators);
+  this.updaters = this.generators;
 
-/**
- * Temporary logger method.
- * TODO: add event logger
- */
+  this.option('help', {
+    configname: 'updater',
+    appname: 'update'
+  });
 
-Update.prototype.log = function() {
-  this.emit.bind(this, 'log').apply(this, arguments);
-  if (this.enabled('verbose')) {
-    console.log.apply(console, arguments);
-  }
-};
+  this.define('update', function() {
+    return this.generate.apply(this, arguments);
+  });
 
-/**
- * Register updater `name` with the given `update`
- * instance.
- *
- * @param {String} `name`
- * @param {Object} `update` Instance of update
- * @return {Object} Returns the instance for chaining
- */
+  this.option('toAlias', function(name) {
+    return name.replace(/^updater?-(.*)$/, '$1');
+  });
 
-Update.prototype.updater = function(name, app) {
-  if (arguments.length === 1 && typeof name === 'string') {
-    return this.updaters[name];
+  function isUpdater(name) {
+    return /^(updater|generate)?-/.test(name);
   }
 
-  app.use(utils.runtimes({
-    displayName: function(key) {
-      return app.name === key ? key : (app.name + ':' + key);
+  this.option('lookup', function(name) {
+    var patterns = [];
+    if (!isUpdater(name)) {
+      patterns.push(`updater-${name}`);
     }
-  }));
+    return patterns;
+  });
 
-  this.emit('updater', name, app);
-  this.updaters[name] = app;
-  return app;
+  this.on('unresolved', function(search, app) {
+    if (!isUpdater(search.name)) return;
+    var resolved = resolve.file(search.name) || resolve.file(search.name, {cwd: utils.gm});
+    if (resolved) {
+      search.app = app.generator(search.name, require(resolved.path));
+    }
+  });
 };
 
 /**
- * Expose `Update`
+ * Expose plugins on the constructor to allow other `base`
+ * apps to use the plugins before instantiating.
+ */
+
+Update.prototype.configfile = function(cwd) {
+  return utils.configfile(cwd)
+};
+
+/**
+ * Get the list of updaters to run
+ */
+
+Update.prototype.getUpdaters = function(names, options) {
+  var updaters = this.option('updaters');
+  this.addUpdaters(names, options);
+  if (utils.isEmpty(updaters)) {
+    updaters = this.pkg.get('update.updaters');
+  }
+  if (utils.isEmpty(updaters)) {
+    updaters = this.store.get('updaters');
+  }
+  if (options.remove) {
+    updaters = utils.remove(updaters, utils.toArray(options.remove));
+  }
+  if (options.add) {
+    updaters = utils.union([], updaters, utils.toArray(options.add));
+  }
+  return updaters;
+};
+
+/**
+ * Get the list of updaters to run
+ */
+
+Update.prototype.addUpdaters = function(names, options) {
+  options = options || {};
+  if (typeof names === 'string') {
+    names = utils.toArray(names);
+  }
+  if (options.config) {
+    this.pkg.union('update.updaters', names);
+  }
+  if (options.global) {
+    this.store.union('updaters', names);
+  }
+};
+
+/**
+ * Expose plugins on the constructor to allow other `base`
+ * apps to use the plugins before instantiating.
+ */
+
+Update.plugins = function(app) {
+  app.use(utils.store('update'));
+  app.use(utils.runtimes());
+  app.use(utils.questions());
+  app.use(utils.config());
+  app.use(utils.cli());
+};
+
+/**
+ * Get the updaters or tasks to run from user config
+ */
+
+Update.resolveTasks = function(app, argv) {
+  var tasks = utils.arrayify(argv._);
+  if (tasks.length && utils.contains(['help', 'list', 'new', 'default'], tasks)) {
+    app.enable('silent');
+    return tasks;
+  }
+
+  if (tasks.length && !utils.contains(['help', 'list', 'new', 'default'], tasks)) {
+    return tasks;
+  }
+
+  tasks = app.getUpdaters(argv.add, argv);
+  if (!tasks || !tasks.length) {
+    return ['init'];
+  }
+  return tasks;
+};
+
+/**
+ * Expose logging methods
+ */
+
+Object.defineProperty(Update.prototype, 'log', {
+  configurable: true,
+  get: function() {
+    function log() {
+      return console.log.apply(console, arguments);
+    }
+    log.warn = function(msg) {
+      return utils.logger('warning', 'yellow').apply(null, arguments);
+    };
+
+    log.success = function() {
+      return utils.logger('success', 'green').apply(null, arguments);
+    };
+
+    log.info = function() {
+      return utils.logger('info', 'cyan').apply(null, arguments);
+    };
+
+    log.error = function() {
+      return utils.logger('error', 'red').apply(null, arguments);
+    };
+    log.__proto__ = utils.log;
+    return log;
+  }
+});
+
+
+/**
+ * Expose static `cli` method
+ */
+
+Update.cli = cli;
+
+/**
+ * Expose `update`
  */
 
 module.exports = Update;
-
-/**
- * Expose `utils` and package.json metadata
- */
-
-module.exports.utils = utils;
-module.exports.pkg = require('./package');
