@@ -4,17 +4,16 @@ related:
   doc: ['tasks', 'updatefile', 'installing-updaters', 'symlinking-updaters']
 ---
 
-Updaters are [plugins](api/plugins.md) that are registered by name. This document describes how to create, register and run updaters.
+This document describes how to create, register and run updaters. 
+
 
 <!-- toc -->
 
 ## What is an updater?
 
-Updaters are just plugins. The only difference between "updaters" and "plugins" is how they're registered.
+Updaters are [plugins](api/plugins.md) that are registered by name. If you're not familiar with plugins yet, it might be a good idea to review the [plugins docs](api/plugins.md) first.
 
-**Comparison to plugins**
-
-Here is a comparison to illustrate the differences between the two in detail:
+The primary difference between "updaters" and "plugins" is how they're registered, but there are a few other minor differences:
 
 |  | **Plugin** | **Updater** | 
 | --- | --- | --- |
@@ -23,12 +22,6 @@ Here is a comparison to illustrate the differences between the two in detail:
 | Invoked | Immediately | `.register` deferred (lazy), `.updater` immediately |
 | Run using | [.run](plugins.md#run): all plugins are run at once | `.update`: only specified plugin(s) are run |
 
-**Which method should I use?**
-
-In general, it's recommended that you use the `.register` method. In most cases update is smart enough to figure out when to invoke updater functions.
-
-However, there are always exceptions. If you create custom code and notice that update can't find the information it needs. Try using the `.updater` method to to invoke the function when the updater is registered.
-
 ## Creating updaters
 
 An updater function takes an instance of `Update` as the first argument.
@@ -36,11 +29,8 @@ An updater function takes an instance of `Update` as the first argument.
 **Example**
 
 ```js
-var update = require('update');
-var app = update();
-
 function updater(app) {
-  console.log(app);
+  // do updater stuff
 }
 ```
 
@@ -54,32 +44,64 @@ Updaters may be registered using either of the following methods:
 **Example**
 
 ```js
-var Update = require('update');
-var app = new Update();
+var update = require('update');
+var app = update();
 
-function updater(msg) {
-  return function(app) {
-    // "app" is the instance of update we created
-    console.log(msg);
-  };
+function updater(app) {
+  // do updater stuff
 }
 
-app.register('foo', updater('One!!!'));
-app.updater('bar', updater('Two!!!')); // <= invoked now
+// register as an updater
+app.register('foo', updater);
 
-// `updater` foo won't be invoked until called by `.update`
-app.update(['foo', 'bar'], function(err) {
-  if (err) return console.log(err);
-  // 'One!!!'
-  // 'Two!!!'
-});
+// or register as a plugin
+app.use(updater);
 ```
+
+**Should I use `.updater` or `.register`?**
+
+In general, it's recommended that you use the `.register` method. In most cases update is smart enough to figure out when to invoke updater functions.
+
+However, there are always exceptions. If you create custom code and notice that update can't find the information it needs. Try using the `.updater` method to to invoke the function when the updater is registered.
+
+## Nested updaters
+
+As with plugins, any updater can register other updaters, and any updater can be registered by other updaters.
+
 
 ## Running updaters
 
 Updaters and their tasks can be run by command line or API.
 
-todo
+**Command line**
+
+To run globally or locally installed `updater-foo`, or an updater named `foo` in `updatefile.js`, run:
+
+```sh
+$ update foo
+```
+
+**API**
+
+```js
+var update = require('update');
+var app = update();
+
+function fn() {
+  // do updater stuff
+}
+
+// the `.register` method does not invoke the updater
+app.register('foo', fn);
+
+// the `.updater` method invokes the updater immediately
+app.updater('bar', fn);
+
+// run updaters foo and bar in series (both updaters will be invoked)
+app.update(['foo', 'bar'], function(err) {
+  if (err) return console.log(err);
+});
+```
 
 ## Resolving updaters
 
