@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "base-generators": "^0.4.1",
+    "copy": "^0.2.3",
     "delete": "^0.3.2",
     "export-files": "^2.1.1",
     "gulp-drafts": "^0.2.0",

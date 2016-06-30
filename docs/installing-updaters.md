@@ -20,7 +20,7 @@ If `updater-license` installed successfully, you should now be able to run it wi
 $ update license
 ```
 
-# Related
+## Related
 
 **Docs**
 

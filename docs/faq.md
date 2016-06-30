@@ -10,7 +10,7 @@ A updater's alias is created by stripping the substring `update-` from the _full
 
 Note that **no dots may be used in published updater names**. Aside from that, any characters considered valid by npm are fine.
 
-# Related
+## Related
 
 **Docs**
 

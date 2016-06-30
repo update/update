@@ -13,7 +13,7 @@ Update offers an elegant and robust suite of methods, carefully organized to hel
 
 Visit the [getting started guide](https://github.com/taunus/getting-started) to learn more.
 
-# Related
+## Related
 
 **Docs**
 

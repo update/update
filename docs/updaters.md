@@ -12,6 +12,7 @@ Updaters are [plugins](api/plugins.md) that are registered by name. This documen
   * [Order of precendence](#order-of-precendence)
 - [Discovering updaters](#discovering-updaters)
 - [Default updater](#default-updater)
+- [Related](#related)
 
 ## What is an updater?
 
@@ -183,10 +184,11 @@ _The only way to register a `default` updater is by creating an [updatefile.js](
 
 When used by command line, Update's CLI will then use node's `require()` system to get the function exported by `updatefile.js` and use it as the `default` updater.
 
-# Related
+## Related
 
 **Docs**
 
 * [tasks](tasks.md)
 * [updatefile](updatefile.md)
 * [installing-updaters](installing-updaters.md)
+* [symlinking-updaters](symlinking-updaters.md)

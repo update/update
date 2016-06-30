@@ -13,6 +13,7 @@ Tasks are used for wrapping code that should be executed at a later point, eithe
     + [Task dependencies](#task-dependencies)
     + [Alias tasks](#alias-tasks)
   * [default task](#default-task)
+- [Related](#related)
 
 ## Creating tasks
 
@@ -157,7 +158,7 @@ app.build(function(err) {
 });
 ```
 
-# Related
+## Related
 
 **Docs**
 

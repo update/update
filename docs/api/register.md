@@ -27,7 +27,7 @@ app.update('foo', function(err) {
 });
 ```
 
-# Related
+## Related
 
 **API**
 

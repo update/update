@@ -27,7 +27,7 @@ app.update('bar', function(err) {
 });
 ```
 
-# Related
+## Related
 
 **API**
 

@@ -57,7 +57,7 @@ This can continue indefinitely as long as the plugin returns a function and the 
 
 When plugins are [registered by name](docs/updaters.md), they are referred to as "updaters". See the [updater documentation](docs/updaters.md) for more details.
 
-# Related
+## Related
 
 **Docs**
 
