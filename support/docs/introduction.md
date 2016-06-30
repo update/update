@@ -1,5 +1,6 @@
 ---
 title: Introduction
+draft: true
 related:
   doc: ['updaters', 'updatefile', 'tasks', 'features', 'faq']
 ---
@@ -18,39 +19,19 @@ Update is a new, open-source developer framework for automating updates of any k
 
 ## How does it work?
 
-**Updaters**
-
-All "updates" are accomplished using plugins called [updaters](#updaters). Updaters are functions that are registered by name, and can be run by [command line](#command-line) or [API](#api).
-
-**Update core**
-
-Update itself is system for [creating](#creating-updaters), [registering](#registering-updaters), [resolving](#resolving-updaters) and [running](#running-updaters) updaters.
+Update's API has methods for [creating](#creating-updaters), [registering](#registering-updaters), [resolving](#resolving-updaters) and [running](#running-updaters) updaters.
 
 ## Updaters
 
+All "updates" are accomplished using plugins called [updaters](#updaters). 
+
 **What are updaters?**
 
-Updaters are plugins that provide all of the "updating" capabilities to update. Technically speaking, updaters are functions that are either registered by name using the [.register](#register) method, or directly using the [.use](#use) method.
-
-Updaters may be published to [npm](https://www.npmjs.com) using the `updater-foo` naming convention, where `foo` is the [alias](#aliases) of your updater. Published updaters can be installed locally or globally.
-
-1. **Plugins**:
-
-Since updaters tend to be used on unstructured data, or things that are often updated "by hand", the first few times you run update (depending on the updaters you run) you might be suprised at the number of inconsistencies and errors that are uncovered.
+- Updaters are functions that are registered by name, and can be run by [command line](#command-line) or [API](#api).
+- Updaters may be published to [npm](https://www.npmjs.com) using the `updater-foo` naming convention, where `foo` is the [alias](#aliases) of your updater. 
+- Published updaters can be installed locally or globally.
 
 ## Command line
-
-### updatefile.js
-
-Each time `update` is run, Update's CLI looks for an [updatefile.js](docs/updatefile.md) in the current working directory:
-
-**If `updatefile.js` exists**
-
-If found, Update's CLI will attempt to load a local installation of the Update library using node's `require()` system, falling back to a global installation if necessary. Next, Update's CLI loads the configuration from your `updatefile.js`, and executes any tasks or updaters you've specified for it to run.
-
-**If `updatefile.js` does not exist**
-
-If not found, Update's CLI attempts to find any updaters you've specified for it to run by using node's `require()` system to search for locally installed modules with the name `updater-*`,
 
 ### Running updaters
 

@@ -1,6 +1,5 @@
----
-title: Summary
----
+# Summary
+
 <br>
 <br>
 <br>
@@ -10,16 +9,20 @@ title: Summary
 <br>
 
 ## Introduction
+
 ### What is update?
-{%%= doc("what-is-update.md") %}
+
+{%= doc("what-is-update.md") %}
 todo
 
 ### What are updaters?
-{%%= doc("what-are-updaters.md") %}
+
+{%= doc("what-are-updaters.md") %}
 todo
 
 ### Why use update?
-{%%= doc("why-use-update.md") %}
+
+{%= doc("why-use-update.md") %}
 todo
 
 <br>
@@ -31,12 +34,15 @@ todo
 <br>
 
 ## Getting started
+
 ### Installing the CLI
-{%%= doc("intro.installing-the-cli.md") %}
+
+{%= doc("intro.installing-the-cli.md") %}
 todo
 
 ### Installing updaters
-{%%= doc("intro.installing-updaters.md") %}
+
+{%= doc("intro.installing-updaters.md") %}
 todo
 
 <br>
@@ -48,18 +54,22 @@ todo
 <br>
 
 ## Usage
+
 Update can be used by command line or API. We recommend you start out with the CLI to become familiarized with how update works before diving into the API.
 
 ### Using tasks
-{%%= doc("getting-started.using-tasks.md") %}
+
+{%= doc("getting-started.using-tasks.md") %}
 todo
 
 ### Using updaters
-{%%= doc("getting-started.using-updaters.md") %}
+
+{%= doc("getting-started.using-updaters.md") %}
 todo
 
 ### Using plugins
-{%%= doc("getting-started.using-plugins.md") %}
+
+{%= doc("getting-started.using-plugins.md") %}
 todo
 
 <br>
@@ -73,16 +83,20 @@ todo
 ## Docs
 
 ### Authoring updaters
+
 todo
 
 ### Publishing updaters
+
 todo
 
 ### Feature highlights
-{%%= doc("features.md") %}
+
+{%= doc("features.md") %}
 
 ### FAQ
-{%%= doc("faq.md") %}
+
+{%= doc("faq.md") %}
 
 <br>
 <br>
@@ -93,10 +107,13 @@ todo
 <br>
 
 ## Developers
+
 Hacking on update.
 
 ### Base
+
 todo
 
 ### Architecture
+
 todo

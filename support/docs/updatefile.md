@@ -4,9 +4,24 @@ related:
   doc: ['installing-updaters', 'updaters', 'tasks']
 ---
 
-If an `updatefile.js` exists in the current working directoy, Update's CLI will attempt to load it and run any updaters or tasks you've specified for it to run.
+Each time `update` is run, Update's CLI looks for an `updatefile.js` in the current working directory. 
 
-Moreover, Update's CLI will use `updatefile.js` to create the ["default" updater](updaters.md#default-updater).
+**If `updatefile.js` exists**
+
+Update's CLI attempts to:
+
+* Load a local installation of the Update library using node's `require()` system, falling back to global installation if not found. 
+* Load the configuration from `updatefile.js` using node.js `require()` system 
+* Register it as the ["default" updater](updaters.md#default-updater) 
+* Execute any tasks or updaters you've specified for it to run.
+* If multiple task or updater names are specified on the command line, Update's CLI will attempt to run 
+
+**If `updatefile.js` does not exist**
+
+Update's CLI attempts to:
+
+* Find any updaters you've specified for it to run by using node's `require()` system to search for locally installed modules with the name `updater-*`,
+
 
 ## Creating an updatefile.js
 

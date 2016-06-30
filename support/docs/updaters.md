@@ -1,7 +1,7 @@
 ---
 title: Updaters
 related:
-  doc: ['tasks', 'updatefile', 'installing-updaters']
+  doc: ['tasks', 'updatefile', 'installing-updaters', 'symlinking-updaters']
 ---
 
 Updaters are [plugins](api/plugins.md) that are registered by name. This document describes how to create, register and run updaters.
