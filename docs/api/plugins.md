@@ -61,7 +61,7 @@ When plugins are [registered by name](docs/updaters.md), they are referred to as
 
 **Docs**
 
-* [updaters](../docs/updaters.md)
+* [updaters](../updaters.md)
 
 **API**
 

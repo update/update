@@ -59,6 +59,7 @@ function createLink(dir, prop, link) {
     filename += '.md';
   }
   if (dir !== key) {
+    if (key === 'docs') key = '';
     filename = path.join('..', key, filename);
   } else if (key !== 'docs') {
     filename = path.join(key, filename);
