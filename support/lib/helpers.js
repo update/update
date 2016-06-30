@@ -15,7 +15,7 @@ module.exports = function(options) {
       var len = arr.length;
       var idx = -1;
       while (++idx < len) {
-        var ele = arr[idx];
+        var ele = arr[idx] || [];
         if (ele.length) {
           return str;
         }
