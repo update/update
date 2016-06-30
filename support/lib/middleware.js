@@ -29,6 +29,14 @@ module.exports = function(options) {
       next();
     });
 
+    app.preRender(/docs[\\\/][^\\\/]+\.md$/, function(view, next) {
+      if (typeof view.data.title === 'undefined') {
+        next(new Error('`title` is missing in ' + view.path));
+        return;
+      }
+      next();
+    });
+
     app.preWrite(/\.md$/, function(file, next) {
       var segs = file.stem.split('.').filter(Boolean);
       if (segs[0] === 'docs') {
