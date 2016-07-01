@@ -5,7 +5,7 @@ require('set-blocking')(true);
 var Update = require('..');
 var commands = require('../lib/commands');
 var utils = require('../lib/utils');
-var argv = require('yargs-parser')(process.argv.slice(2), utils.opts);
+var argv = utils.parseArgs(process.argv.slice(2));
 
 /**
  * Listen for errors
