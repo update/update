@@ -63,7 +63,7 @@ utils.links = function(rules) {
         if (typeof group === 'undefined') {
           throw new Error('directory group: ' + seg + ' is not defined');
         }
-        if (group.indexOf(rest) === -1) {
+        if (group.indexOf(rest) === -1 && !/issues/.test(rest)) {
           throw new Error(`cannot find filepath: ${rest} in "${seg}" (${file.path})`);
         }
       }
