@@ -5,7 +5,6 @@ var rules = require('pretty-remarkable/lib/rules');
 var fn = require;
 require = utils;
 
-require('has-value');
 require('is-valid-app', 'isValid');
 require('pretty-remarkable', 'prettify');
 require('remarkable', 'Remarkable');
