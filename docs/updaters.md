@@ -5,7 +5,6 @@ This document describes how to create, register and run updaters.
 - [What is an updater?](#what-is-an-updater)
 - [Creating updaters](#creating-updaters)
 - [Registering updaters](#registering-updaters)
-- [Nested updaters](#nested-updaters)
 - [Running updaters](#running-updaters)
 - [Resolving updaters](#resolving-updaters)
   * [Tasks and updaters](#tasks-and-updaters)
@@ -69,10 +68,6 @@ app.use(updater);
 In general, it's recommended that you use the `.register` method. In most cases update is smart enough to figure out when to invoke updater functions.
 
 However, there are always exceptions. If you create custom code and notice that update can't find the information it needs. Try using the `.updater` method to to invoke the function when the updater is registered.
-
-## Nested updaters
-
-As with plugins, any updater can register other updaters, and any updater can be registered by other updaters.
 
 ## Running updaters
 

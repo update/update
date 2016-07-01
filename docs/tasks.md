@@ -27,7 +27,13 @@ Tasks can be run by command line or API.
 
 Pass the names of the tasks to run after the `update` command.
 
-**Example**
+**Examples**
+
+Run task `foo`:
+
+```sh
+update foo
+```
 
 Run tasks `foo`, `bar` and `baz`:
 
