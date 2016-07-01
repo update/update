@@ -7,7 +7,7 @@
 
 'use strict';
 
-var Base = require('base-app');
+var Base = require('assemble-core');
 var resolve = require('resolve-file');
 var utils = require('./lib/utils');
 var cli = require('./lib/cli');
@@ -24,6 +24,9 @@ var cli = require('./lib/cli');
  */
 
 function Update(options) {
+  if (!(this instanceof Update)) {
+    return new Update(options);
+  }
   Base.call(this, options);
   this.is('update');
   this.initUpdate(this);
@@ -62,6 +65,10 @@ Update.prototype.initDefaults = function() {
 
   this.define('update', function() {
     return this.generate.apply(this, arguments);
+  });
+
+  this.define('getUpdater', function() {
+    return this.getGenerator.apply(this, arguments);
   });
 
   this.option('toAlias', function(name) {
@@ -143,6 +150,7 @@ Update.prototype.addUpdaters = function(names, options) {
  */
 
 Update.plugins = function(app) {
+  app.use(utils.generators());
   app.use(utils.store('update'));
   app.use(utils.runtimes());
   app.use(utils.questions());

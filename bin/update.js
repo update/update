@@ -6,6 +6,7 @@ var Update = require('..');
 var commands = require('../lib/commands');
 var utils = require('../lib/utils');
 var argv = utils.parseArgs(process.argv.slice(2));
+var util = require('util');
 
 /**
  * Listen for errors

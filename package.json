@@ -1,6 +1,6 @@
 {
   "name": "update",
-  "description": "Update is a developer framework and CLI for automating updates of any kind in code projects. All updating is accomplished using plugins called _updaters_, which are run by command line or API, and can be installed globally, locally, or in a local `updatefile.js`.",
+  "description": "Update is a new developer framework and CLI for automating updates of any kind in code projects. All updating is accomplished using plugins called _updaters_, which are run by command line or API, and can be installed globally, locally, or in a local `updatefile.js`.",
   "version": "0.5.3",
   "homepage": "https://github.com/update/update",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
@@ -29,9 +29,10 @@
   },
   "dependencies": {
     "arr-union": "^3.1.0",
-    "base-app": "^0.2.6",
+    "assemble-core": "^0.23.0",
     "base-cli-process": "^0.1.13",
     "base-config-process": "^0.1.7",
+    "base-generators": "^0.4.1",
     "base-questions": "^0.6.6",
     "base-runtimes": "^0.1.11",
     "base-store": "^0.4.4",
@@ -51,13 +52,28 @@
     "yargs-parser": "^2.4.0"
   },
   "devDependencies": {
+    "assemble-loader": "^0.6.1",
+    "base-runner": "^0.8.2",
+    "base-test-runner": "^0.2.0",
+    "base-test-suite": "^0.1.11",
+    "cross-spawn": "^4.0.0",
+    "generate-foo": "^0.1.5",
+    "generator-util": "^0.2.9",
+    "graceful-fs": "^4.1.4",
     "gulp": "^3.9.1",
     "gulp-eslint": "^2.0.0",
     "gulp-format-md": "^0.1.9",
     "gulp-istanbul": "^0.10.4",
     "gulp-mocha": "^2.2.0",
     "gulp-unused": "^0.1.2",
-    "mocha": "^2.5.3"
+    "is-absolute": "^0.2.5",
+    "load-pkg": "^3.0.1",
+    "mocha": "^2.5.3",
+    "npm-install-global": "^0.1.2",
+    "resolve": "^1.1.7",
+    "should": "^9.0.2",
+    "sinon": "^1.17.4",
+    "updater-example": "^0.1.1"
   },
   "keywords": [
     "convention",
