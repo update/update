@@ -1,12 +1,12 @@
-# update [![NPM version](https://img.shields.io/npm/v/update.svg?style=flat)](https://www.npmjs.com/package/update) [![NPM downloads](https://img.shields.io/npm/dm/update.svg?style=flat)](https://npmjs.org/package/update) [![Build Status](https://img.shields.io/travis/jonschlinkert/update.svg?style=flat)](https://travis-ci.org/jonschlinkert/update)
+# update [![NPM version](https://img.shields.io/npm/v/update.svg?style=flat)](https://www.npmjs.com/package/update) [![NPM downloads](https://img.shields.io/npm/dm/update.svg?style=flat)](https://npmjs.org/package/update) [![Build Status](https://img.shields.io/travis/update/update.svg?style=flat)](https://travis-ci.org/update/update)
 
 <p align="center">
-<a href="https://github.com/jonschlinkert/update">
-<img height="250" width="250" src="https://raw.githubusercontent.com/jonschlinkert/update/master/docs/logo.png">
+<a href="https://github.com/update/update">
+<img height="250" width="250" src="https://raw.githubusercontent.com/update/update/master/docs/logo.png">
 </a>
 </p>
 
-Update is a developer framework and CLI for automating updates of any kind in code projects. All updating is accomplished using plugins called _updaters_, which are run by command line or API, and can be installed globally, locally, or in a local `updatefile.js`.
+Update is a new developer framework and CLI for automating updates of any kind in code projects. All updating is accomplished using plugins called _updaters_, which are run by command line or API, and can be installed globally, locally, or in a local `updatefile.js`.
 
 ## TOC
 
@@ -246,7 +246,7 @@ $ npm install -d && npm test
 ## License
 
 Copyright © 2016, [Jon Schlinkert](https://github.com/jonschlinkert).
-Released under the [MIT license](https://github.com/jonschlinkert/update/blob/master/LICENSE).
+Released under the [MIT license](https://github.com/update/update/blob/master/LICENSE).
 
 ***
 
