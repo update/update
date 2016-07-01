@@ -48,7 +48,6 @@ module.exports = function(options) {
 function createLink(dir, prop, link) {
   var key = (prop === 'doc') ? 'docs' : prop;
 
-  var filepath = name;
   var name = link;
   var anchor = '';
   var segs = link.split('#');
