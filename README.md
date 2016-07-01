@@ -6,7 +6,7 @@
 </a>
 </p>
 
-Update is a new developer framework and CLI for automating updates of any kind in code projects. All updating is accomplished using plugins called _updaters_, which are run by command line or API, and can be installed globally, locally, or in a local `updatefile.js`.
+Be scalable. Update is a new developer framework and CLI for automating updates of any kind in code projects.
 
 ## TOC
 
@@ -33,6 +33,8 @@ Please read our [contributing guide](.github/contributing.md) if you'd like to l
 
 ## What does it do?
 
+All updating is accomplished using plugins called _updaters_, which are run by command line or API, and can be installed globally, locally, or created in a local `updatefile.js`.
+
 You can create your own [updaters](docs/updaters.md) using Update's API, or install updaters using [npm](https://www.npmjs.com/), to do things like:
 
 * enforce conventions across all of your projects
@@ -47,21 +49,9 @@ You can create your own [updaters](docs/updaters.md) using Update's API, or inst
 
 ## Why update?
 
-**Shared plugin ecosystem**
-
-Update is built on [base](https://github.com/node-base/base), a developer framework and API for rapidly building high quality node.js applications, using plugins like building blocks. This means that, in addition to plugins created just for Update, plugins from any [other Base application](#in-the-wild) can be used to add functionality to your updaters as well.
-
-**Learn one, learn them all**
-
-Moreover, once you learn how to use Update, or any other Base application, you will have at least a firm understanding of how to use the others, if not a good head start.
-
-**Plays well with others**
-
-Update is valueable by itself and can be used completely standalone. But it's even better when used with complementary frameworks that address other parts of the software development lifecycle, such as:
-
-* [generate](https://github.com/generate/generate): create projects
-* [assemble](https://github.com/assemble/assemble): build projects
-* [verb](https://github.com/verbose/verb): document projects
+* **be more productive**: Update makes you more productive by eliminating time spent on things that _can be automated_, but typically aren't since they don't need to be done often, don't fit into the build cycle or a project's deliverables, or they're usually updated by hand. As code projects mature, time spent on these things tend to stay linear or increase as the size of a community grows. And this only compounds which each new project under your stewardship.
+* **your way, instantly**: updaters can be published to and installed from npm, but you can also easily create your own [personal updaters](docs/symlinking-updaters.md). Once you're updaters are setup, projects under your maintenance will convert to the the conventions you prefer in milliseconds.
+* **plugin ecosystem**: any plugins that work with [Base applications](#discovering-plugins) will work with Update. Which means you can use [assemble](https://github.com/assemble/assemble), [verb](https://github.com/verbose/verb), and [generate](https://github.com/generate/generate) plugins, to name a few.
 
 ## Who should use Update?
 
