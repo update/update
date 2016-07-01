@@ -1,0 +1,9 @@
+{
+  "name": "update-one",
+  "version": "0.0.0",
+  "private": true,
+  "description": "",
+  "main": "updatefile.js",
+  "license": "MIT",
+  "base": {}
+}
