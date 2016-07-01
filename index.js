@@ -52,6 +52,7 @@ Update.prototype.initUpdate = function() {
 
 Update.prototype.initDefaults = function() {
   this.define('generators', this.generators);
+  this.define('updater', this.generator);
   this.updaters = this.generators;
 
   this.option('help', {
