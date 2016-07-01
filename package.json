@@ -1,6 +1,6 @@
 {
   "name": "update",
-  "description": "Update is a developer framework and CLI for automating updates of any kind in code projects. All updating is accomplished using plugins called _updaters_, which can be installed globally, locally, or in a local `updatefile.js`.",
+  "description": "Update is a developer framework and CLI for automating updates of any kind in code projects. All updating is accomplished using plugins called _updaters_, which are run by command line or API, and can be installed globally, locally, or in a local `updatefile.js`.",
   "version": "0.5.1",
   "homepage": "https://github.com/jonschlinkert/update",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
@@ -12,7 +12,9 @@
   "files": [
     "bin",
     "index.js",
-    "lib"
+    "lib",
+    "LICENSE",
+    "README.md"
   ],
   "main": "index.js",
   "preferGlobal": true,
@@ -103,7 +105,8 @@
       "lodash",
       "pug",
       "swig",
-      "updater-example"
+      "updater-example",
+      "verb"
     ],
     "lint": {
       "reflinks": true
