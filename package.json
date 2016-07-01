@@ -2,11 +2,11 @@
   "name": "update",
   "description": "Update is a developer framework and CLI for automating updates of any kind in code projects. All updating is accomplished using plugins called _updaters_, which are run by command line or API, and can be installed globally, locally, or in a local `updatefile.js`.",
   "version": "0.5.2",
-  "homepage": "https://github.com/jonschlinkert/update",
+  "homepage": "https://github.com/update/update",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
-  "repository": "jonschlinkert/update",
+  "repository": "update/update",
   "bugs": {
-    "url": "https://github.com/jonschlinkert/update/issues"
+    "url": "https://github.com/update/update/issues"
   },
   "license": "MIT",
   "files": [
