@@ -31,5 +31,5 @@ app.update('bar', function(err) {
 
 **API**
 
-* [register](api/register.md)
-* [plugins](api/plugins.md)
+* [register](register.md)
+* [plugins](plugins.md)

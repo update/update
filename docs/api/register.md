@@ -31,5 +31,5 @@ app.update('foo', function(err) {
 
 **API**
 
-* [updater](api/updater.md)
-* [plugins](api/plugins.md)
+* [updater](updater.md)
+* [plugins](plugins.md)
