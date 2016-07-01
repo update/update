@@ -4,16 +4,15 @@ title: Nested updaters
 
 Updaters provide a convenient way of wrapping code that should be executed on-demand, whilst also "namespacing" the code being wrapped, and making it available to be executed using a consistent and intuitive syntax by either CLI or API.
 
-**Example**
 
-The following updater:
-
-```js
+TBC...
 
 
-```
+## TODO
 
-
+- [ ] explain how nested updaters work
+- [ ] command line syntax
+- [ ] API syntax
 
 ## Pre-requisites
 

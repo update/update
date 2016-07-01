@@ -8,6 +8,13 @@ This document describes how to create, register and run updaters.
 
 <!-- toc -->
 
+## TODO
+
+- [ ] document updater args
+- [ ] explain how the `base` instance works
+- [ ] document `env`
+
+
 ## What is an updater?
 
 Updaters are [plugins](api/plugins.md) that are registered by name. If you're not familiar with plugins yet, it might be a good idea to review the [plugins docs](api/plugins.md) first.
@@ -33,7 +40,15 @@ function updater(app) {
 }
 ```
 
+
+
 ## Registering updaters
+
+Register an updater function with the given `name`.
+
+```js
+app.register(name, fn);
+```
 
 Updaters may be registered using either of the following methods:
 
