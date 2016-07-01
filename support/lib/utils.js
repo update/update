@@ -6,6 +6,7 @@ var fn = require;
 require = utils;
 
 require('is-valid-app', 'isValid');
+require('has-value');
 require('pretty-remarkable', 'prettify');
 require('remarkable', 'Remarkable');
 require('strip-color');

@@ -7,6 +7,23 @@ module.exports = function(options) {
   return function(app) {
     if (!utils.isValid(app, 'update-support-helpers')) return;
     app.helpers(utils.helpers());
+    app.helper('hasValue', function(val, str) {
+      return utils.hasValue(val) ? str : '';
+    });
+
+    app.helper('hasAny', function(arr, str) {
+      arr = utils.arrayify(arr);
+      var len = arr.length;
+      var idx = -1;
+      while (++idx < len) {
+        var ele = arr[idx] || [];
+        if (ele.length) {
+          return str;
+        }
+      }
+      return '';
+    });
+
     app.helper('links', function(related, prop) {
       var arr = related[prop] || (related[prop] = []);
       arr = utils.arrayify(arr);
