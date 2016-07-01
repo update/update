@@ -61,7 +61,7 @@ If not, review the steps and make sure you did everything described. If you stil
 
 **Next steps**
 
-If you'd like to see how multiple updaters can work together, repeat the same steps described above to create and symlnk `updater-bbb` and `updater-ccc`. 
+If you'd like to see how multiple updaters can work together, repeat the same steps described above to create and symlink `updater-bbb` and `updater-ccc`. 
 
 Then run:
 
