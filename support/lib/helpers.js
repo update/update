@@ -62,7 +62,7 @@ function createLink(dir, prop, link) {
   if (dir !== key) {
     if (key === 'docs') key = '';
     filename = path.join('..', key, filename);
-  } else if (key !== 'docs') {
+  } else if (key !== 'docs' && dir !== key) {
     filename = path.join(key, filename);
   }
   return `- [${name}](${filename}${anchor})`;
