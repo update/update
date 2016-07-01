@@ -2,9 +2,12 @@
 
 This document describes how to create, register and run updaters.
 
+- [TODO](#todo)
 - [What is an updater?](#what-is-an-updater)
 - [Creating updaters](#creating-updaters)
 - [Registering updaters](#registering-updaters)
+  * [.register](#register)
+  * [.updater](#updater)
 - [Running updaters](#running-updaters)
 - [Resolving updaters](#resolving-updaters)
   * [Tasks and updaters](#tasks-and-updaters)
@@ -14,6 +17,12 @@ This document describes how to create, register and run updaters.
 - [Default updater](#default-updater)
 - [Related](#related)
 
+## TODO
+
+* [ ] document updater args
+* [ ] explain how the `base` instance works
+* [ ] document `env`
+
 ## What is an updater?
 
 Updaters are [plugins](api/plugins.md) that are registered by name. If you're not familiar with plugins yet, it might be a good idea to review the [plugins docs](api/plugins.md) first.
@@ -22,10 +31,10 @@ The primary difference between "updaters" and "plugins" is how they're registere
 
 |  | **Plugin** | **Updater** | 
 | --- | --- | --- |
-| Registered with | [.use](plugins.md#use) method | [.register](#register) method or [.updater](#updater) method |
+| Registered with | [.use](api/plugins.md#use) method | [.register](#register) method or [.updater](#updater) method |
 | Instance | Loaded onto "current" `Update` instance | A `new Update()` instance is created for every updater registered |
 | Invoked | Immediately | `.register` deferred (lazy), `.updater` immediately |
-| Run using | [.run](plugins.md#run): all plugins are run at once | `.update`: only specified plugin(s) are run |
+| Run using | [.run](api/plugins.md#run): all plugins are run at once | `.update`: only specified plugin(s) are run |
 
 ## Creating updaters
 
@@ -46,6 +55,10 @@ Updaters may be registered using either of the following methods:
 * `.register`: if the plugin should not be invoked until it's called by `.update` (stays lazy while it's cached, this is preferred)
 * `.updater`: if the plugin needs to be invoked immediately when registered
 
+### .register
+
+Register an updater function with the given `name` using the `.register` method.
+
 **Example**
 
 ```js
@@ -53,21 +66,45 @@ var update = require('update');
 var app = update();
 
 function updater(app) {
-  // do updater stuff
+  // do updater stuff when the updater is run with the `.update` method.
+  console.log('foo is being run');
 }
 
-// register as an updater
+// register as an updater with the `.register` method
 app.register('foo', updater);
 
-// or register as a plugin
-app.use(updater);
+// run the `foo` updater with the `.update` method
+app.update('foo', function(err) {
+  if (err) return console.log(err);
+});
+//=> "foo is being run"
+```
+
+### .updater
+
+Register an updater function with the given `name` using the `.updater` method.
+
+**Example**
+
+```js
+var update = require('update');
+var app = update();
+
+function updater(app) {
+  // do updater stuff when the updater is registered
+  console.log('foo is being registered');
+}
+
+// register as an updater using `.updater`
+app.updater('foo', updater);
+//=> "foo is being registered"
 ```
 
 **Should I use `.updater` or `.register`?**
 
 In general, it's recommended that you use the `.register` method. In most cases update is smart enough to figure out when to invoke updater functions.
 
-However, there are always exceptions. If you create custom code and notice that update can't find the information it needs. Try using the `.updater` method to to invoke the function when the updater is registered.
+However, there are always exceptions. If you create custom code and notice that update can't find the information it needs. Try using the `.updater` method to invoke the function when the updater is registered.
 
 ## Running updaters
 
@@ -105,7 +142,7 @@ app.update(['foo', 'bar'], function(err) {
 
 ## Resolving updaters
 
-Updaters can be published to npm and installed globally or locally. But you there is no requirement that updaters must be published. You can also create custom updaters and register them using the [.register](#register) or [.updater](#updater) methods.
+Updaters can be published to npm and installed globally or locally. But there is no requirement that updaters must be published. You can also create custom updaters and register using the [.register](#register) or [.updater](#updater) methods.
 
 This provides a great deal of flexibility, but it also means that we need a strategy for _finding updaters_ when `update` is run from the command line.
 
@@ -146,7 +183,7 @@ module.exports = function(app) {
     });
   });
 
-  // `.build` doesn't run updaters
+  // `.update` will run updater `foo`
   app.update('foo', function(err) {
     if (err) return console.log(err);
   });
@@ -168,7 +205,7 @@ module.exports = function(app) {
     app.update('foo', cb);
   });
 
-  // `.build` will run task `foo`, which runs the updater
+  // `.build` will run task `foo`, which runs updater `foo`
   app.build('foo', function(err) {
     if (err) return console.log(err);
   });

@@ -12,7 +12,7 @@ The following example shows you to do this.
 
 **1. Create an updater project**
 
-Create a new project named `updater-aaa`. You can expedite this using [generate][] or Google's Yeoman or however you prefer. 
+Create a new project named `updater-aaa`. You can expedite this using [generate][] or Google's Yeoman or however you prefer.
 
 **2. Add `index.js`**
 
@@ -48,24 +48,24 @@ $ npm link
 To test that `updater-aaa` was symlinked properly, run the following command:
 
 ```sh
-$ update aaa 
+$ update aaa
 ```
 
 You should see something like the following in the terminal
 
 ```sh
-updater aaa > task default
+updater updater-aaa > task default
 ```
 
 If not, review the steps and make sure you did everything described. If you still can't get it working please [create an issue](../../../issues) so we can look into it.
 
 **Next steps**
 
-If you'd like to see how multiple updaters can work together, repeat the same steps described above to create and symlink `updater-bbb` and `updater-ccc`. 
+If you'd like to see how multiple updaters can work together, repeat the same steps described above to create and symlink `updater-bbb` and `updater-ccc`.
 
 Then run:
 
 ```sh
-update aaa bbb ccc 
+update aaa bbb ccc
 ```
 

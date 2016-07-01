@@ -68,7 +68,7 @@ When using update's file system API (`.src`/`.dest` etc), you can optionally ret
 
 #### .build
 
-Run one more tasks.
+Run one or more tasks.
 
 **Params**
 
@@ -82,7 +82,8 @@ app.task('foo', function(cb) {
   // do task stuff
   cb();
 });
-app.task('foo', function(cb) {
+
+app.task('bar', function(cb) {
   // do task stuff
   cb();
 });
@@ -95,11 +96,11 @@ app.build(['foo', 'bar'], function(err) {
 
 #### .update
 
-The `.update` may also be used to run tasks. However, `.update` can be used to run _tasks and updaters_, thus it will also look for updaters to run when a task is not found.
+The `.update` method may also be used to run tasks. However, `.update` can be used to run _tasks and updaters_, thus it will also look for updaters to run when a task is not found.
 
 _To ensure that only tasks are run, use the `.build` method._
 
-See the [updaters documentation](#updaters) for more details.
+See the [updaters documentation](updaters.md) for more details.
 
 ### Task composition
 

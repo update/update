@@ -2,6 +2,14 @@
 
 Updaters provide a convenient way of wrapping code that should be executed on-demand, whilst also "namespacing" the code being wrapped, and making it available to be executed using a consistent and intuitive syntax by either CLI or API.
 
+TBC...
+
+## TODO
+
+* [ ] explain how nested updaters work
+* [ ] command line syntax
+* [ ] API syntax
+
 ## Pre-requisites
 
 * [plugins](api/plugins.md)
@@ -15,11 +23,11 @@ As with [plugins](api/plugins.md), updaters may be nested: _any updater can regi
 
 ```js
 app.register('foo', function(foo) {
-  // do udpater stuff
+  // do updater stuff
   this.register('bar', function(bar) {
-    // do udpater stuff
+    // do updater stuff
     this.register('baz', function(baz) {
-      // do udpater stuff
+      // do updater stuff
       this.task('default', function(cb) {
         console.log(baz.namespace);
         cb();

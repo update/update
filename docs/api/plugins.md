@@ -49,7 +49,7 @@ app.run(obj);
 Additionally:
 
 * If `obj` has a `.use` method, it will be used on each plugin (e.g. `obj.use(fn)`). Otherwise `fn(obj)`.
-* If the plugin returns a function again and `obj` has a `.run` method, the plugin will be pushed onto the `obj.fns` array
+* If the plugin returns a function again and `obj` has a `.run` method, the plugin will be pushed onto the `obj.fns` array.
 
 This can continue indefinitely as long as the plugin returns a function and the receiving object has `.use`/`.run` functions.
 

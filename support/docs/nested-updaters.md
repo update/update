@@ -27,11 +27,11 @@ As with [plugins](api/plugins.md), updaters may be nested: _any updater can regi
 
 ```js
 app.register('foo', function(foo) {
-  // do udpater stuff
+  // do updater stuff
   this.register('bar', function(bar) {
-    // do udpater stuff
+    // do updater stuff
     this.register('baz', function(baz) {
-      // do udpater stuff
+      // do updater stuff
       this.task('default', function(cb) {
         console.log(baz.namespace);
         cb();

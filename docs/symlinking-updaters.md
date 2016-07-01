@@ -44,13 +44,13 @@ $ npm link
 To test that `updater-aaa` was symlinked properly, run the following command:
 
 ```sh
-$ update aaa 
+$ update aaa
 ```
 
 You should see something like the following in the terminal
 
 ```sh
-updater aaa > task default
+updater updater-aaa > task default
 ```
 
 If not, review the steps and make sure you did everything described. If you still can't get it working please [create an issue](../../../issues) so we can look into it.
@@ -62,7 +62,7 @@ If you'd like to see how multiple updaters can work together, repeat the same st
 Then run:
 
 ```sh
-update aaa bbb ccc 
+update aaa bbb ccc
 ```
 
 ## Related
