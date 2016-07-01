@@ -18,4 +18,3 @@ Visit the [getting started guide](https://github.com/taunus/getting-started) to 
 **Docs**
 
 * [faq](faq.md)
-* [introduction](introduction.md)

@@ -59,10 +59,6 @@ When plugins are [registered by name](docs/updaters.md), they are referred to as
 
 ## Related
 
-**Docs**
-
-* [updaters](../updaters.md)
-
 **API**
 
 * [updater](api/updater.md)

@@ -181,7 +181,7 @@ $ update help
 
 ## Discovering updaters
 
-* Find updaters to install by [searching npm](https://www.npmjs.com/browse/keyword/update-updater) for packages with the keyword `update-updater`
+* Find updaters to install by [searching npm](https://www.npmjs.com/browse/keyword/updateupdater) for packages with the keyword `updateupdater`
 * Visit [Update's GitHub org](https://github.com/update) to see the updaters maintained by the core team
 
 ## Discovering plugins
@@ -192,6 +192,7 @@ Plugins from any applications built on [base](https://github.com/node-base/base)
 * [assemble](https://www.npmjs.com/browse/keyword/assembleplugin): find assemble plugins on npm using the `assembleplugin` keyword
 * [generate](https://www.npmjs.com/browse/keyword/generateplugin): find generate plugins on npm using the `generateplugin` keyword
 * [templates](https://www.npmjs.com/browse/keyword/templatesplugin): find templates plugins on npm using the `templatesplugin` keyword
+* [update][update-plugin]: find update plugins on npm using the `updateplugin` keyword
 * [verb](https://www.npmjs.com/browse/keyword/verbplugin): find verb plugins on npm using the `verbplugin` keyword
 
 ## Authoring updaters
@@ -211,7 +212,7 @@ Are you using Update in your project? Have you published an [updater](docs/updat
 * If you get like Update and want to tweet about it, please use the hashtag `#updatejs`
 * Get implementation help on [StackOverflow](http://stackoverflow.com/questions/tagged/update) (pluse use the `update` tag in questions)
 * **Gitter** Discuss Update with us on [Gitter](https://gitter.im/update)
-* If you publish an updater, thank you! To make your project as discoverable as possible, please add the keyword `update-updater` to package.json.
+* If you publish an updater, thank you! To make your project as discoverable as possible, please add the keyword `updateupdater` to package.json.
 
 ## Related projects
 

@@ -1,7 +1,7 @@
 ---
 title: Features
 related:
-  doc: ['faq', 'introduction']
+  doc: ['faq']
 ---
 
 Update offers an elegant and robust suite of methods, carefully organized to help you accomplish common activities in less time, including:

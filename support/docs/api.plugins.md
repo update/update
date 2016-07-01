@@ -2,7 +2,7 @@
 title: Plugins
 related:
   api: ['updater', 'register']
-  doc: ['updaters']
+  doc: []
 ---
 
 A plugin is function that takes an instance of `Update` and is registered with the `.use` method. See the [base-plugins][] documentation for additional details.
