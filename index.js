@@ -102,7 +102,7 @@ Update.prototype.initDefaults = function() {
  */
 
 Update.prototype.configfile = function(cwd) {
-  return utils.configfile(cwd)
+  return utils.configfile(cwd);
 };
 
 /**
@@ -154,6 +154,7 @@ Update.plugins = function(app) {
   app.use(utils.store('update'));
   app.use(utils.runtimes());
   app.use(utils.questions());
+  app.use(utils.loader());
   app.use(utils.config());
   app.use(utils.cli());
 };
@@ -209,7 +210,6 @@ Object.defineProperty(Update.prototype, 'log', {
     return log;
   }
 });
-
 
 /**
  * Expose static `cli` method
