@@ -35,9 +35,17 @@ Update.cli(Update, argv, function(err, app) {
     var tasks = argv._.length ? argv._ : ['default'];
     if (app.updatefile !== true || argv.run) {
       tasks = Update.resolveTasks(app, argv);
+
+    } else if (app.updatefile === true && app.pkg.get('update.run')) {
+      tasks = Update.resolveTasks(app, argv).concat(tasks);
     }
 
-    app.log.success('running:', tasks);
+    app.once('task', function() {
+      if (!app.base.enabled('silent')) {
+        app.log.success('running:', tasks);
+      }
+    });
+
     app.update(tasks, function(err) {
       if (err) return console.log(err);
       app.emit('done');
