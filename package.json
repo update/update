@@ -44,6 +44,7 @@
     "global-modules": "^0.2.2",
     "gulp-choose-files": "^0.1.2",
     "is-valid-app": "^0.2.0",
+    "isobject": "^2.1.0",
     "lazy-cache": "^2.0.1",
     "log-utils": "^0.1.4",
     "os-homedir": "^1.0.1",
@@ -88,6 +89,7 @@
     "update"
   ],
   "update": {
+    "run": true,
     "add": [
       "keywords"
     ]
@@ -103,6 +105,8 @@
       "gulp-format-md"
     ],
     "related": {
+      "highlight": "generate",
+      "description": "Update shares a common architecture and plugin ecosystem with the following libraries:",
       "list": [
         "assemble",
         "base",
@@ -112,19 +116,21 @@
     },
     "reflinks": [
       "assemble",
+      "assemble-core",
+      "assemble-loader",
       "bach",
       "base",
+      "consolidate",
       "generate",
       "gulp",
       "handlebars",
       "lodash",
       "pug",
       "swig",
+      "templates",
       "updater-example",
       "verb",
-      "assemble-core",
-      "templates",
-      "assemble-loader"
+      "vinyl"
     ],
     "lint": {
       "reflinks": true

@@ -63,9 +63,7 @@ Update.prototype.initDefaults = function() {
     appname: 'update'
   });
 
-  this.define('update', function() {
-    return this.generate.apply(this, arguments);
-  });
+  this.define('update', this.generate);
 
   this.define('getUpdater', function() {
     return this.getGenerator.apply(this, arguments);
@@ -110,6 +108,11 @@ Update.prototype.configfile = function(cwd) {
  */
 
 Update.prototype.getUpdaters = function(names, options) {
+  if (utils.isObject(names)) {
+    options = names;
+    names = [];
+  }
+  options = options || {};
   var updaters = this.option('updaters');
   this.addUpdaters(names, options);
   if (utils.isEmpty(updaters)) {
@@ -194,7 +197,6 @@ Object.defineProperty(Update.prototype, 'log', {
     log.warn = function(msg) {
       return utils.logger('warning', 'yellow').apply(null, arguments);
     };
-
     log.success = function() {
       return utils.logger('success', 'green').apply(null, arguments);
     };
