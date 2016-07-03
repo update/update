@@ -8,6 +8,8 @@
 
 Be scalable! Update is a new, open source developer framework and CLI for automating updates of any kind in code projects.
 
+You might also be interested in [generate](https://github.com/generate/generate).
+
 ## TOC
 
 - [What does it do?](#what-does-it-do)
@@ -51,8 +53,9 @@ You can create your own [updaters](docs/updaters.md) using Update's API, or inst
 ## Why update?
 
 * **be more productive**: Update makes you more productive by eliminating time spent on things that _can be automated_, but typically aren't since they don't need to be done often, don't fit into the build cycle or a project's deliverables, or they're usually updated by hand. As code projects mature, time spent on these things tend to stay linear or increase as the size of a community grows. And this only compounds with each new project under your stewardship.
-* **your way, instantly**: updaters can be published to and installed from npm, but you can also easily create your own [personal updaters](docs/symlinking-updaters.md). Once you're updaters are setup, projects under your maintenance will convert to the the conventions you prefer in milliseconds.
-* **plugin ecosystem**: any plugins that work with [Base applications](#discovering-plugins) will work with Update. Which means you can use [assemble](https://github.com/assemble/assemble), [verb](https://github.com/verbose/verb), and [generate](https://github.com/generate/generate) plugins, to name a few.
+* **your way, instantly**: updaters can be published to and installed from npm, but you can also easily create your own [personal updaters](docs/symlinking-updaters.md). Once your updaters are setup, just run `update init`, then projects under your maintenance will convert to the the conventions you prefer within milliseconds after running `update`.
+* **plugin ecosystem**: any plugins that work with [Base applications](#discovering-plugins) will work also with Update. Which means you can use plugins (or generators) from [assemble](https://github.com/assemble/assemble), [verb](https://github.com/verbose/verb), and [generate](https://github.com/generate/generate), to name a few.
+* **well tested**: with more than 1,200 unit tests
 
 ## Who should use Update?
 
@@ -101,6 +104,8 @@ This appends the string `foo` to the contents of `example.txt`. Visit the [updat
 * Browse the [documentation](docs)
 * Learn about [updaters](docs/updaters.md)
 * Learn about the [built-in updaters](docs/cli/built-in-updaters.md)
+* Learn more about [base](https://github.com/node-base/base)
+* Get [Sublime Text Snippets](https://github.com/node-base/sublime-text-base-snippets) for creating tasks and updaters
 
 ## Init
 
@@ -160,19 +165,22 @@ $ update help
 
 ## Features
 
-* **unparalleled flow control**: through the use of [updaters](https://github.com/update/getting-started), [sub-updaters](https://github.com/update/getting-started) and [tasks](https://github.com/update/getting-started)
-* **templates, scaffolds and boilerplates**: update a single file, initialize an entire project, or provide ad-hoc "components" throughout the duration of a project using any combination of [templates, scaffolds and boilerplates](#templates-scaffolds-and-boilerplates).
-* **any engine**: use any template engine to render templates, including [handlebars](http://www.handlebarsjs.com/), [lodash](https://lodash.com/), [swig](https://github.com/paularmstrong/swig) and [pug](http://jade-lang.com)
-* **prompts**: asks you for data when it can't find what it needs, and it's easy to customize prompts for any data you want.
-* **data**: gathers data from the user's environment to populate "hints" in user prompts and render templates
-* **streams**: interact with the file system, with full support for [gulp](http://gulpjs.com) and [assemble](https://github.com/assemble/assemble) plugins
-* **smart plugins**: Update is built on [base](https://github.com/node-base/base), so any "smart" plugin can be used
+* **unparalleled flow control**: through the use of [updaters](docs/updaters.md), [sub-updaters](https://github.com/update/getting-started) and [tasks](docs/tasks.md)
+* **generators**: support for [generate](https://github.com/generate/generate) generators. If your updater needs to create new files, there might be a [generator for that](https://www.npmjs.com/browse/keyword/generate-generator). Just use the generator the same way you would use an [updater](docs/updaters.md).
+* **render templates**: use templates to create new files, or replace existing files
+* **prompts**: It's easy to create custom prompts. Answers to prompts can be used as context for rendering templates, for settings options, determining file names, directory structure, and anything else that requires use feedback.
+* **any engine**: use any template engine to render templates, including [handlebars](http://www.handlebarsjs.com/), [lodash](https://lodash.com/), [swig](https://github.com/paularmstrong/swig) and [pug](http://jade-lang.com), or anything supported by [consolidate](https://github.com/visionmedia/consolidate.js).
+* **data**: gather data from the user's environment to populate "hints" in user prompts or for rendering templates
+* **fs**: in the spirit of [gulp](http://gulpjs.com), use `.src` and `.dest` to read and write globs of files.
+* **vinyl**: files and templates are [vinyl](http://github.com/wearefractal/vinyl) files
+* **streams**: full support for [gulp](http://gulpjs.com) and [assemble](https://github.com/assemble/assemble) plugins
+* **smart plugins**: Update is built on [base](https://github.com/node-base/base), so any "smart" plugin from the Base ecosystem can be used
 * **stores**: persist configuration settings, global defaults, project-specific defaults, answers to prompts, and so on.
 * much more!
 
 ## Discovering updaters
 
-* Find updaters to install by [searching npm](https://www.npmjs.com/browse/keyword/updateupdater) for packages with the keyword `updateupdater`
+* Find updaters to install by [searching npm](https://www.npmjs.com/browse/keyword/update-updater) for packages with the keyword `updateupdater`
 * Visit [Update's GitHub org](https://github.com/update) to see the updaters maintained by the core team
 
 ## Discovering plugins
@@ -209,8 +217,8 @@ Are you using Update in your project? Have you published an [updater](docs/updat
 
 **v0.6.0**
 
-* Swap out [base](https://github.com/node-base/base) for [assemble-core][] (which uses Base via [templates][]). This allows updaters to seamlessly run generators from [generate](https://github.com/generate/generate), [assemble](https://github.com/assemble/assemble), or [verb](https://github.com/verbose/verb) (when a file needs to be created, or re-created for example)
-* Adds [assemble-loader][] to support glob patterns in collection methods
+* Swap out [base](https://github.com/node-base/base) for [assemble-core](https://github.com/assemble/assemble-core) (which uses Base via [templates](https://github.com/jonschlinkert/templates)). This allows updaters to seamlessly run generators from [generate](https://github.com/generate/generate), [assemble](https://github.com/assemble/assemble), or [verb](https://github.com/verbose/verb) (when a file needs to be created, or re-created for example)
+* Adds [assemble-loader](https://github.com/assemble/assemble-loader) to support glob patterns in collection methods
 
 **v0.5.0**
 
@@ -218,7 +226,7 @@ First stable release!
 
 ## Related projects
 
-You might also be interested in these projects:
+Update shares a common architecture and plugin ecosystem with the following libraries:
 
 * [assemble](https://www.npmjs.com/package/assemble): Assemble is a powerful, extendable and easy to use static site generator for node.js. Used… [more](https://github.com/assemble/assemble) | [homepage](https://github.com/assemble/assemble "Assemble is a powerful, extendable and easy to use static site generator for node.js. Used by thousands of projects for much more than building websites, Assemble is also used for creating themes, scaffolds, boilerplates, e-books, UI components, API docum")
 * [base](https://www.npmjs.com/package/base): base is the foundation for creating modular, unit testable and highly pluggable node.js applications, starting… [more](https://github.com/node-base/base) | [homepage](https://github.com/node-base/base "base is the foundation for creating modular, unit testable and highly pluggable node.js applications, starting with a handful of common methods, like `set`, `get`, `del` and `use`.")
@@ -253,8 +261,4 @@ Released under the [MIT license](https://github.com/update/update/blob/master/LI
 
 ***
 
-_This file was generated by [verb](https://github.com/verbose/verb), v0.9.0, on July 02, 2016._
-
-[assemble-core]: https://github.com/assemble/assemble-core
-[templates]: https://github.com/jonschlinkert/templates
-[assemble-loader]: https://github.com/assemble/assemble-loader
+_This file was generated by [verb](https://github.com/verbose/verb), v0.9.0, on July 03, 2016._
