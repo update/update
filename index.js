@@ -58,13 +58,8 @@ Update.prototype.initDefaults = function() {
   this.define('updater', this.generator);
   this.updaters = this.generators;
 
-  this.option('help', {
-    configname: 'updater',
-    appname: 'update'
-  });
-
+  this.option('help', {configname: 'updater', appname: 'update'});
   this.define('update', this.generate);
-
   this.define('getUpdater', function() {
     return this.getGenerator.apply(this, arguments);
   });
@@ -76,6 +71,16 @@ Update.prototype.initDefaults = function() {
   function isUpdater(name) {
     return /^(updater|generate)?-/.test(name);
   }
+
+  // create `app.globals` store
+  Object.defineProperty(this, 'globals', {
+    configurable: true,
+    get: function() {
+      return new utils.Store('generate-globals', {
+        cwd: utils.resolveDir('~/')
+      });
+    }
+  });
 
   this.option('lookup', function(name) {
     var patterns = [];
@@ -119,7 +124,7 @@ Update.prototype.getUpdaters = function(names, options) {
     updaters = this.pkg.get('update.updaters');
   }
   if (utils.isEmpty(updaters)) {
-    updaters = this.store.get('updaters');
+    updaters = this.globals.get('updaters');
   }
   if (options.remove) {
     updaters = utils.remove(updaters, utils.toArray(options.remove));
@@ -143,7 +148,7 @@ Update.prototype.addUpdaters = function(names, options) {
     this.pkg.union('update.updaters', names);
   }
   if (options.global) {
-    this.store.union('updaters', names);
+    this.globals.union('updaters', names);
   }
 };
 
@@ -153,6 +158,7 @@ Update.prototype.addUpdaters = function(names, options) {
  */
 
 Update.plugins = function(app) {
+  app.use(utils.logger());
   app.use(utils.generators());
   app.use(utils.store('update'));
   app.use(utils.runtimes());
@@ -183,35 +189,6 @@ Update.resolveTasks = function(app, argv) {
   }
   return tasks;
 };
-
-/**
- * Expose logging methods
- */
-
-Object.defineProperty(Update.prototype, 'log', {
-  configurable: true,
-  get: function() {
-    function log() {
-      return console.log.apply(console, arguments);
-    }
-    log.warn = function(msg) {
-      return utils.logger('warning', 'yellow').apply(null, arguments);
-    };
-    log.success = function() {
-      return utils.logger('success', 'green').apply(null, arguments);
-    };
-
-    log.info = function() {
-      return utils.logger('info', 'cyan').apply(null, arguments);
-    };
-
-    log.error = function() {
-      return utils.logger('error', 'red').apply(null, arguments);
-    };
-    log.__proto__ = utils.log;
-    return log;
-  }
-});
 
 /**
  * Expose static `cli` method
