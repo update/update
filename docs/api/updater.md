@@ -29,6 +29,14 @@ app.update('bar', function(err) {
 
 ## Related
 
+**Docs**
+
+* [faq](../faq.md)
+
+**CLI**
+
+* [commands](../cli/commands.md)
+
 **API**
 
 * [register](register.md)

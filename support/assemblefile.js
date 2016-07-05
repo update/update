@@ -23,6 +23,9 @@ module.exports = function(app) {
       .pipe(lib.plugins.buildPaths(dest))
       .pipe(lib.plugins.lintPaths(dest))
       .pipe(app.renderFile())
-      .pipe(app.dest(dest));
+      .pipe(app.dest(function(file) {
+        // file.path = path.join(file.dirname, file.stem, 'index.html');
+        return dest;
+      }));
   });
 };

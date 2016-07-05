@@ -2,9 +2,12 @@
 
 {% body %}
 
-<%= hasAny([related.doc, related.api, related.url], '## Related') %>
+<%= hasAny([related.doc, related.api, related.url, related.cli], '## Related') %>
 <%= hasValue(related.doc, '**Docs**') %>
 <%= links(related, 'doc') %>
+
+<%= hasValue(related.cli, '**CLI**') %>
+<%= links(related, 'cli') %>
 
 <%= hasValue(related.api, '**API**') %>
 <%= links(related, 'api') %>

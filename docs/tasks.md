@@ -19,6 +19,13 @@ Tasks are used for wrapping code that should be executed at a later point, eithe
 
 Tasks are asynchronous functions that are registered by name using the `.task` method, and can be run using the `.build` method.
 
+```js
+app.task('foo', function(cb) {
+  // since tasks are asynchronous, you must call the callback when the task is complete
+  cb();
+});
+```
+
 ## Running tasks
 
 Tasks can be run by command line or API.
@@ -169,6 +176,6 @@ app.build(function(err) {
 
 **Docs**
 
-* [updaters](updaters.md#running-updaters)
+* [running-updaters](updaters.md#running-updaters)
 * [updaters](updaters.md)
 * [updatefile](updatefile.md)
