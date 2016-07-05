@@ -1,7 +1,7 @@
 {
   "name": "update",
   "description": "Be scalable! Update is a new, open source developer framework and CLI for automating updates of any kind in code projects.",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "homepage": "https://github.com/update/update",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "update/update",
@@ -100,7 +100,7 @@
   },
   "verb": {
     "run": true,
-    "toc": false,
+    "toc": true,
     "layout": "common-minimal",
     "tasks": [
       "readme"
@@ -109,7 +109,6 @@
       "gulp-format-md"
     ],
     "related": {
-      "highlight": "generate",
       "description": "Update shares a common architecture and plugin ecosystem with the following libraries:",
       "list": [
         "assemble",
