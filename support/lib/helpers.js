@@ -24,6 +24,14 @@ module.exports = function(options) {
       return '';
     });
 
+    app.helper('relatedLinks', function(related) {
+      if (!related || typeof related !== 'object') {
+        return '';
+      }
+      var links = app.getHelper('links').bind(this);
+      return relatedLinks(related, links);
+    });
+
     app.helper('links', function(related, prop) {
       var arr = related[prop] || (related[prop] = []);
       arr = utils.arrayify(arr);
@@ -44,6 +52,32 @@ module.exports = function(options) {
     });
   };
 };
+
+function relatedLinks(related, links) {
+  var keys = Object.keys(related);
+  if (keys.length === 0) {
+    return '';
+  }
+
+  var hasLinks = false;
+  function reduce(acc, key) {
+    if (related[key].length === 0) {
+      return acc;
+    }
+
+    hasLinks = true;
+    acc += `**${heading(key)}**\n${links(related, key)}\n`;
+    return acc;
+  }
+
+  var list = `${keys.reduce(reduce, '')}`;
+
+  if (!hasLinks) {
+    return '';
+  }
+
+  return `## Related\n${list}`;
+}
 
 function createLink(dir, prop, link) {
   var key = (prop === 'doc') ? 'docs' : prop;
@@ -70,4 +104,25 @@ function createLink(dir, prop, link) {
     filename = path.join(key, filename);
   }
   return `- [${name}](${filename}${anchor})`;
+}
+
+function heading(title) {
+  switch (title.toLowerCase()) {
+    case 'doc':
+      title = 'docs';
+      break;
+    case 'url':
+      title = 'links';
+      break;
+    default:
+      if (/(i|s)$/.test(title.toLowerCase()) === false) {
+        title += 's';
+      }
+      break;
+  }
+
+  if (/s$/.test(title)) {
+    return utils.pascalcase(title);
+  }
+  return title.toUpperCase();
 }
