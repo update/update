@@ -81,29 +81,17 @@ function relatedLinks(related, links) {
 
 function createLink(dir, prop, link) {
   var key = (prop === 'doc') ? 'docs' : prop;
+  link = normalizeLink(link);
 
-  var filename = link;
-  var name = link;
-  var anchor = '';
-  var segs = link.split('#');
-  if (segs.length === 2) {
-    name = segs[segs.length - 1];
-    anchor = '#' + name;
-    filename = segs[0];
-  }
-
-  if (!/\.md$/.test(filename) && !/#/.test(filename)) {
-    filename += '.md';
-  }
   if (dir !== key) {
     if (key === 'docs') {
       key = '';
     }
-    filename = path.join('..', key, filename);
+    link.filename = path.join('..', key, link.filename);
   } else if (key !== 'docs' && dir !== key) {
-    filename = path.join(key, filename);
+    link.filename = path.join(key, link.filename);
   }
-  return `- [${name}](${filename}${anchor})`;
+  return `- [${link.title}](${link.filename}${link.anchor})`;
 }
 
 function heading(title) {
@@ -125,4 +113,29 @@ function heading(title) {
     return utils.pascalcase(title);
   }
   return title.toUpperCase();
+}
+
+function normalizeLink(obj) {
+  if (typeof obj === 'string') {
+    obj = {link: obj};
+  }
+  var link = obj.link;
+  var filename = link;
+  var name = link;
+  var anchor = '';
+  var segs = link.split('#');
+  if (segs.length === 2) {
+    name = segs[segs.length - 1];
+    anchor = '#' + name;
+    filename = segs[0];
+  }
+
+  if (!/\.md$/.test(filename) && !/#/.test(filename)) {
+    filename += '.md';
+  }
+
+  obj.title = obj.title || name;
+  obj.filename = obj.filename || filename;
+  obj.anchor = obj.anchor || anchor;
+  return obj;
 }
