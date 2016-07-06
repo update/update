@@ -8,6 +8,7 @@ require = utils;
 
 require('is-valid-app', 'isValid');
 require('has-value');
+require('pascalcase');
 require('pretty-remarkable', 'prettify');
 require('remarkable', 'Remarkable');
 require('strip-color');
@@ -61,7 +62,6 @@ utils.links = function(rules) {
         }
       } else {
         var segs = href.split('/');
-        console.log(segs)
         var len = segs.length;
         if (len === 1) {
           segs.unshift(file.dir);
