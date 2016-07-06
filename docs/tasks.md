@@ -176,6 +176,6 @@ app.build(function(err) {
 
 **Docs**
 
-* [running-updaters](updaters.md#running-updaters)
+* [Running updaters](updaters.md#running-updaters)
 * [updaters](updaters.md)
 * [updatefile](updatefile.md)

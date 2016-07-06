@@ -1,7 +1,12 @@
 ---
 title: Tasks
 related:
-  doc: ['updaters#running-updaters', 'updaters', 'updatefile']
+  doc:
+    - link: updaters
+      title: Running updaters
+      anchor: '#running-updaters'
+    - updaters
+    - updatefile
 ---
 
 Tasks are used for wrapping code that should be executed at a later point, either when specified by command line or explicitly run when using the API.
