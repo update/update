@@ -19,6 +19,12 @@ Custom labels used in this changelog:
 
 Please [let us know](../../issues) if any of the following heading links are broken. Thanks!
 
+## [0.7.3] - 2016-07-21
+
+**fixed**
+
+- ensure `app.cwd` in the current instance is the cwd defined by the user on the options or argv.
+
 ## [0.7.0] - 2016-07-21
 
 **added**
