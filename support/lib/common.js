@@ -11,7 +11,6 @@ module.exports = function(options) {
     app.use(require('generate-defaults'));
     app.use(require('verb-toc'));
     app.use(helpers());
-    app.use(helpers());
 
     if (!app.docs) app.create('docs');
     app.option('renameKey', function(key, file) {

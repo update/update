@@ -7,8 +7,10 @@
 
 'use strict';
 
+var fs = require('fs');
+var os = require('os');
+var path = require('path');
 var Base = require('assemble-core');
-var resolve = require('resolve-file');
 var utils = require('./lib/utils');
 var cli = require('./lib/cli');
 
@@ -57,6 +59,13 @@ Update.prototype.initDefaults = function() {
   this.define('generators', this.generators);
   this.define('updater', this.generator);
   this.updaters = this.generators;
+  var self = this;
+
+  this.define('home', function() {
+    var args = [].slice.call(arguments);
+    var home = path.resolve(self.options.homedir || os.homedir());
+    return path.resolve.apply(path, [home].concat(args));
+  });
 
   this.option('help', {configname: 'updater', appname: 'update'});
   this.define('update', this.generate);
@@ -82,6 +91,27 @@ Update.prototype.initDefaults = function() {
     }
   });
 
+  Object.defineProperty(this, 'common', {
+    configurable: true,
+    get: function() {
+      return utils.common;
+    }
+  });
+
+  this.onLoad(/(^|[\\\/])templates[\\\/]/, function(view, next) {
+    var userDefined = self.home('templates', view.basename);
+    if (utils.exists(userDefined)) {
+      view.contents = fs.readFileSync(userDefined);
+      view.homePath = userDefined;
+      view.isUserDefined = true;
+    }
+    if (/^templates[\\\/]/.test(view.relative)) {
+      view.path = path.join(self.cwd, view.basename);
+    }
+    utils.stripPrefixes(view);
+    utils.parser.parse(view, next);
+  });
+
   this.option('lookup', function(name) {
     var patterns = [];
     if (!isUpdater(name)) {
@@ -92,9 +122,29 @@ Update.prototype.initDefaults = function() {
 
   this.on('unresolved', function(search, app) {
     if (!isUpdater(search.name)) return;
-    var resolved = resolve.file(search.name) || resolve.file(search.name, {cwd: utils.gm});
+    var resolved = utils.resolve.file(search.name) || utils.resolve.file(search.name, {cwd: utils.gm});
     if (resolved) {
       search.app = app.generator(search.name, require(resolved.path));
+    }
+  });
+
+  this.on('option', function(key, val) {
+    if (key === 'dest') {
+      self.base.cwd = val;
+      self.cwd = val;
+    }
+  });
+
+  this.on('ask', function(val, key, question, answers) {
+    val = val || question.default;
+    if (typeof val === 'undefined') {
+      question.default = self.common.get(key);
+    }
+  });
+
+  this.on('task:starting', function(event, task) {
+    if (task && task.app) {
+      task.app.cwd = self.base.cwd;
     }
   });
 };

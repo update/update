@@ -16,7 +16,7 @@ Update only has a few built-in [updaters](docs/updaters.md) (these might be exte
 
 ### init
 
-Choose the updaters to run by default each time `update` is run from the command line:
+Prompts you to choose one or more updaters to run by default each time `update` is run from the command line:
 
 ```sh
 $ update init

@@ -21,14 +21,20 @@ Update is a new, open-source developer framework for automating updates of any k
 
 Update's API has methods for [creating](#creating-updaters), [registering](#registering-updaters), [resolving](#resolving-updaters) and [running](#running-updaters) updaters.
 
+### Who should use Update?
+
+* developers or organizations with many projects under their stewardship
+* agencies or consultants who maintain and/or create client projects and would like to reduce time spent on maintainance
+* anyone who cares about having consistency across all of their projects
+
 ## Updaters
 
-All "updates" are accomplished using plugins called [updaters](#updaters). 
+All "updates" are accomplished using plugins called [updaters](#updaters).
 
 **What are updaters?**
 
 - Updaters are functions that are registered by name, and can be run by [command line](#command-line) or [API](#api).
-- Updaters may be published to [npm](https://www.npmjs.com) using the `updater-foo` naming convention, where `foo` is the [alias](#aliases) of your updater. 
+- Updaters may be published to [npm](https://www.npmjs.com) using the `updater-foo` naming convention, where `foo` is the [alias](#aliases) of your updater.
 - Published updaters can be installed locally or globally.
 
 ## Command line
@@ -69,7 +75,7 @@ Updaters via CLI or API. (tasks are powered by [bach][], the same library used i
 
 The main export of the library is the `Update` constructor function.
 
-Updaters themselves are just functions that take an instance of `Update`. 
+Updaters themselves are just functions that take an instance of `Update`.
 
 Update gives you a way to automate the maintenance of files that are typically excluded from the automated parts of the software lifecycle, and thus are mostly forgotten about after they're created.
 

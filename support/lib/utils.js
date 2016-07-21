@@ -8,7 +8,6 @@ require = utils;
 
 require('is-valid-app', 'isValid');
 require('has-value');
-require('pascalcase');
 require('pretty-remarkable', 'prettify');
 require('remarkable', 'Remarkable');
 require('strip-color');

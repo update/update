@@ -1,11 +1,11 @@
 'use strict';
 
 var path = require('path');
+var copy = require('copy');
+var del = require('delete');
 var drafts = require('gulp-drafts');
 var reflinks = require('gulp-reflinks');
 var format = require('gulp-format-md');
-var copy = require('copy');
-var del = require('delete');
 var paths = require('./lib/paths');
 var lib = require('./lib');
 

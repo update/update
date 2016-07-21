@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 
-require('set-blocking')(true);
+process.on('exit', function() {
+  require('set-blocking')(true);
+});
 
+var os = require('os');
 var Update = require('..');
 var commands = require('../lib/commands');
 var utils = require('../lib/utils');
@@ -42,7 +45,7 @@ Update.cli(Update, argv, function(err, app) {
 
     app.once('task', function() {
       if (!app.base.enabled('silent')) {
-        app.log.success('running:', tasks);
+        app.log.success('running:', logRunning(app, tasks.join(', ')));
       }
     });
 
@@ -53,3 +56,10 @@ Update.cli(Update, argv, function(err, app) {
     });
   });
 });
+
+function logRunning(app, str) {
+  if (os.platform() === 'win32') {
+    return app.log.bold(app.log.cyan(str));
+  }
+  return app.log.bold(app.log.blue(str));
+}
