@@ -71,6 +71,7 @@
     "gulp-istanbul": "^1.0.0",
     "gulp-mocha": "^2.2.0",
     "gulp-unused": "^0.1.2",
+    "helper-changelog": "^0.3.0",
     "is-absolute": "^0.2.5",
     "load-pkg": "^3.0.1",
     "mocha": "^2.5.3",
@@ -108,6 +109,9 @@
     ],
     "plugins": [
       "gulp-format-md"
+    ],
+    "helpers": [
+      "helper-changelog"
     ],
     "related": {
       "description": "Update shares a common architecture and plugin ecosystem with the following libraries:",

@@ -15,7 +15,6 @@ This document describes how to create, register and run updaters.
   * [Order of precendence](#order-of-precendence)
 - [Discovering updaters](#discovering-updaters)
 - [Default updater](#default-updater)
-- [Related](#related)
 
 ## TODO
 

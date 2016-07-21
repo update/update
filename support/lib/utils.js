@@ -11,6 +11,7 @@ require('has-value');
 require('pretty-remarkable', 'prettify');
 require('remarkable', 'Remarkable');
 require('strip-color');
+require('pascalcase');
 require('template-helpers', 'helpers');
 require('through2', 'through');
 
