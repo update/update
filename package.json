@@ -1,7 +1,7 @@
 {
   "name": "update",
   "description": "Be scalable! Update is a new, open source developer framework and CLI for automating updates of any kind in code projects.",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "homepage": "https://github.com/update/update",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "update/update",
