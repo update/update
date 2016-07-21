@@ -143,8 +143,11 @@ Update.prototype.initDefaults = function() {
   });
 
   this.on('task:starting', function(event, task) {
+    if (event && event.app) {
+      event.app.cwd = self.base.options.dest || self.base.cwd || event.app.cwd;
+    }
     if (task && task.app) {
-      task.app.cwd = self.base.cwd;
+      task.app.cwd = self.base.options.dest || self.base.cwd || task.app.cwd;
     }
   });
 };
