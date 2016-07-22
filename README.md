@@ -1,5 +1,7 @@
 # update [![NPM version](https://img.shields.io/npm/v/update.svg?style=flat)](https://www.npmjs.com/package/update) [![NPM downloads](https://img.shields.io/npm/dm/update.svg?style=flat)](https://npmjs.org/package/update) [![Build Status](https://img.shields.io/travis/update/update.svg?style=flat)](https://travis-ci.org/update/update)
 
+[![Join the chat at https://gitter.im/update/update](https://badges.gitter.im/update/update.svg)](https://gitter.im/update/update?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 <p align="center">
 <a href="https://github.com/update/update">
 <img height="250" width="250" src="https://raw.githubusercontent.com/update/update/master/docs/logo.png">
