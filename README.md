@@ -5,7 +5,6 @@
 <img height="250" width="250" src="https://raw.githubusercontent.com/update/update/master/docs/logo.png">
 </a>
 </p>
-
 Be scalable! Update is a new, open source developer framework and CLI for automating updates of any kind in code projects.
 
 ## Table of Contents
@@ -13,6 +12,7 @@ Be scalable! Update is a new, open source developer framework and CLI for automa
 - [Overview](#overview)
   * [What does Update do?](#what-does-update-do)
   * [Why should I use Update?](#why-should-i-use-update)
+  * [Examples](#examples)
   * [Features](#features)
 - [CLI](#cli)
   * [Installing update](#installing-update)
@@ -67,6 +67,17 @@ You can create your own [updaters](docs/updaters.md) using Update's API, or inst
 * **your way, instantly**: updaters can be published to and installed from npm, but you can also easily create your own [personal updaters](docs/symlinking-updaters.md). Once your updaters are setup, just run `update init`, then projects under your maintenance will convert to the the conventions you prefer within milliseconds after running `update`.
 * **plugin ecosystem**: any plugins that work with [Base applications](#discovering-plugins) will work also with Update. Which means you can use plugins (or generators) from [assemble](https://github.com/assemble/assemble), [verb](https://github.com/verbose/verb), and [generate](https://github.com/generate/generate), to name a few.
 * **well tested**: with more than 1,250 unit tests
+
+### Examples
+
+Here are some random example commits after running `$ update`.
+
+**Project**/**Commit** | **Updaters used**
+
+--- | ---
+[generate-scaffold](https://github.com/generate/generate-scaffold/commit/440d71f7293cb1f79445c0161440afbb266a2fbe) |  `editorconfig`, `travis`
+[updater-editorconfig](https://github.com/update/updater-editorconfig/commit/b7bd0aa616519440fa4a0d29d3aefac26787cbaf) | `editorconfig`, `eslint`, `travis`, `license`
+[expand-target](https://github.com/jonschlinkert/expand-target/commit/48d70a0bc95d8eb3f7def615b7e231e8f93816e8) | `editorconfig`, `eslint`, `travis`, `package`
 
 ### Features
 
