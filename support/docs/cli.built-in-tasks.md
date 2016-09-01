@@ -1,10 +1,10 @@
 ---
-title: Built in updaters
+title: Built in tasks
 related:
   doc: []
 ---
 
-Update only has a few built-in [updaters](docs/updaters.md) (these might be externalized at some point):
+Update only has a few built-in [tasks](docs/tasks.md) (these might be externalized at some point):
 
 * [init](#init): Choose the updaters to run by default each time `update` is run from the command line
 * [list](#list): List all globally and locally installed updaters
@@ -16,7 +16,7 @@ Update only has a few built-in [updaters](docs/updaters.md) (these might be exte
 
 ### init
 
-Prompts you to choose one or more updaters to run by default each time `update` is run from the command line:
+Prompts you to choose one or more "default updaters" to run automatically each time to `update` command is given:
 
 ```sh
 $ update init
