@@ -58,7 +58,8 @@ utils.links = function(rules) {
         var pre = href.slice(0, idx);
         var anc = anchors[pre];
         if (anc && anc.indexOf(val) === -1) {
-          throw new Error('cannot find anchor: #' + val + ' in (' + token.href + ') in ' + file.path);
+          console.log(pre)
+          throw new Error(`cannot find anchor: #${val} in "${pre}" (defined in ${file.path})`);
         }
       } else {
         var segs = href.split('/');
@@ -76,10 +77,10 @@ utils.links = function(rules) {
         var group = paths[seg];
 
         if (typeof group === 'undefined') {
-          throw new Error('directory group: ' + seg + ' is not defined');
+          throw new Error(`directory group: "${seg}" is not defined`);
         }
         if (group.indexOf(rest) === -1 && !/issues/.test(rest)) {
-          throw new Error(`cannot find filepath: ${rest} in "${seg}" (${file.path})`);
+          throw new Error(`cannot find filepath: "${rest}" in "${seg}" (${file.path})`);
         }
       }
     }
