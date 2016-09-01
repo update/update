@@ -4,6 +4,10 @@
   "version": "0.7.3",
   "homepage": "https://github.com/update/update",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "contributors": [
+    "Brian Woodward <brian.woodward@gmail.com> (https://github.com/doowb)",
+    "Jon Schlinkert <jon.schlinkert@sellside.com> (http://twitter.com/jonschlinkert)"
+  ],
   "repository": "update/update",
   "bugs": {
     "url": "https://github.com/update/update/issues"

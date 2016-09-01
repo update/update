@@ -101,7 +101,7 @@ describe('app.questions', function() {
         app.data('name', 'Brian Woodward');
 
         app.ask('name', function(err, answers) {
-          if(err) return cb(err)
+          if (err) return cb(err)
           assert.equal(answers.name, 'Brian Woodward');
           cb();
         });
@@ -112,12 +112,12 @@ describe('app.questions', function() {
         app.data('a', 'b');
 
         app.ask('a', function(err, answers) {
-          if(err) return cb(err)
+          if (err) return cb(err)
           assert.equal(answers.a, 'b');
 
           app.data('a', 'zzz');
           app.ask('a', function(err, answers) {
-            if(err) return cb(err)
+            if (err) return cb(err)
             assert.equal(answers.a, 'zzz');
             cb();
           })
@@ -208,12 +208,12 @@ describe('app.questions', function() {
         app.data('package.name', 'base-questions');
 
         app.ask('package.name', function(err, answers) {
-          if(err) return cb(err)
+          if (err) return cb(err)
           assert.equal(answers.package.name, 'base-questions');
 
           app.data('package.name', 'foo-bar-baz');
           app.ask('package.name', function(err, answers) {
-            if(err) return cb(err)
+            if (err) return cb(err)
             assert.equal(answers.package.name, 'foo-bar-baz');
             cb();
           })
@@ -225,12 +225,12 @@ describe('app.questions', function() {
         site.data('package.name', 'base-questions');
 
         site.ask('package.name', function(err, answers) {
-          if(err) return cb(err)
+          if (err) return cb(err)
           assert.equal(answers.package.name, 'base-questions');
 
           site.data('package.name', 'foo-bar-baz');
           site.ask('package.name', function(err, answers) {
-            if(err) return cb(err)
+            if (err) return cb(err)
             assert.equal(answers.package.name, 'foo-bar-baz');
             cb();
           })
