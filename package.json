@@ -107,7 +107,7 @@
   "verb": {
     "run": true,
     "toc": true,
-    "layout": "common-minimal",
+    "layout": "app",
     "tasks": [
       "readme"
     ],
@@ -130,12 +130,12 @@
       "assemble",
       "assemble-core",
       "assemble-loader",
-      "bach",
       "base",
       "consolidate",
       "generate",
       "gulp",
       "handlebars",
+      "helper-changelog",
       "lodash",
       "pug",
       "swig",
