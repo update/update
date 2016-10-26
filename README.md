@@ -68,7 +68,6 @@ You can create your own [updaters](docs/updaters.md) using Update's API, or inst
 Here are some random example commits after running `$ update`.
 
 **Project**/**Commit** | **Updaters used**
-
 --- | ---
 [generate-scaffold](https://github.com/generate/generate-scaffold/commit/440d71f7293cb1f79445c0161440afbb266a2fbe) |  `editorconfig`, `travis`
 [updater-editorconfig](https://github.com/update/updater-editorconfig/commit/b7bd0aa616519440fa4a0d29d3aefac26787cbaf) | `editorconfig`, `eslint`, `travis`, `license`
