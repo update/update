@@ -236,7 +236,7 @@ $ update help
 
 #### Discovering updaters
 
-* Find updaters to install by [searching npm](https://www.npmjs.com/browse/keyword/update-updater) for packages with the keyword `updateupdater`
+* Find updaters to install by [searching npm](https://www.npmjs.com/browse/keyword/update-updater) for packages with the keyword `update-updater`
 * Visit [Update's GitHub org](https://github.com/update) to see the updaters maintained by the core team
 
 #### Discovering plugins
