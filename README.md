@@ -246,7 +246,7 @@ Plugins from any applications built on [base](https://github.com/node-base/base)
 * [assemble](https://www.npmjs.com/browse/keyword/assembleplugin): find assemble plugins on npm using the `assembleplugin` keyword
 * [generate](https://www.npmjs.com/browse/keyword/generateplugin): find generate plugins on npm using the `generateplugin` keyword
 * [templates](https://www.npmjs.com/browse/keyword/templatesplugin): find templates plugins on npm using the `templatesplugin` keyword
-* [update][update-plugin]: find update plugins on npm using the `updateplugin` keyword
+* [update](https://www.npmjs.com/browse/keyword/updateplugin): find update plugins on npm using the `updateplugin` keyword
 * [verb](https://www.npmjs.com/browse/keyword/verbplugin): find verb plugins on npm using the `verbplugin` keyword
 
 #### Authoring updaters
