@@ -9,7 +9,7 @@ Be scalable! Update is a new, open source developer framework and CLI for automa
 
 # update
 
-[![NPM version](https://img.shields.io/npm/v/update.svg?style=flat)](https://www.npmjs.com/package/update) [![NPM downloads](https://img.shields.io/npm/dm/update.svg?style=flat)](https://npmjs.org/package/update) [![Build Status](https://img.shields.io/travis/update/update.svg?style=flat)](https://travis-ci.org/update/update)
+[![NPM version](https://img.shields.io/npm/v/update.svg?style=flat)](https://www.npmjs.com/package/update) [![NPM monthly downloads](https://img.shields.io/npm/dm/update.svg?style=flat)](https://npmjs.org/package/update) [![Build Status](https://img.shields.io/travis/update/update.svg?style=flat)](https://travis-ci.org/update/update)
 
 You might also be interested in:
 
@@ -68,8 +68,9 @@ You can create your own [updaters](docs/updaters.md) using Update's API, or inst
 Here are some random example commits after running `$ update`.
 
 **Project**/**Commit** | **Updaters used**
+
 --- | ---
-[generate-scaffold](https://github.com/generate/generate-scaffold/commit/440d71f7293cb1f79445c0161440afbb266a2fbe) |  `editorconfig`, `travis`
+[generate-scaffold](https://github.com/generate/generate-scaffold/commit/440d71f7293cb1f79445c0161440afbb266a2fbe) | `editorconfig`, `travis`
 [updater-editorconfig](https://github.com/update/updater-editorconfig/commit/b7bd0aa616519440fa4a0d29d3aefac26787cbaf) | `editorconfig`, `eslint`, `travis`, `license`
 [expand-target](https://github.com/jonschlinkert/expand-target/commit/48d70a0bc95d8eb3f7def615b7e231e8f93816e8) | `editorconfig`, `eslint`, `travis`, `package`
 
@@ -79,10 +80,10 @@ Here are some random example commits after running `$ update`.
 * **generators**: support for [generate](https://github.com/generate/generate) generators. If your updater needs to create new files, there might be a [generator for that](https://www.npmjs.com/browse/keyword/generate-generator). Just use the generator the same way you would use an [updater](docs/updaters.md).
 * **render templates**: use templates to create new files, or replace existing files
 * **prompts**: It's easy to create custom prompts. Answers to prompts can be used as context for rendering templates, for settings options, determining file names, directory structure, and anything else that requires user feedback.
-* **any engine**: use any template engine to render templates, including [handlebars](http://www.handlebarsjs.com/), [lodash](https://lodash.com/), [swig](https://github.com/paularmstrong/swig) and [pug](http://jade-lang.com), or anything supported by [consolidate](https://github.com/visionmedia/consolidate.js).
+* **any engine**: use any template engine to render templates, including [handlebars](http://www.handlebarsjs.com/), [lodash](https://lodash.com/), [swig](https://github.com/paularmstrong/swig) and [pug](https://pugjs.org), or anything supported by [consolidate](https://github.com/visionmedia/consolidate.js).
 * **data**: gather data from the user's environment to populate "hints" in user prompts or for rendering templates
 * **fs**: in the spirit of [gulp](http://gulpjs.com), use `.src` and `.dest` to read and write globs of files.
-* **vinyl**: files and templates are [vinyl](http://github.com/gulpjs/vinyl) files
+* **vinyl**: files and templates are [vinyl](https://github.com/gulpjs/vinyl) files
 * **streams**: full support for [gulp](http://gulpjs.com) and [assemble](https://github.com/assemble/assemble) plugins
 * **smart plugins**: Update is built on [base](https://github.com/node-base/base), so any "smart" plugin from the Base ecosystem can be used
 * **stores**: persist configuration settings, global defaults, project-specific defaults, answers to prompts, and so on.
@@ -104,7 +105,7 @@ This adds the `update` command to your system path, allowing it to be run from a
 
 ### Installing updaters
 
-Updaters can be [found on npm](https://www.npmjs.com/browse/keyword/update-updater), but if you're not familiar with how Update works, we recommend installing  `updater-example`:
+Updaters can be [found on npm](https://www.npmjs.com/browse/keyword/updateupdater), but if you're not familiar with how Update works, we recommend installing  `updater-example`:
 
 ```sh
 $ npm install --global updater-example
@@ -235,7 +236,7 @@ $ update help
 
 #### Discovering updaters
 
-* Find updaters to install by [searching npm](https://www.npmjs.com/browse/keyword/update-updater) for packages with the keyword `update-updater`
+* Find updaters to install by [searching npm](https://www.npmjs.com/browse/keyword/updateupdater) for packages with the keyword `updateupdater`
 * Visit [Update's GitHub org](https://github.com/update) to see the updaters maintained by the core team
 
 #### Discovering plugins
@@ -246,7 +247,7 @@ Plugins from any applications built on [base](https://github.com/node-base/base)
 * [assemble](https://www.npmjs.com/browse/keyword/assembleplugin): find assemble plugins on npm using the `assembleplugin` keyword
 * [generate](https://www.npmjs.com/browse/keyword/generateplugin): find generate plugins on npm using the `generateplugin` keyword
 * [templates](https://www.npmjs.com/browse/keyword/templatesplugin): find templates plugins on npm using the `templatesplugin` keyword
-* [update][update-plugin]: find update plugins on npm using the `updateplugin` keyword
+* [update](https://www.npmjs.com/browse/keyword/updateplugin): find update plugins on npm using the `updateplugin` keyword
 * [verb](https://www.npmjs.com/browse/keyword/verbplugin): find verb plugins on npm using the `verbplugin` keyword
 
 #### Authoring updaters
@@ -353,34 +354,34 @@ _(Changelog generated by [helper-changelog](https://github.com/helpers/helper-ch
 ### Related projects
 
 * [assemble](https://www.npmjs.com/package/assemble): Get the rocks out of your socks! Assemble makes you fast at creating web projects… [more](https://github.com/assemble/assemble) | [homepage](https://github.com/assemble/assemble "Get the rocks out of your socks! Assemble makes you fast at creating web projects. Assemble is used by thousands of projects for rapid prototyping, creating themes, scaffolds, boilerplates, e-books, UI components, API documentation, blogs, building websit")
-* [base](https://www.npmjs.com/package/base): base is the foundation for creating modular, unit testable and highly pluggable node.js applications, starting… [more](https://github.com/node-base/base) | [homepage](https://github.com/node-base/base "base is the foundation for creating modular, unit testable and highly pluggable node.js applications, starting with a handful of common methods, like `set`, `get`, `del` and `use`.")
+* [base](https://www.npmjs.com/package/base): Framework for rapidly creating high quality, server-side node.js applications, using plugins like building blocks | [homepage](https://github.com/node-base/base "Framework for rapidly creating high quality, server-side node.js applications, using plugins like building blocks")
 * [generate](https://www.npmjs.com/package/generate): Command line tool and developer framework for scaffolding out new GitHub projects. Generate offers the… [more](https://github.com/generate/generate) | [homepage](https://github.com/generate/generate "Command line tool and developer framework for scaffolding out new GitHub projects. Generate offers the robustness and configurability of Yeoman, the expressiveness and simplicity of Slush, and more powerful flow control and composability than either.")
 * [verb](https://www.npmjs.com/package/verb): Documentation generator for GitHub projects. Verb is extremely powerful, easy to use, and is used… [more](https://github.com/verbose/verb) | [homepage](https://github.com/verbose/verb "Documentation generator for GitHub projects. Verb is extremely powerful, easy to use, and is used on hundreds of projects of all sizes to generate everything from API docs to readmes.")
 
 ### Community
 
-Are you using [Generate](https://github.com/generate/generate) in your project? Have you published a [generator](https://github.com/generate/generate/blob/master/docs/generators.md) and want to share your project with the world?
+Are you using [Update](https://github.com/update/update) in your project? Have you published an [updater](https://github.com/update/update/blob/master/docs/updaters.md) and want to share your Update project with the world?
 
 Here are some suggestions!
 
-* If you get like Generate and want to tweet about it, please feel free to mention `@generatejs` or use the `#generatejs` hashtag
-* Show your love by starring [Generate](https://github.com/generate/generate) and `update`
-* Get implementation help on [StackOverflow](http://stackoverflow.com/questions/tagged/generate) (please use the `generatejs` tag in questions)
-* **Gitter** Discuss Generate with us on [Gitter](https://gitter.im/generate/generate)
-* If you publish an generator, thank you! To make your project as discoverable as possible, please add the keyword `generategenerator` to package.json.
+* If you get like Update and want to tweet about it, please use the hashtag `#updatejs` (not `@`)
+* Show your love by starring [Update](https://github.com/update/update) and `update`
+* Get implementation help on [StackOverflow](http://stackoverflow.com/questions/tagged/update) (please use the `updatejs` tag in questions)
+* **Gitter** Discuss Update with us on [Gitter](https://gitter.im/update/update)
+* If you publish an updater, thank you! To make your project as discoverable as possible, please add the keyword `updateupdater` to package.json.
 
 ### Contributing
 
 Pull requests and stars are always welcome. For bugs and feature requests, [please create an issue](../../issues/new).
 
-Please read the [contributing guide](.github/contributing.md) for avice on opening issues, pull requests, and coding standards.
+Please read the [contributing guide](.github/contributing.md) for advice on opening issues, pull requests, and coding standards.
 
 ### Running tests
 
-Install dev dependencies:
+Running and reviewing unit tests is a great way to get familiarized with a library and its API. You can install dependencies and run tests with the following command:
 
 ```sh
-$ npm install -d && npm test
+$ npm install && npm test
 ```
 
 ### Author
@@ -388,13 +389,13 @@ $ npm install -d && npm test
 **Jon Schlinkert**
 
 * [github/jonschlinkert](https://github.com/jonschlinkert)
-* [twitter/jonschlinkert](http://twitter.com/jonschlinkert)
+* [twitter/jonschlinkert](https://twitter.com/jonschlinkert)
 
 ### License
 
-Copyright © 2016, [Jon Schlinkert](https://github.com/jonschlinkert).
-Released under the [MIT license](https://github.com/update/update/blob/master/LICENSE).
+Copyright © 2018, [Jon Schlinkert](https://github.com/jonschlinkert).
+Released under the [MIT License](LICENSE).
 
 ***
 
-_This file was generated by [verb-generate-readme](https://github.com/verbose/verb-generate-readme), v0.1.30, on September 01, 2016._
+_This file was generated by [verb-generate-readme](https://github.com/verbose/verb-generate-readme), v0.6.0, on January 23, 2018._
